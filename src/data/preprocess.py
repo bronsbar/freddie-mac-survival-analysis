@@ -5,266 +5,502 @@ This script transforms raw Freddie Mac origination and performance data
 into a survival analysis-ready format with:
 - duration: time from origination to event (in months)
 - event: binary indicator (1 = event occurred, 0 = censored)
-- event_type: 'default', 'prepay', or 'censored'
+- event_type: 'default', 'prepay', 'other', or 'censored'
+
+Usage:
+    python -m src.data.preprocess --input data/raw --output data/processed
+    python -m src.data.preprocess --input data/raw --output data/processed --year 2020
 """
 
 import argparse
+import logging
 from pathlib import Path
+from typing import List, Optional, Tuple
 
-import pandas as pd
 import numpy as np
-from tqdm import tqdm
+import pandas as pd
 
+from .columns import (
+    ORIGINATION_COLUMNS,
+    PERFORMANCE_COLUMNS,
+    ORIGINATION_DTYPES,
+    PERFORMANCE_DTYPES,
+    MISSING_VALUES,
+    OCCUPANCY_STATUS_MAP,
+    LOAN_PURPOSE_MAP,
+    PROPERTY_TYPE_MAP,
+    CHANNEL_MAP,
+)
+from .utils import (
+    extract_vintage_year,
+    map_event_type,
+    create_event_indicator,
+    bin_fico,
+    bin_ltv,
+    bin_dti,
+    has_mortgage_insurance,
+    is_high_ltv,
+    calculate_loan_term_years,
+    find_data_files,
+    print_summary_stats,
+    get_max_delinquency,
+)
 
-# Freddie Mac origination file columns
-ORIGINATION_COLS = [
-    'credit_score', 'first_payment_date', 'first_time_homebuyer_flag',
-    'maturity_date', 'msa', 'mi_percentage', 'num_units',
-    'occupancy_status', 'cltv', 'dti', 'upb', 'ltv', 'orig_interest_rate',
-    'channel', 'prepay_penalty_flag', 'amortization_type', 'property_state',
-    'property_type', 'postal_code', 'loan_sequence_number', 'loan_purpose',
-    'orig_loan_term', 'num_borrowers', 'seller_name', 'servicer_name',
-    'super_conforming_flag', 'pre_harp_loan_seq_num', 'program_indicator',
-    'harp_indicator', 'valuation_method', 'io_indicator'
-]
-
-# Freddie Mac performance file columns
-PERFORMANCE_COLS = [
-    'loan_sequence_number', 'monthly_reporting_period', 'current_upb',
-    'current_loan_delinquency_status', 'loan_age', 'remaining_months_to_maturity',
-    'repurchase_flag', 'modification_flag', 'zero_balance_code',
-    'zero_balance_effective_date', 'current_interest_rate', 'current_deferred_upb',
-    'ddlpi', 'mi_recoveries', 'net_sale_proceeds', 'non_mi_recoveries',
-    'expenses', 'legal_costs', 'maintenance_costs', 'taxes_insurance',
-    'misc_expenses', 'actual_loss', 'modification_cost', 'step_modification_flag',
-    'deferred_payment_modification', 'eltv', 'zero_balance_removal_upb',
-    'delinquent_accrued_interest', 'delinquency_due_to_disaster',
-    'borrower_assistance_plan'
-]
-
-# Zero balance codes meaning
-ZERO_BALANCE_CODES = {
-    '01': 'prepay',      # Prepaid or Matured
-    '02': 'prepay',      # Third Party Sale
-    '03': 'default',     # Short Sale
-    '06': 'default',     # Repurchased
-    '09': 'default',     # REO Disposition
-    '15': 'default',     # Note Sale
-    '16': 'default',     # Reperforming Loan Sale
-}
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 
 def load_origination_data(filepath: Path) -> pd.DataFrame:
-    """Load origination data from pipe-delimited file."""
+    """
+    Load origination data from pipe-delimited file.
+
+    Args:
+        filepath: Path to origination file
+
+    Returns:
+        DataFrame with origination data
+    """
+    logger.info(f"Loading origination data from {filepath}")
+
     df = pd.read_csv(
         filepath,
         sep='|',
         header=None,
-        names=ORIGINATION_COLS,
-        low_memory=False
+        names=ORIGINATION_COLUMNS,
+        dtype=ORIGINATION_DTYPES,
+        low_memory=False,
+        na_values=['', ' '],
     )
+
+    logger.info(f"Loaded {len(df):,} origination records")
     return df
 
 
 def load_performance_data(filepath: Path) -> pd.DataFrame:
-    """Load performance data from pipe-delimited file."""
+    """
+    Load performance data from pipe-delimited file.
+
+    Args:
+        filepath: Path to performance file
+
+    Returns:
+        DataFrame with performance data
+    """
+    logger.info(f"Loading performance data from {filepath}")
+
     df = pd.read_csv(
         filepath,
         sep='|',
         header=None,
-        names=PERFORMANCE_COLS,
-        low_memory=False
+        names=PERFORMANCE_COLUMNS,
+        dtype=PERFORMANCE_DTYPES,
+        low_memory=False,
+        na_values=['', ' '],
     )
+
+    logger.info(f"Loaded {len(df):,} performance records")
     return df
 
 
-def determine_event_type(zero_balance_code: str) -> str:
-    """Map zero balance code to event type."""
-    if pd.isna(zero_balance_code):
-        return 'censored'
-    return ZERO_BALANCE_CODES.get(str(int(zero_balance_code)).zfill(2), 'censored')
+def aggregate_performance_data(perf_df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Aggregate performance data to get last observation per loan.
+
+    Args:
+        perf_df: Performance DataFrame
+
+    Returns:
+        DataFrame with one row per loan containing survival information
+    """
+    logger.info("Aggregating performance data...")
+
+    # Sort by loan_age to ensure we get the last observation
+    perf_df = perf_df.sort_values(['loan_sequence_number', 'loan_age'])
+
+    # Get last record for each loan
+    last_obs = perf_df.groupby('loan_sequence_number').agg({
+        'loan_age': 'last',
+        'zero_balance_code': 'last',
+        'zero_balance_effective_date': 'last',
+        'current_loan_delinquency_status': 'last',
+        'current_actual_upb': 'last',
+        'modification_flag': lambda x: 'Y' in x.values or 'P' in x.values,
+    }).reset_index()
+
+    # Rename columns
+    last_obs = last_obs.rename(columns={
+        'loan_age': 'duration',
+        'modification_flag': 'ever_modified',
+    })
+
+    # Calculate max delinquency per loan
+    max_delinq = perf_df.groupby('loan_sequence_number')['current_loan_delinquency_status'].apply(
+        get_max_delinquency
+    ).reset_index()
+    max_delinq.columns = ['loan_sequence_number', 'max_delinquency']
+
+    last_obs = last_obs.merge(max_delinq, on='loan_sequence_number', how='left')
+
+    logger.info(f"Aggregated to {len(last_obs):,} unique loans")
+    return last_obs
 
 
-def create_survival_dataset(
-    origination_df: pd.DataFrame,
-    performance_df: pd.DataFrame,
-    default_threshold: int = 3
+def create_survival_variables(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Create survival analysis variables from aggregated performance data.
+
+    Args:
+        df: Aggregated performance DataFrame
+
+    Returns:
+        DataFrame with event and event_type columns added
+    """
+    logger.info("Creating survival variables...")
+
+    # Create event type
+    df['event_type'] = df['zero_balance_code'].apply(map_event_type)
+
+    # Create binary event indicator
+    df['event'] = df['zero_balance_code'].apply(create_event_indicator)
+
+    # Handle missing duration (set to 0 if missing)
+    df['duration'] = df['duration'].fillna(0).astype(int)
+
+    # Create ever_60_plus_delinquent indicator
+    df['ever_60_plus_delinquent'] = (df['max_delinquency'] >= 2).astype(int)
+
+    # Create ever_90_plus_delinquent indicator
+    df['ever_90_plus_delinquent'] = (df['max_delinquency'] >= 3).astype(int)
+
+    return df
+
+
+def clean_origination_data(orig_df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Clean origination data: handle missing values and create derived features.
+
+    Args:
+        orig_df: Raw origination DataFrame
+
+    Returns:
+        Cleaned origination DataFrame
+    """
+    logger.info("Cleaning origination data...")
+
+    df = orig_df.copy()
+
+    # Handle missing values for numeric columns
+    for col, missing_codes in MISSING_VALUES.items():
+        if col in df.columns:
+            df[col] = df[col].replace(missing_codes, np.nan)
+
+    # Convert credit_score to numeric, handling missing
+    if 'credit_score' in df.columns:
+        df['credit_score'] = pd.to_numeric(df['credit_score'], errors='coerce')
+        df.loc[df['credit_score'] == 9999, 'credit_score'] = np.nan
+
+    # Convert LTV/CLTV/DTI to numeric
+    for col in ['orig_ltv', 'orig_cltv', 'orig_dti']:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+            df.loc[df[col] == 999, col] = np.nan
+
+    # Convert MI percentage
+    if 'mi_pct' in df.columns:
+        df['mi_pct'] = pd.to_numeric(df['mi_pct'], errors='coerce')
+        df.loc[df['mi_pct'] == 999, 'mi_pct'] = np.nan
+
+    # Extract vintage year
+    df['vintage_year'] = df['first_payment_date'].apply(extract_vintage_year)
+
+    # Create FICO bands
+    df['fico_band'] = df['credit_score'].apply(bin_fico)
+
+    # Create LTV bands
+    df['ltv_band'] = df['orig_ltv'].apply(bin_ltv)
+
+    # Create DTI bands
+    df['dti_band'] = df['orig_dti'].apply(bin_dti)
+
+    # Create binary indicators
+    df['has_mi'] = df['mi_pct'].apply(has_mortgage_insurance)
+    df['is_high_ltv'] = df['orig_ltv'].apply(is_high_ltv)
+    df['loan_term_years'] = df['orig_loan_term'].apply(calculate_loan_term_years)
+
+    # Map categorical variables
+    df['occupancy_status_desc'] = df['occupancy_status'].map(OCCUPANCY_STATUS_MAP)
+    df['loan_purpose_desc'] = df['loan_purpose'].map(LOAN_PURPOSE_MAP)
+    df['property_type_desc'] = df['property_type'].map(PROPERTY_TYPE_MAP)
+    df['channel_desc'] = df['channel'].map(CHANNEL_MAP)
+
+    # Create first time homebuyer indicator
+    df['is_first_time_homebuyer'] = (df['first_time_homebuyer'] == 'Y').astype(int)
+
+    return df
+
+
+def merge_and_create_survival_dataset(
+    orig_df: pd.DataFrame,
+    perf_agg_df: pd.DataFrame
 ) -> pd.DataFrame:
     """
-    Create survival analysis dataset from raw Freddie Mac data.
+    Merge origination and aggregated performance data to create final survival dataset.
 
-    Parameters
-    ----------
-    origination_df : pd.DataFrame
-        Loan origination characteristics
-    performance_df : pd.DataFrame
-        Monthly loan performance data
-    default_threshold : int
-        Number of months delinquent to consider as default (default=3 for 90+ days)
+    Args:
+        orig_df: Cleaned origination DataFrame
+        perf_agg_df: Aggregated performance DataFrame with survival variables
 
-    Returns
-    -------
-    pd.DataFrame
-        Survival dataset with columns:
-        - loan_id: unique loan identifier
-        - duration: time to event in months
-        - event: 1 if event occurred, 0 if censored
-        - event_type: 'default', 'prepay', or 'censored'
-        - [covariates from origination data]
+    Returns:
+        Final survival analysis dataset
     """
+    logger.info("Merging origination and performance data...")
 
-    # Get the last observation for each loan
-    last_obs = performance_df.sort_values('loan_age').groupby('loan_sequence_number').last()
+    # Merge on loan_sequence_number
+    df = perf_agg_df.merge(
+        orig_df,
+        on='loan_sequence_number',
+        how='inner'
+    )
 
-    # Determine event type and timing
-    survival_data = []
+    logger.info(f"Merged dataset has {len(df):,} loans")
 
-    for loan_id, row in tqdm(last_obs.iterrows(), total=len(last_obs), desc="Processing loans"):
-        duration = row['loan_age'] if pd.notna(row['loan_age']) else 0
+    # Select and order final columns
+    survival_columns = [
+        # Identifiers
+        'loan_sequence_number',
 
-        # Determine event type
-        event_type = determine_event_type(row.get('zero_balance_code'))
+        # Survival variables
+        'duration',
+        'event',
+        'event_type',
 
-        # Alternative: check delinquency status for default
-        if event_type == 'censored':
-            delinq = row.get('current_loan_delinquency_status', 0)
-            if pd.notna(delinq) and str(delinq) not in ['0', 'XX', '']:
-                try:
-                    if int(delinq) >= default_threshold:
-                        event_type = 'default'
-                except ValueError:
-                    pass
+        # Time variables
+        'vintage_year',
 
-        event = 0 if event_type == 'censored' else 1
+        # Core covariates
+        'credit_score',
+        'orig_ltv',
+        'orig_cltv',
+        'orig_dti',
+        'orig_upb',
+        'orig_interest_rate',
+        'orig_loan_term',
 
-        survival_data.append({
-            'loan_id': loan_id,
-            'duration': duration,
-            'event': event,
-            'event_type': event_type
-        })
+        # Categorical covariates
+        'occupancy_status',
+        'loan_purpose',
+        'property_type',
+        'property_state',
+        'channel',
+        'num_borrowers',
+        'num_units',
 
-    survival_df = pd.DataFrame(survival_data)
+        # Binary indicators
+        'is_first_time_homebuyer',
+        'has_mi',
+        'is_high_ltv',
+        'ever_modified',
+        'ever_60_plus_delinquent',
+        'ever_90_plus_delinquent',
 
-    # Merge with origination covariates
-    origination_df = origination_df.set_index('loan_sequence_number')
-    survival_df = survival_df.set_index('loan_id').join(origination_df)
-    survival_df = survival_df.reset_index().rename(columns={'index': 'loan_id'})
+        # Binned variables
+        'fico_band',
+        'ltv_band',
+        'dti_band',
+
+        # Descriptive mappings
+        'occupancy_status_desc',
+        'loan_purpose_desc',
+        'property_type_desc',
+        'channel_desc',
+
+        # Additional info
+        'loan_term_years',
+        'mi_pct',
+        'max_delinquency',
+    ]
+
+    # Keep only columns that exist
+    available_columns = [col for col in survival_columns if col in df.columns]
+    df = df[available_columns]
+
+    return df
+
+
+def process_single_year(
+    orig_file: Path,
+    perf_file: Path,
+    year: int
+) -> pd.DataFrame:
+    """
+    Process a single year of data.
+
+    Args:
+        orig_file: Path to origination file
+        perf_file: Path to performance file
+        year: Vintage year
+
+    Returns:
+        Survival dataset for the year
+    """
+    logger.info(f"\n{'='*60}")
+    logger.info(f"Processing year {year}")
+    logger.info(f"{'='*60}")
+
+    # Load data
+    orig_df = load_origination_data(orig_file)
+    perf_df = load_performance_data(perf_file)
+
+    # Aggregate performance data
+    perf_agg = aggregate_performance_data(perf_df)
+
+    # Create survival variables
+    perf_agg = create_survival_variables(perf_agg)
+
+    # Clean origination data
+    orig_clean = clean_origination_data(orig_df)
+
+    # Merge and create final dataset
+    survival_df = merge_and_create_survival_dataset(orig_clean, perf_agg)
+
+    logger.info(f"Year {year}: {len(survival_df):,} loans processed")
 
     return survival_df
 
 
-def clean_covariates(df: pd.DataFrame) -> pd.DataFrame:
-    """Clean and encode covariates for modeling."""
+def save_datasets(
+    df: pd.DataFrame,
+    output_path: Path,
+    save_by_event_type: bool = True
+) -> None:
+    """
+    Save survival datasets to disk.
 
-    # Select key covariates for survival analysis
-    key_covariates = [
-        'loan_id', 'duration', 'event', 'event_type',
-        'credit_score', 'ltv', 'cltv', 'dti', 'upb',
-        'orig_interest_rate', 'orig_loan_term', 'num_borrowers',
-        'first_time_homebuyer_flag', 'occupancy_status',
-        'channel', 'property_type', 'loan_purpose', 'property_state'
-    ]
+    Args:
+        df: Full survival dataset
+        output_path: Output directory path
+        save_by_event_type: Whether to save separate files by event type
+    """
+    output_path.mkdir(parents=True, exist_ok=True)
 
-    # Keep only available columns
-    available_cols = [c for c in key_covariates if c in df.columns]
-    df = df[available_cols].copy()
+    # Save full dataset
+    parquet_file = output_path / 'survival_data.parquet'
+    csv_file = output_path / 'survival_data.csv'
 
-    # Handle missing values in numeric columns
-    numeric_cols = ['credit_score', 'ltv', 'cltv', 'dti', 'orig_interest_rate']
-    for col in numeric_cols:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
+    df.to_parquet(parquet_file, index=False)
+    logger.info(f"Saved {len(df):,} loans to {parquet_file}")
 
-    return df
+    df.to_csv(csv_file, index=False)
+    logger.info(f"Saved CSV to {csv_file}")
+
+    if save_by_event_type:
+        # Save default-only dataset (for cause-specific hazard models)
+        default_df = df[df['event_type'].isin(['default', 'censored'])].copy()
+        default_df['event'] = (default_df['event_type'] == 'default').astype(int)
+        default_file = output_path / 'survival_data_default.csv'
+        default_df.to_csv(default_file, index=False)
+        logger.info(f"Saved default dataset ({len(default_df):,} loans) to {default_file}")
+
+        # Save prepayment-only dataset
+        prepay_df = df[df['event_type'].isin(['prepay', 'censored'])].copy()
+        prepay_df['event'] = (prepay_df['event_type'] == 'prepay').astype(int)
+        prepay_file = output_path / 'survival_data_prepay.csv'
+        prepay_df.to_csv(prepay_file, index=False)
+        logger.info(f"Saved prepayment dataset ({len(prepay_df):,} loans) to {prepay_file}")
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Preprocess Freddie Mac data for survival analysis')
-    parser.add_argument('--input', type=str, required=True, help='Path to raw data directory')
-    parser.add_argument('--output', type=str, required=True, help='Path to output directory')
-    parser.add_argument('--year', type=str, default=None, help='Specific year to process (e.g., 2015)')
+    """Main entry point for preprocessing."""
+    parser = argparse.ArgumentParser(
+        description='Preprocess Freddie Mac data for survival analysis'
+    )
+    parser.add_argument(
+        '--input', '-i',
+        type=str,
+        required=True,
+        help='Path to raw data directory'
+    )
+    parser.add_argument(
+        '--output', '-o',
+        type=str,
+        required=True,
+        help='Path to output directory'
+    )
+    parser.add_argument(
+        '--year', '-y',
+        type=int,
+        default=None,
+        help='Specific year to process (e.g., 2020). If not specified, process all years.'
+    )
+    parser.add_argument(
+        '--years',
+        type=str,
+        default=None,
+        help='Range of years to process (e.g., "2015-2020")'
+    )
+    parser.add_argument(
+        '--no-split',
+        action='store_true',
+        help='Do not create separate files by event type'
+    )
+
     args = parser.parse_args()
 
     input_path = Path(args.input)
     output_path = Path(args.output)
-    output_path.mkdir(parents=True, exist_ok=True)
 
-    print(f"Processing data from {input_path}")
-
-    # Find origination and performance files
-    # Freddie Mac naming convention: historical_data_YYYY.txt, historical_data_time_YYYY.txt
-    orig_files = list(input_path.glob('**/historical_data_20*.txt'))
-    perf_files = list(input_path.glob('**/historical_data_time_20*.txt'))
-
-    if not orig_files or not perf_files:
-        # Try sample data naming convention
-        orig_files = list(input_path.glob('**/sample_orig*.txt'))
-        perf_files = list(input_path.glob('**/sample_svcg*.txt'))
-
-    if not orig_files:
-        print("No origination files found. Please check the input directory structure.")
-        print("Expected files: historical_data_YYYY.txt or sample_orig*.txt")
+    if not input_path.exists():
+        logger.error(f"Input path does not exist: {input_path}")
         return
 
-    print(f"Found {len(orig_files)} origination files and {len(perf_files)} performance files")
+    # Find all data file pairs
+    file_pairs = find_data_files(input_path)
 
-    # Process each file pair
-    all_survival_data = []
+    if not file_pairs:
+        logger.error(f"No data files found in {input_path}")
+        logger.error("Expected structure: data/raw/sample_YYYY/sample_orig_YYYY.txt")
+        return
 
-    for orig_file in tqdm(orig_files, desc="Processing files"):
-        year = orig_file.stem.split('_')[-1]
+    logger.info(f"Found {len(file_pairs)} year(s) of data")
 
-        if args.year and year != args.year:
+    # Filter by year if specified
+    if args.year:
+        file_pairs = [(y, o, p) for y, o, p in file_pairs if y == args.year]
+        if not file_pairs:
+            logger.error(f"No data found for year {args.year}")
+            return
+    elif args.years:
+        start_year, end_year = map(int, args.years.split('-'))
+        file_pairs = [(y, o, p) for y, o, p in file_pairs if start_year <= y <= end_year]
+
+    # Process each year
+    all_data = []
+
+    for year, orig_file, perf_file in file_pairs:
+        try:
+            survival_df = process_single_year(orig_file, perf_file, year)
+            all_data.append(survival_df)
+        except Exception as e:
+            logger.error(f"Error processing year {year}: {e}")
             continue
 
-        # Find matching performance file
-        perf_file = None
-        for pf in perf_files:
-            if year in pf.stem:
-                perf_file = pf
-                break
+    if not all_data:
+        logger.error("No data was successfully processed")
+        return
 
-        if perf_file is None:
-            print(f"Warning: No performance file found for {orig_file}")
-            continue
+    # Combine all years
+    logger.info("\nCombining all years...")
+    final_df = pd.concat(all_data, ignore_index=True)
 
-        print(f"\nProcessing {year}...")
+    # Save datasets
+    save_datasets(final_df, output_path, save_by_event_type=not args.no_split)
 
-        # Load data
-        orig_df = load_origination_data(orig_file)
-        perf_df = load_performance_data(perf_file)
-
-        # Create survival dataset
-        survival_df = create_survival_dataset(orig_df, perf_df)
-        survival_df = clean_covariates(survival_df)
-        survival_df['vintage'] = year
-
-        all_survival_data.append(survival_df)
-
-    if all_survival_data:
-        # Combine all years
-        final_df = pd.concat(all_survival_data, ignore_index=True)
-
-        # Save to parquet for efficient storage
-        output_file = output_path / 'survival_data.parquet'
-        final_df.to_parquet(output_file, index=False)
-        print(f"\nSaved {len(final_df)} loans to {output_file}")
-
-        # Also save as CSV for convenience
-        csv_file = output_path / 'survival_data.csv'
-        final_df.to_csv(csv_file, index=False)
-        print(f"Saved CSV to {csv_file}")
-
-        # Print summary statistics
-        print("\n=== Dataset Summary ===")
-        print(f"Total loans: {len(final_df)}")
-        print(f"\nEvent distribution:")
-        print(final_df['event_type'].value_counts())
-        print(f"\nDuration statistics (months):")
-        print(final_df['duration'].describe())
-    else:
-        print("No data processed. Please check input files.")
+    # Print summary statistics
+    print_summary_stats(final_df, "Final Survival Dataset")
 
 
 if __name__ == '__main__':

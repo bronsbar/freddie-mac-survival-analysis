@@ -160,10 +160,38 @@ For competing risks analysis:
 ### Derived Features
 | Variable | Calculation |
 |----------|-------------|
-| `vintage_year` | Extract from `first_payment_date` |
+| `vintage_year` | Extract from `loan_sequence_number` (see below) |
 | `loan_term_years` | `orig_loan_term / 12` |
 | `is_high_ltv` | 1 if `orig_ltv > 80`, else 0 |
 | `has_mi` | 1 if `mi_pct > 0`, else 0 |
+
+### Vintage Year Extraction
+
+The `vintage_year` is extracted from the `loan_sequence_number` which encodes the origination period:
+
+```
+Format: FYYQ#xxxxxx
+
+F   = Freddie Mac identifier (always 'F')
+YY  = Two-digit origination year
+Q#  = Origination quarter (1, 2, 3, or 4)
+xxx = Sequence number
+```
+
+**Examples:**
+| loan_sequence_number | Parsed Year | Quarter |
+|---------------------|-------------|---------|
+| F99Q10012345        | 1999        | Q1      |
+| F05Q32098765        | 2005        | Q3      |
+| F20Q41234567        | 2020        | Q4      |
+
+**Y2K Handling:**
+- Years 91-99 → 1991-1999
+- Years 00-90 → 2000-2090
+
+This is more accurate than using `first_payment_date` because:
+1. It reflects the actual origination date, not when payments began
+2. The first payment date is typically 1 month after origination
 
 ---
 

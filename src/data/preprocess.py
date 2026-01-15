@@ -47,11 +47,21 @@ from .utils import (
 )
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# Create formatter
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+# Console handler
+console_handler = logging.StreamHandler()
+console_handler.setFormatter(formatter)
+logger.addHandler(console_handler)
+
+# File handler
+file_handler = logging.FileHandler('preprocessing.log')
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 
 def load_origination_data(filepath: Path) -> pd.DataFrame:

@@ -34,20 +34,28 @@ def parse_date(date_str: str) -> Optional[pd.Timestamp]:
         return None
 
 
-def extract_vintage_year(first_payment_date: str) -> Optional[int]:
+def extract_vintage_year(loan_sequence_number: str) -> Optional[int]:
     """
-    Extract vintage year from first payment date.
+    Extract vintage year from loan sequence number.
+
+    The loan_sequence_number format is FYYQ#xxxxxx where:
+    - F = Freddie Mac identifier
+    - YY = Two-digit origination year
+    - Q# = Origination quarter (1-4)
 
     Args:
-        first_payment_date: Date string in YYYYMM format
+        loan_sequence_number: Loan sequence number string
 
     Returns:
         Year as integer or None
     """
-    if pd.isna(first_payment_date) or first_payment_date == '':
+    if pd.isna(loan_sequence_number) or len(str(loan_sequence_number)) < 4:
         return None
     try:
-        return int(str(first_payment_date)[:4])
+        year_digits = str(loan_sequence_number)[1:3]
+        year = int(year_digits)
+        # Handle Y2K: years > 90 are 1990s, otherwise 2000s
+        return 1900 + year if year > 90 else 2000 + year
     except (ValueError, TypeError):
         return None
 

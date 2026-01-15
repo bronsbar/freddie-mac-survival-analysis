@@ -214,8 +214,8 @@ def clean_origination_data(orig_df: pd.DataFrame) -> pd.DataFrame:
         df['mi_pct'] = pd.to_numeric(df['mi_pct'], errors='coerce')
         df.loc[df['mi_pct'] == 999, 'mi_pct'] = np.nan
 
-    # Extract vintage year
-    df['vintage_year'] = df['first_payment_date'].apply(extract_vintage_year)
+    # Extract vintage year from loan sequence number
+    df['vintage_year'] = df['loan_sequence_number'].apply(extract_vintage_year)
 
     # Create FICO bands
     df['fico_band'] = df['credit_score'].apply(bin_fico)

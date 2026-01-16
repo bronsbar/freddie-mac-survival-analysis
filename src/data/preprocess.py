@@ -5,7 +5,7 @@ This script transforms raw Freddie Mac origination and performance data
 into a survival analysis-ready format with:
 - duration: time from origination to event (in months)
 - event: binary indicator (1 = event occurred, 0 = censored)
-- event_type: 'default', 'prepay', 'other', or 'censored'
+- event_type: 'default', 'prepay', 'matured', 'other', or 'censored'
 
 Usage:
     python -m src.data.preprocess --input data/raw --output data/processed
@@ -35,6 +35,7 @@ from .columns import (
 from .utils import (
     extract_vintage_year,
     map_event_type,
+    map_event_type_with_maturity,
     create_event_indicator,
     bin_fico,
     bin_ltv,
@@ -164,16 +165,16 @@ def create_survival_variables(df: pd.DataFrame) -> pd.DataFrame:
     """
     Create survival analysis variables from aggregated performance data.
 
+    Note: event_type is created later in merge_and_create_survival_dataset
+    after merging with origination data (to distinguish matured from prepaid).
+
     Args:
         df: Aggregated performance DataFrame
 
     Returns:
-        DataFrame with event and event_type columns added
+        DataFrame with event column added (event_type created after merge)
     """
     logger.info("Creating survival variables...")
-
-    # Create event type
-    df['event_type'] = df['zero_balance_code'].apply(map_event_type)
 
     # Create binary event indicator
     df['event'] = df['zero_balance_code'].apply(create_event_indicator)
@@ -278,6 +279,16 @@ def merge_and_create_survival_dataset(
     )
 
     logger.info(f"Merged dataset has {len(df):,} loans")
+
+    # Create event_type after merge (need both duration and orig_loan_term to distinguish matured from prepaid)
+    df['event_type'] = df.apply(
+        lambda row: map_event_type_with_maturity(
+            row['zero_balance_code'],
+            row['duration'],
+            row['orig_loan_term']
+        ),
+        axis=1
+    )
 
     # Select and order final columns
     survival_columns = [

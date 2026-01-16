@@ -94,13 +94,13 @@ For each loan, extract from the **last performance record**:
 |----------|--------|-------|
 | `duration` | `loan_age` | Last observed loan age (months since origination) |
 | `event` | `zero_balance_code` | 1 if code exists (terminated), 0 if blank (censored) |
-| `event_type` | `zero_balance_code` | Categorical: prepay, default, other, censored |
+| `event_type` | `zero_balance_code` + `loan_age` | Categorical: prepay, matured, default, other, censored |
 
 ### Zero Balance Code Mapping
 
 | Code | Description | Event Type |
 |------|-------------|------------|
-| 01 | Prepaid or Matured (Voluntary Payoff) | **Prepayment** |
+| 01 | Prepaid or Matured (Voluntary Payoff) | **Prepayment** or **Matured** (see below) |
 | 02 | Third Party Sale (Foreclosure) | **Default** |
 | 03 | Short Sale or Charge Off | **Default** |
 | 09 | REO Disposition | **Default** |
@@ -109,12 +109,22 @@ For each loan, extract from the **last performance record**:
 | 96 | Defect prior to termination | Defect (exclude) |
 | (blank) | Loan still active | **Censored** |
 
+### Distinguishing Matured from Prepaid Loans
+
+Code 01 represents both voluntary prepayments and loans that reached maturity. To distinguish:
+
+- **Matured**: `zero_balance_code = 01` AND `loan_age >= orig_loan_term - 3 months`
+- **Prepay**: `zero_balance_code = 01` AND `loan_age < orig_loan_term - 3 months`
+
+The 3-month threshold (`MATURITY_THRESHOLD_MONTHS`) accounts for minor timing differences in reporting.
+
 ### Competing Risks Framework
 
 For competing risks analysis:
-- **Event 1 (Prepayment)**: `zero_balance_code = 01`
-- **Event 2 (Default)**: `zero_balance_code IN (02, 03, 09)`
-- **Censored**: No `zero_balance_code` or codes 15, 16, 96
+- **Event 1 (Prepayment)**: `event_type = 'prepay'`
+- **Event 2 (Default)**: `event_type = 'default'`
+- **Event 3 (Matured)**: `event_type = 'matured'`
+- **Censored**: `event_type = 'censored'` (no zero_balance_code or codes 15, 16, 96)
 
 ---
 

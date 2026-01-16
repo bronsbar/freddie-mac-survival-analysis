@@ -13,6 +13,7 @@ from .columns import (
     FICO_BANDS, FICO_LABELS,
     LTV_BANDS, LTV_LABELS,
     DTI_BANDS, DTI_LABELS,
+    MATURITY_THRESHOLD_MONTHS,
 )
 
 
@@ -64,6 +65,9 @@ def map_event_type(zero_balance_code: str) -> str:
     """
     Map zero balance code to event type for survival analysis.
 
+    Note: This function does NOT distinguish between prepay and matured.
+    Use map_event_type_with_maturity() for that distinction.
+
     Args:
         zero_balance_code: Zero balance code from performance data
 
@@ -74,6 +78,41 @@ def map_event_type(zero_balance_code: str) -> str:
         return 'censored'
 
     code = str(zero_balance_code).strip().zfill(2)
+    return ZERO_BALANCE_CODE_MAP.get(code, 'other')
+
+
+def map_event_type_with_maturity(
+    zero_balance_code: str,
+    loan_age: int,
+    orig_loan_term: int
+) -> str:
+    """
+    Map zero balance code to event type, distinguishing matured loans from prepayments.
+
+    A loan with code '01' (Prepaid or Matured) is classified as:
+    - 'matured' if loan_age >= orig_loan_term - MATURITY_THRESHOLD_MONTHS
+    - 'prepay' otherwise
+
+    Args:
+        zero_balance_code: Zero balance code from performance data
+        loan_age: Current loan age in months
+        orig_loan_term: Original loan term in months
+
+    Returns:
+        Event type string: 'prepay', 'matured', 'default', 'other', 'defect', or 'censored'
+    """
+    if pd.isna(zero_balance_code) or zero_balance_code == '':
+        return 'censored'
+
+    code = str(zero_balance_code).strip().zfill(2)
+
+    # Check for maturity: code 01 with loan age near original term
+    if code == '01':
+        if (pd.notna(loan_age) and pd.notna(orig_loan_term) and
+                loan_age >= orig_loan_term - MATURITY_THRESHOLD_MONTHS):
+            return 'matured'
+        return 'prepay'
+
     return ZERO_BALANCE_CODE_MAP.get(code, 'other')
 
 

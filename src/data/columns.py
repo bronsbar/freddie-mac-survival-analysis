@@ -149,8 +149,10 @@ PERFORMANCE_DTYPES = {
 }
 
 # Zero balance code mapping for event types
+# Note: Code '01' (Prepaid or Matured) requires additional logic to distinguish
+# between prepayment and maturity - see map_event_type_with_maturity() in utils.py
 ZERO_BALANCE_CODE_MAP = {
-    '01': 'prepay',      # Prepaid or Matured (Voluntary Payoff)
+    '01': 'prepay',      # Prepaid or Matured - needs loan_age check for maturity
     '02': 'default',     # Third Party Sale (Foreclosure)
     '03': 'default',     # Short Sale or Charge Off
     '09': 'default',     # REO Disposition
@@ -158,6 +160,10 @@ ZERO_BALANCE_CODE_MAP = {
     '16': 'other',       # Reperforming Loan Securitization
     '96': 'defect',      # Defect prior to termination
 }
+
+# Maturity threshold: if loan_age >= orig_loan_term - MATURITY_THRESHOLD_MONTHS,
+# and zero_balance_code is '01', the loan is considered matured (not prepaid)
+MATURITY_THRESHOLD_MONTHS = 3
 
 # Missing value codes
 MISSING_VALUES = {

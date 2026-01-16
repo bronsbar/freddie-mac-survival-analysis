@@ -10,6 +10,7 @@ into a survival analysis-ready format with:
 Usage:
     python -m src.data.preprocess --input data/raw --output data/processed
     python -m src.data.preprocess --input data/raw --output data/processed --year 2020
+    python -m src.data.preprocess --input data/raw --output data/processed --by-vintage
 """
 
 import argparse
@@ -385,7 +386,8 @@ def process_single_year(
 def save_datasets(
     df: pd.DataFrame,
     output_path: Path,
-    save_by_event_type: bool = True
+    save_by_event_type: bool = True,
+    save_by_vintage: bool = False
 ) -> None:
     """
     Save survival datasets to disk.
@@ -394,18 +396,22 @@ def save_datasets(
         df: Full survival dataset
         output_path: Output directory path
         save_by_event_type: Whether to save separate files by event type
+        save_by_vintage: Whether to save separate files per vintage year
     """
     output_path.mkdir(parents=True, exist_ok=True)
 
     # Save full dataset
-    parquet_file = output_path / 'survival_data.parquet'
     csv_file = output_path / 'survival_data.csv'
-
-    df.to_parquet(parquet_file, index=False)
-    logger.info(f"Saved {len(df):,} loans to {parquet_file}")
-
     df.to_csv(csv_file, index=False)
-    logger.info(f"Saved CSV to {csv_file}")
+    logger.info(f"Saved {len(df):,} loans to {csv_file}")
+
+    # Try to save parquet (optional, requires pyarrow or fastparquet)
+    try:
+        parquet_file = output_path / 'survival_data.parquet'
+        df.to_parquet(parquet_file, index=False)
+        logger.info(f"Saved parquet to {parquet_file}")
+    except ImportError:
+        logger.warning("Parquet not saved (pyarrow/fastparquet not installed)")
 
     if save_by_event_type:
         # Save default-only dataset (for cause-specific hazard models)
@@ -421,6 +427,63 @@ def save_datasets(
         prepay_file = output_path / 'survival_data_prepay.csv'
         prepay_df.to_csv(prepay_file, index=False)
         logger.info(f"Saved prepayment dataset ({len(prepay_df):,} loans) to {prepay_file}")
+
+    if save_by_vintage:
+        save_datasets_by_vintage(df, output_path, save_by_event_type)
+
+
+def save_datasets_by_vintage(
+    df: pd.DataFrame,
+    output_path: Path,
+    save_by_event_type: bool = True
+) -> None:
+    """
+    Save separate survival datasets for each vintage year.
+
+    Args:
+        df: Full survival dataset
+        output_path: Output directory path
+        save_by_event_type: Whether to save separate files by event type for each vintage
+    """
+    vintage_dir = output_path / 'by_vintage'
+    vintage_dir.mkdir(parents=True, exist_ok=True)
+
+    vintages = sorted(df['vintage_year'].dropna().unique())
+    logger.info(f"\nSaving datasets by vintage for {len(vintages)} vintages...")
+
+    for vintage in vintages:
+        vintage_int = int(vintage)
+        vintage_path = vintage_dir / f'vintage_{vintage_int}'
+        vintage_path.mkdir(parents=True, exist_ok=True)
+
+        vintage_df = df[df['vintage_year'] == vintage].copy()
+
+        # Save full vintage dataset
+        csv_file = vintage_path / f'survival_data_{vintage_int}.csv'
+        vintage_df.to_csv(csv_file, index=False)
+        logger.info(f"Vintage {vintage_int}: saved {len(vintage_df):,} loans to {vintage_path}")
+
+        # Try to save parquet (optional)
+        try:
+            parquet_file = vintage_path / f'survival_data_{vintage_int}.parquet'
+            vintage_df.to_parquet(parquet_file, index=False)
+        except ImportError:
+            pass  # Skip parquet if not available
+
+        if save_by_event_type:
+            # Save default-only dataset for this vintage
+            default_df = vintage_df[vintage_df['event_type'].isin(['default', 'censored'])].copy()
+            default_df['event'] = (default_df['event_type'] == 'default').astype(int)
+            default_file = vintage_path / f'survival_data_{vintage_int}_default.csv'
+            default_df.to_csv(default_file, index=False)
+
+            # Save prepayment-only dataset for this vintage
+            prepay_df = vintage_df[vintage_df['event_type'].isin(['prepay', 'censored'])].copy()
+            prepay_df['event'] = (prepay_df['event_type'] == 'prepay').astype(int)
+            prepay_file = vintage_path / f'survival_data_{vintage_int}_prepay.csv'
+            prepay_df.to_csv(prepay_file, index=False)
+
+    logger.info(f"Saved {len(vintages)} vintage-specific datasets to {vintage_dir}")
 
 
 def main():
@@ -456,6 +519,11 @@ def main():
         '--no-split',
         action='store_true',
         help='Do not create separate files by event type'
+    )
+    parser.add_argument(
+        '--by-vintage',
+        action='store_true',
+        help='Create separate survival files for each vintage year'
     )
 
     args = parser.parse_args()
@@ -507,7 +575,12 @@ def main():
     final_df = pd.concat(all_data, ignore_index=True)
 
     # Save datasets
-    save_datasets(final_df, output_path, save_by_event_type=not args.no_split)
+    save_datasets(
+        final_df,
+        output_path,
+        save_by_event_type=not args.no_split,
+        save_by_vintage=args.by_vintage
+    )
 
     # Print summary statistics
     print_summary_stats(final_df, "Final Survival Dataset")

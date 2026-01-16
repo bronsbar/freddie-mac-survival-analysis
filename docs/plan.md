@@ -16,7 +16,10 @@
    - Define `event_type` (default, prepayment)
    - Map `zero_balance_code` to event types
 5. **Handle missing values** and data quality issues
-6. **Output to** `data/processed/`
+6. **Output to** `data/processed/`:
+   - Combined dataset across all vintages
+   - Per-vintage datasets (with `--by-vintage` flag)
+   - Event-type splits (default-only, prepay-only)
 
 ## Phase 3: Exploratory Data Analysis
 1. **Univariate analysis** of key variables

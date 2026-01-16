@@ -237,9 +237,29 @@ has_mi           | int      | 1=Has mortgage insurance
 ```
 
 ### Output Files
+
+**Combined datasets:**
 - `data/processed/survival_data.csv` - Full survival dataset
 - `data/processed/survival_data_default.csv` - Default events only (for cause-specific analysis)
 - `data/processed/survival_data_prepay.csv` - Prepayment events only
+
+**Per-vintage datasets (with `--by-vintage` flag):**
+```
+data/processed/by_vintage/
+├── vintage_1999/
+│   ├── survival_data_1999.csv
+│   ├── survival_data_1999_default.csv
+│   └── survival_data_1999_prepay.csv
+├── vintage_2000/
+│   └── ...
+└── vintage_2025/
+    └── ...
+```
+
+Each vintage directory contains:
+- `survival_data_YYYY.csv` - All loans for that vintage year
+- `survival_data_YYYY_default.csv` - Default events only
+- `survival_data_YYYY_prepay.csv` - Prepayment events only
 
 ---
 
@@ -260,3 +280,22 @@ has_mi           | int      | 1=Has mortgage insurance
 - Main preprocessing script: `src/data/preprocess.py`
 - Column definitions: `src/data/columns.py`
 - Utility functions: `src/data/utils.py`
+
+### Usage Examples
+
+```bash
+# Process all years, combined output only
+python -m src.data.preprocess --input data/raw --output data/processed
+
+# Process a specific year
+python -m src.data.preprocess --input data/raw --output data/processed --year 2020
+
+# Process a range of years
+python -m src.data.preprocess --input data/raw --output data/processed --years 2015-2020
+
+# Process all years with per-vintage output files
+python -m src.data.preprocess --input data/raw --output data/processed --by-vintage
+
+# Combine options: specific range with vintage split, no event-type splits
+python -m src.data.preprocess -i data/raw -o data/processed --years 2015-2020 --by-vintage --no-split
+```

@@ -93,8 +93,10 @@ For each loan, extract from the **last performance record**:
 | Variable | Source | Logic |
 |----------|--------|-------|
 | `duration` | `loan_age` | Last observed loan age (months since origination) |
-| `event` | `zero_balance_code` | 1 if code exists (terminated), 0 if blank (censored) |
+| `event` | `event_type` | 1 if prepay/default/other/defect, 0 if censored/matured |
 | `event_type` | `zero_balance_code` + `loan_age` | Categorical: prepay, matured, default, other, censored |
+
+**Note:** Matured loans are treated as **censored** (`event=0`) for survival modeling because maturity is deterministic (known at origination) and represents successful loan completion, not a failure event.
 
 ### Zero Balance Code Mapping
 
@@ -121,10 +123,14 @@ The 3-month threshold (`MATURITY_THRESHOLD_MONTHS`) accounts for minor timing di
 ### Competing Risks Framework
 
 For competing risks analysis:
-- **Event 1 (Prepayment)**: `event_type = 'prepay'`
-- **Event 2 (Default)**: `event_type = 'default'`
-- **Event 3 (Matured)**: `event_type = 'matured'`
-- **Censored**: `event_type = 'censored'` (no zero_balance_code or codes 15, 16, 96)
+- **Event 1 (Prepayment)**: `event_type = 'prepay'` → `event = 1`
+- **Event 2 (Default)**: `event_type = 'default'` → `event = 1`
+- **Censored**: `event_type IN ('censored', 'matured')` → `event = 0`
+
+Matured loans are grouped with censored because:
+1. Maturity timing is deterministic (known at origination)
+2. The loan "survived" to its natural end without prepay/default
+3. There's no remaining risk to model after maturity
 
 ---
 

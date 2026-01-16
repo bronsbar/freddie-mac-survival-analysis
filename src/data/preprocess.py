@@ -34,9 +34,7 @@ from .columns import (
 )
 from .utils import (
     extract_vintage_year,
-    map_event_type,
     map_event_type_with_maturity,
-    create_event_indicator,
     bin_fico,
     bin_ltv,
     bin_dti,
@@ -165,19 +163,17 @@ def create_survival_variables(df: pd.DataFrame) -> pd.DataFrame:
     """
     Create survival analysis variables from aggregated performance data.
 
-    Note: event_type is created later in merge_and_create_survival_dataset
-    after merging with origination data (to distinguish matured from prepaid).
+    Note: event_type and event indicator are created later in
+    merge_and_create_survival_dataset after merging with origination data
+    (to distinguish matured from prepaid, and treat matured as censored).
 
     Args:
         df: Aggregated performance DataFrame
 
     Returns:
-        DataFrame with event column added (event_type created after merge)
+        DataFrame with preliminary survival variables
     """
     logger.info("Creating survival variables...")
-
-    # Create binary event indicator
-    df['event'] = df['zero_balance_code'].apply(create_event_indicator)
 
     # Handle missing duration (set to 0 if missing)
     df['duration'] = df['duration'].fillna(0).astype(int)
@@ -288,6 +284,13 @@ def merge_and_create_survival_dataset(
             row['orig_loan_term']
         ),
         axis=1
+    )
+
+    # Create binary event indicator (matured treated as censored)
+    # Events: prepay, default, other, defect
+    # Censored: censored, matured
+    df['event'] = df['event_type'].apply(
+        lambda x: 0 if x in ['censored', 'matured'] else 1
     )
 
     # Select and order final columns

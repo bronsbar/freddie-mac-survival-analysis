@@ -9,6 +9,7 @@ Models:
 - Cause-Specific Cox (CSC): Semi-parametric Cox model
 - Fine-Gray (FGR): Subdistribution hazard model
 - Random Survival Forest (RSF): ML ensemble approach
+- DeepHit: Deep learning approach (Lee et al., 2018)
 
 Modules:
 --------
@@ -16,6 +17,7 @@ data_prep : Time-varying covariate dataset creation
 fine_gray : Discrete-time Fine-Gray model implementation
 cause_specific : Cause-specific Cox model wrappers
 random_forest : Random Survival Forest for competing risks
+deephit : DeepHit deep learning model (pycox/PyTorch)
 cumulative_incidence : CIF estimation functions
 evaluation : Model comparison and validation metrics
 """
@@ -39,6 +41,11 @@ from .cause_specific import (
 from .random_forest import (
     CompetingRisksRSF,
     fit_rsf_competing_risks,
+)
+
+from .deephit import (
+    CompetingRisksDeepHit,
+    fit_deephit_competing_risks,
 )
 
 from .cumulative_incidence import (
@@ -75,6 +82,9 @@ __all__ = [
     # Random Survival Forest
     'CompetingRisksRSF',
     'fit_rsf_competing_risks',
+    # DeepHit
+    'CompetingRisksDeepHit',
+    'fit_deephit_competing_risks',
     # Cumulative incidence
     'estimate_cif_aalen_johansen',
     'estimate_cif_from_model',
@@ -93,4 +103,4 @@ __all__ = [
     'EVAL_TIMES',
 ]
 
-__version__ = '0.2.0'
+__version__ = '0.3.0'

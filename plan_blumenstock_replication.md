@@ -16,8 +16,7 @@ Compare statistical and machine learning survival models for predicting mortgage
 | **Cause-Specific Cox (CSC)** | Statistical | Semi-parametric Cox model, treats competing events as censored |
 | **Fine-Gray (FGR)** | Statistical | Subdistribution hazard model, properly handles competing risks |
 | **Random Survival Forest (RSF)** | ML | Ensemble method using Gray's log-rank splitting for competing risks |
-
-**Note**: DeepHit (deep learning model) is excluded from this implementation phase.
+| **DeepHit** | Deep Learning | Neural network directly modeling PMF with ranking loss for competing risks |
 
 ---
 
@@ -193,6 +192,41 @@ rsf = RandomSurvivalForest(
 
 **Note**: For proper competing risks RSF, implement Gray's log-rank splitting rule.
 
+### 4. DeepHit (Deep Learning)
+
+Using pycox library (PyTorch-based):
+
+```python
+from pycox.models import DeepHit
+import torchtuples as tt
+
+# Network architecture: shared layers + cause-specific outputs
+net = CauseSpecificNet(
+    in_features=n_features,
+    num_nodes_shared=[64, 64],
+    num_nodes_indiv=[32],
+    num_risks=2,  # prepay + default
+    out_features=num_durations,
+    batch_norm=True,
+    dropout=0.1
+)
+
+# DeepHit model with ranking loss
+model = DeepHit(
+    net,
+    optimizer=tt.optim.AdamWR(lr=0.01, decoupled_weight_decay=0.01),
+    alpha=0.2,      # Balance between NLL and ranking loss
+    sigma=0.1,      # Ranking loss parameter
+    duration_index=labtrans.cuts
+)
+```
+
+**Key features**:
+- Directly models the probability mass function (PMF) over discrete time
+- Combined loss: `alpha * NLL + (1-alpha) * ranking_loss`
+- Handles competing risks natively with cause-specific output layers
+- Predicts cumulative incidence functions (CIF) for each event type
+
 ---
 
 ## Implementation Roadmap
@@ -214,12 +248,14 @@ rsf = RandomSurvivalForest(
 - [x] Cause-Specific Cox for prepayment and default
 - [x] Fine-Gray discrete-time model
 - [x] Random Survival Forest for competing risks
+- [x] DeepHit deep learning model (pycox/PyTorch)
 - [x] Implement time-dependent concordance index
 
 **Implemented in**:
 - `src/competing_risks/cause_specific.py` - CSC wrapper
 - `src/competing_risks/fine_gray.py` - Discrete-time Fine-Gray
 - `src/competing_risks/random_forest.py` - RSF for competing risks
+- `src/competing_risks/deephit.py` - DeepHit wrapper using pycox
 - `src/competing_risks/evaluation.py` - Time-dependent C-index at 24, 48, 72 months
 
 ### Phase 3: Run Experiments ✅
@@ -254,8 +290,8 @@ notebooks/
 ├── 04_nonparametric_cif.ipynb              # Aalen-Johansen CIF estimation
 ├── 05_cause_specific_cox.ipynb             # CSC models
 ├── 06_fine_gray_model.ipynb                # FGR model
-├── 07_random_survival_forest.ipynb         # RSF model (NEW)
-├── 08_model_comparison.ipynb               # Compare all models
+├── 07_random_survival_forest.ipynb         # RSF model
+├── 08_model_comparison.ipynb               # Compare all models (CSC, FGR, RSF, DeepHit)
 
 src/
 ├── competing_risks/
@@ -263,7 +299,8 @@ src/
 │   ├── data_prep.py                        # Paper-style data preparation
 │   ├── fine_gray.py                        # Discrete-time FG
 │   ├── cause_specific.py                   # Cause-specific Cox
-│   ├── random_forest.py                    # RSF for competing risks (NEW)
+│   ├── random_forest.py                    # RSF for competing risks
+│   ├── deephit.py                          # DeepHit wrapper (pycox/PyTorch)
 │   ├── cumulative_incidence.py             # CIF calculations
 │   └── evaluation.py                       # Time-dependent C-index
 ```
@@ -275,7 +312,7 @@ src/
 | Aspect | Paper (Blumenstock 2022) | This Implementation |
 |--------|--------------------------|---------------------|
 | Period | 2010-2017 | 2010-2025 (extended) |
-| DeepHit | Included | Excluded (for now) |
+| DeepHit | Custom implementation | pycox library (PyTorch) |
 | Sample size | 600,000 total | Based on available Freddie Mac data |
 | Fine-Gray | Continuous time | Discrete-time approximation via logistic regression |
 | RSF | Custom competing risks | Cause-specific RSF using scikit-survival |
@@ -297,8 +334,12 @@ src/
 
 1. **Blumenstock, G., Lessmann, S., & Seow, H-V. (2022)**. Deep learning for survival and competing risk modelling. *Journal of the Operational Research Society*, 73(1), 26-38.
 
-2. **Fine, J.P. and Gray, R.J. (1999)**. A Proportional Hazards Model for the Subdistribution of a Competing Risk. *JASA*, 94(446), 496-509.
+2. **Lee, C., Zame, W., Yoon, J., & van der Schaar, M. (2018)**. DeepHit: A Deep Learning Approach to Survival Analysis with Competing Risks. *AAAI Conference on Artificial Intelligence*.
 
-3. **Ishwaran, H., et al. (2014)**. Random survival forests for competing risks. *Biostatistics*, 15(4), 757-773.
+3. **Fine, J.P. and Gray, R.J. (1999)**. A Proportional Hazards Model for the Subdistribution of a Competing Risk. *JASA*, 94(446), 496-509.
 
-4. **Antolini, L., et al. (2005)**. A time-dependent discrimination index for survival data. *Statistics in Medicine*, 24(24), 3927-3944.
+4. **Ishwaran, H., et al. (2014)**. Random survival forests for competing risks. *Biostatistics*, 15(4), 757-773.
+
+5. **Antolini, L., et al. (2005)**. A time-dependent discrimination index for survival data. *Statistics in Medicine*, 24(24), 3927-3944.
+
+6. **Kvamme, H., Borgan, Ø., & Scheel, I. (2019)**. Time-to-Event Prediction with Neural Networks and Cox Regression. *JMLR*, 20(129), 1-30. (pycox library)

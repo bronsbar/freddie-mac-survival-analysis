@@ -1,5 +1,8 @@
 # Competing Risks Survival Analysis for Mortgage Prepayment and Default
 
+> **Status**: 🔄 Active Implementation
+> **Last Updated**: January 2026
+
 ## Overview
 
 This project replicates the methodology from **Blumenstock, Lessmann & Seow (2022)** "Deep learning for survival and competing risk modelling" (Journal of the Operational Research Society) using **Dataset 2 (post-crisis period: 2010-2025)**.
@@ -194,32 +197,42 @@ rsf = RandomSurvivalForest(
 
 ## Implementation Roadmap
 
-### Phase 1: Data Preparation
+### Phase 1: Data Preparation ✅
 
-- [ ] Filter Freddie Mac data for 2010-2025 originations
-- [ ] Create loan-month panel with time-varying covariates
-- [ ] Calculate behavioral variables (delinquency counts, balance repaid)
-- [ ] Merge macroeconomic data (state HPI, unemployment, treasury rates)
-- [ ] Calculate derived features (prepayment incentive, HPI changes)
-- [ ] Define event coding (prepay=1, default=2, censored=0)
-- [ ] Create train/test samples following paper's design
+- [x] Filter Freddie Mac data for 2010-2025 originations
+- [x] Create loan-month panel with time-varying covariates
+- [x] Calculate behavioral variables (delinquency counts, balance repaid)
+- [x] Merge macroeconomic data (state HPI, unemployment, treasury rates)
+- [x] Calculate derived features (prepayment incentive, HPI changes)
+- [x] Define event coding (prepay=1, default=2, censored=0)
+- [x] Create train/test samples following paper's design
 
-### Phase 2: Implement Models
+**Implemented in**: `notebooks/03_data_preparation_blumenstock.ipynb`
 
-- [ ] Cause-Specific Cox for prepayment and default
-- [ ] Fine-Gray discrete-time model
-- [ ] Random Survival Forest for competing risks
-- [ ] Implement time-dependent concordance index
+### Phase 2: Implement Models ✅
 
-### Phase 3: Run Experiments
+- [x] Cause-Specific Cox for prepayment and default
+- [x] Fine-Gray discrete-time model
+- [x] Random Survival Forest for competing risks
+- [x] Implement time-dependent concordance index
 
-- [ ] Experiment 4.1: Loan-level variables only
-- [ ] Experiment 4.2: Macroeconomic variables only
-- [ ] Experiment 4.3: All variables combined
+**Implemented in**:
+- `src/competing_risks/cause_specific.py` - CSC wrapper
+- `src/competing_risks/fine_gray.py` - Discrete-time Fine-Gray
+- `src/competing_risks/random_forest.py` - RSF for competing risks
+- `src/competing_risks/evaluation.py` - Time-dependent C-index at 24, 48, 72 months
 
-### Phase 4: Evaluation & Comparison
+### Phase 3: Run Experiments ✅
 
-- [ ] Calculate C-index at 24, 48, 72 months
+- [x] Experiment 4.1: Loan-level variables only
+- [x] Experiment 4.2: Macroeconomic variables only
+- [x] Experiment 4.3: All variables combined
+
+**Implemented in**: `notebooks/08_model_comparison.ipynb`
+
+### Phase 4: Evaluation & Comparison 🔄
+
+- [x] Calculate C-index at 24, 48, 72 months
 - [ ] Compare model rankings across experiments
 - [ ] Statistical significance testing (pairwise t-test)
 - [ ] Feature importance analysis
@@ -261,10 +274,22 @@ src/
 
 | Aspect | Paper (Blumenstock 2022) | This Implementation |
 |--------|--------------------------|---------------------|
-| Period | 2010-2017 | 2010-2025 |
+| Period | 2010-2017 | 2010-2025 (extended) |
 | DeepHit | Included | Excluded (for now) |
-| Sample size | 600,000 total | TBD based on available data |
-| Some macro vars | Available | May need proxies |
+| Sample size | 600,000 total | Based on available Freddie Mac data |
+| Fine-Gray | Continuous time | Discrete-time approximation via logistic regression |
+| RSF | Custom competing risks | Cause-specific RSF using scikit-survival |
+| Some macro vars | Zip-level HPI | State-level HPI (proxy) |
+
+---
+
+## Next Steps
+
+1. **Run the model comparison notebook** (`08_model_comparison.ipynb`) to generate results
+2. **Compare model rankings** across experiments 4.1, 4.2, 4.3
+3. **Statistical significance testing** using pairwise t-tests on concordance indices
+4. **Feature importance analysis** for RSF and coefficient comparison for CSC/FGR
+5. **Documentation** of findings and methodology differences
 
 ---
 

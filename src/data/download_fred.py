@@ -8,7 +8,7 @@ This script downloads the following series:
 - USSTHPI: All-Transactions House Price Index for the United States (quarterly)
 
 Usage:
-    python -m src.data.download_fred [--api-key YOUR_API_KEY]
+    python -m src.data.download_fred [--api-key YOUR_API_KEY] [--include-states]
 
 If no API key is provided, data is downloaded via direct CSV URLs from FRED.
 """
@@ -54,6 +54,12 @@ FRED_SERIES = {
         'description': '10-Year Treasury Constant Maturity Minus 2-Year Treasury'
     },
     # === Interest Rates ===
+    
+    'DGS3MO': {
+        'name': '3-month Treasury Rate',
+        'frequency': 'daily',
+        'description': '3-month Constant Maturity Treasury'
+    },
     'DGS10': {
         'name': '10-Year Treasury Rate',
         'frequency': 'daily',

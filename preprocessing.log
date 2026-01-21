@@ -1,0 +1,2146 @@
+2026-01-15 17:04:14,847 - INFO - Found 27 year(s) of data
+2026-01-15 17:04:14,847 - INFO - 
+============================================================
+2026-01-15 17:04:14,847 - INFO - Processing year 1999
+2026-01-15 17:04:14,847 - INFO - ============================================================
+2026-01-15 17:04:14,847 - INFO - Loading origination data from data/raw/sample_1999/sample_orig_1999.txt
+2026-01-15 17:04:15,019 - INFO - Loaded 50,000 origination records
+2026-01-15 17:04:15,019 - INFO - Loading performance data from data/raw/sample_1999/sample_svcg_1999.txt
+2026-01-15 17:04:20,786 - INFO - Loaded 2,500,667 performance records
+2026-01-15 17:04:20,786 - INFO - Aggregating performance data...
+2026-01-15 17:04:22,759 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:04:22,829 - INFO - Creating survival variables...
+2026-01-15 17:04:22,851 - INFO - Cleaning origination data...
+2026-01-15 17:04:22,984 - INFO - Merging origination and performance data...
+2026-01-15 17:04:23,009 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:04:23,016 - INFO - Year 1999: 50,000 loans processed
+2026-01-15 17:04:23,092 - INFO - 
+============================================================
+2026-01-15 17:04:23,092 - INFO - Processing year 2000
+2026-01-15 17:04:23,092 - INFO - ============================================================
+2026-01-15 17:04:23,092 - INFO - Loading origination data from data/raw/sample_2000/sample_orig_2000.txt
+2026-01-15 17:04:23,251 - INFO - Loaded 50,000 origination records
+2026-01-15 17:04:23,251 - INFO - Loading performance data from data/raw/sample_2000/sample_svcg_2000.txt
+2026-01-15 17:04:26,024 - INFO - Loaded 1,440,666 performance records
+2026-01-15 17:04:26,024 - INFO - Aggregating performance data...
+2026-01-15 17:04:27,434 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:04:27,473 - INFO - Creating survival variables...
+2026-01-15 17:04:27,494 - INFO - Cleaning origination data...
+2026-01-15 17:04:27,623 - INFO - Merging origination and performance data...
+2026-01-15 17:04:27,648 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:04:27,654 - INFO - Year 2000: 50,000 loans processed
+2026-01-15 17:04:27,698 - INFO - 
+============================================================
+2026-01-15 17:04:27,698 - INFO - Processing year 2001
+2026-01-15 17:04:27,698 - INFO - ============================================================
+2026-01-15 17:04:27,698 - INFO - Loading origination data from data/raw/sample_2001/sample_orig_2001.txt
+2026-01-15 17:04:27,859 - INFO - Loaded 50,000 origination records
+2026-01-15 17:04:27,859 - INFO - Loading performance data from data/raw/sample_2001/sample_svcg_2001.txt
+2026-01-15 17:04:31,734 - INFO - Loaded 1,974,136 performance records
+2026-01-15 17:04:31,734 - INFO - Aggregating performance data...
+2026-01-15 17:04:33,400 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:04:33,458 - INFO - Creating survival variables...
+2026-01-15 17:04:33,479 - INFO - Cleaning origination data...
+2026-01-15 17:04:33,604 - INFO - Merging origination and performance data...
+2026-01-15 17:04:33,629 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:04:33,635 - INFO - Year 2001: 50,000 loans processed
+2026-01-15 17:04:33,701 - INFO - 
+============================================================
+2026-01-15 17:04:33,701 - INFO - Processing year 2002
+2026-01-15 17:04:33,701 - INFO - ============================================================
+2026-01-15 17:04:33,701 - INFO - Loading origination data from data/raw/sample_2002/sample_orig_2002.txt
+2026-01-15 17:04:33,859 - INFO - Loaded 50,000 origination records
+2026-01-15 17:04:33,859 - INFO - Loading performance data from data/raw/sample_2002/sample_svcg_2002.txt
+2026-01-15 17:04:39,137 - INFO - Loaded 2,492,140 performance records
+2026-01-15 17:04:39,137 - INFO - Aggregating performance data...
+2026-01-15 17:04:41,104 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:04:41,172 - INFO - Creating survival variables...
+2026-01-15 17:04:41,193 - INFO - Cleaning origination data...
+2026-01-15 17:04:41,324 - INFO - Merging origination and performance data...
+2026-01-15 17:04:41,349 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:04:41,354 - INFO - Year 2002: 50,000 loans processed
+2026-01-15 17:04:41,428 - INFO - 
+============================================================
+2026-01-15 17:04:41,429 - INFO - Processing year 2003
+2026-01-15 17:04:41,429 - INFO - ============================================================
+2026-01-15 17:04:41,429 - INFO - Loading origination data from data/raw/sample_2003/sample_orig_2003.txt
+2026-01-15 17:04:41,585 - INFO - Loaded 50,000 origination records
+2026-01-15 17:04:41,585 - INFO - Loading performance data from data/raw/sample_2003/sample_svcg_2003.txt
+2026-01-15 17:04:50,825 - INFO - Loaded 4,069,611 performance records
+2026-01-15 17:04:50,826 - INFO - Aggregating performance data...
+2026-01-15 17:04:53,595 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:04:53,708 - INFO - Creating survival variables...
+2026-01-15 17:04:53,730 - INFO - Cleaning origination data...
+2026-01-15 17:04:53,860 - INFO - Merging origination and performance data...
+2026-01-15 17:04:53,886 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:04:53,892 - INFO - Year 2003: 50,000 loans processed
+2026-01-15 17:04:54,023 - INFO - 
+============================================================
+2026-01-15 17:04:54,023 - INFO - Processing year 2004
+2026-01-15 17:04:54,024 - INFO - ============================================================
+2026-01-15 17:04:54,024 - INFO - Loading origination data from data/raw/sample_2004/sample_orig_2004.txt
+2026-01-15 17:04:54,182 - INFO - Loaded 50,000 origination records
+2026-01-15 17:04:54,182 - INFO - Loading performance data from data/raw/sample_2004/sample_svcg_2004.txt
+2026-01-15 17:05:03,698 - INFO - Loaded 3,974,583 performance records
+2026-01-15 17:05:03,699 - INFO - Aggregating performance data...
+2026-01-15 17:05:06,442 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:05:06,558 - INFO - Creating survival variables...
+2026-01-15 17:05:06,579 - INFO - Cleaning origination data...
+2026-01-15 17:05:06,711 - INFO - Merging origination and performance data...
+2026-01-15 17:05:06,737 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:05:06,743 - INFO - Year 2004: 50,000 loans processed
+2026-01-15 17:05:06,861 - INFO - 
+============================================================
+2026-01-15 17:05:06,861 - INFO - Processing year 2005
+2026-01-15 17:05:06,861 - INFO - ============================================================
+2026-01-15 17:05:06,861 - INFO - Loading origination data from data/raw/sample_2005/sample_orig_2005.txt
+2026-01-15 17:05:07,013 - INFO - Loaded 50,000 origination records
+2026-01-15 17:05:07,014 - INFO - Loading performance data from data/raw/sample_2005/sample_svcg_2005.txt
+2026-01-15 17:05:15,443 - INFO - Loaded 3,864,978 performance records
+2026-01-15 17:05:15,444 - INFO - Aggregating performance data...
+2026-01-15 17:05:18,052 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:05:18,160 - INFO - Creating survival variables...
+2026-01-15 17:05:18,182 - INFO - Cleaning origination data...
+2026-01-15 17:05:18,313 - INFO - Merging origination and performance data...
+2026-01-15 17:05:18,338 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:05:18,343 - INFO - Year 2005: 50,000 loans processed
+2026-01-15 17:05:18,454 - INFO - 
+============================================================
+2026-01-15 17:05:18,454 - INFO - Processing year 2006
+2026-01-15 17:05:18,454 - INFO - ============================================================
+2026-01-15 17:05:18,454 - INFO - Loading origination data from data/raw/sample_2006/sample_orig_2006.txt
+2026-01-15 17:05:18,606 - INFO - Loaded 50,000 origination records
+2026-01-15 17:05:18,607 - INFO - Loading performance data from data/raw/sample_2006/sample_svcg_2006.txt
+2026-01-15 17:05:25,177 - INFO - Loaded 3,192,103 performance records
+2026-01-15 17:05:25,177 - INFO - Aggregating performance data...
+2026-01-15 17:05:27,428 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:05:27,517 - INFO - Creating survival variables...
+2026-01-15 17:05:27,538 - INFO - Cleaning origination data...
+2026-01-15 17:05:27,668 - INFO - Merging origination and performance data...
+2026-01-15 17:05:27,693 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:05:27,698 - INFO - Year 2006: 50,000 loans processed
+2026-01-15 17:05:27,789 - INFO - 
+============================================================
+2026-01-15 17:05:27,789 - INFO - Processing year 2007
+2026-01-15 17:05:27,789 - INFO - ============================================================
+2026-01-15 17:05:27,789 - INFO - Loading origination data from data/raw/sample_2007/sample_orig_2007.txt
+2026-01-15 17:05:27,949 - INFO - Loaded 50,000 origination records
+2026-01-15 17:05:27,949 - INFO - Loading performance data from data/raw/sample_2007/sample_svcg_2007.txt
+2026-01-15 17:05:33,691 - INFO - Loaded 2,998,694 performance records
+2026-01-15 17:05:33,691 - INFO - Aggregating performance data...
+2026-01-15 17:05:35,812 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:05:35,892 - INFO - Creating survival variables...
+2026-01-15 17:05:35,914 - INFO - Cleaning origination data...
+2026-01-15 17:05:36,044 - INFO - Merging origination and performance data...
+2026-01-15 17:05:36,070 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:05:36,075 - INFO - Year 2007: 50,000 loans processed
+2026-01-15 17:05:36,160 - INFO - 
+============================================================
+2026-01-15 17:05:36,160 - INFO - Processing year 2008
+2026-01-15 17:05:36,160 - INFO - ============================================================
+2026-01-15 17:05:36,160 - INFO - Loading origination data from data/raw/sample_2008/sample_orig_2008.txt
+2026-01-15 17:05:36,316 - INFO - Loaded 50,000 origination records
+2026-01-15 17:05:36,316 - INFO - Loading performance data from data/raw/sample_2008/sample_svcg_2008.txt
+2026-01-15 17:05:41,013 - INFO - Loaded 2,444,931 performance records
+2026-01-15 17:05:41,014 - INFO - Aggregating performance data...
+2026-01-15 17:05:42,886 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:05:42,950 - INFO - Creating survival variables...
+2026-01-15 17:05:42,972 - INFO - Cleaning origination data...
+2026-01-15 17:05:43,102 - INFO - Merging origination and performance data...
+2026-01-15 17:05:43,126 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:05:43,132 - INFO - Year 2008: 50,000 loans processed
+2026-01-15 17:05:43,201 - INFO - 
+============================================================
+2026-01-15 17:05:43,201 - INFO - Processing year 2009
+2026-01-15 17:05:43,201 - INFO - ============================================================
+2026-01-15 17:05:43,201 - INFO - Loading origination data from data/raw/sample_2009/sample_orig_2009.txt
+2026-01-15 17:05:43,356 - INFO - Loaded 50,000 origination records
+2026-01-15 17:05:43,356 - INFO - Loading performance data from data/raw/sample_2009/sample_svcg_2009.txt
+2026-01-15 17:05:49,291 - INFO - Loaded 3,137,679 performance records
+2026-01-15 17:05:49,291 - INFO - Aggregating performance data...
+2026-01-15 17:05:51,484 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:05:51,568 - INFO - Creating survival variables...
+2026-01-15 17:05:51,588 - INFO - Cleaning origination data...
+2026-01-15 17:05:51,716 - INFO - Merging origination and performance data...
+2026-01-15 17:05:51,740 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:05:51,745 - INFO - Year 2009: 50,000 loans processed
+2026-01-15 17:05:51,832 - INFO - 
+============================================================
+2026-01-15 17:05:51,832 - INFO - Processing year 2010
+2026-01-15 17:05:51,832 - INFO - ============================================================
+2026-01-15 17:05:51,832 - INFO - Loading origination data from data/raw/sample_2010/sample_orig_2010.txt
+2026-01-15 17:05:52,002 - INFO - Loaded 50,000 origination records
+2026-01-15 17:05:52,002 - INFO - Loading performance data from data/raw/sample_2010/sample_svcg_2010.txt
+2026-01-15 17:05:58,579 - INFO - Loaded 3,414,559 performance records
+2026-01-15 17:05:58,580 - INFO - Aggregating performance data...
+2026-01-15 17:06:00,934 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:06:01,028 - INFO - Creating survival variables...
+2026-01-15 17:06:01,050 - INFO - Cleaning origination data...
+2026-01-15 17:06:01,177 - INFO - Merging origination and performance data...
+2026-01-15 17:06:01,201 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:06:01,207 - INFO - Year 2010: 50,000 loans processed
+2026-01-15 17:06:01,305 - INFO - 
+============================================================
+2026-01-15 17:06:01,305 - INFO - Processing year 2011
+2026-01-15 17:06:01,305 - INFO - ============================================================
+2026-01-15 17:06:01,305 - INFO - Loading origination data from data/raw/sample_2011/sample_orig_2011.txt
+2026-01-15 17:06:01,463 - INFO - Loaded 50,000 origination records
+2026-01-15 17:06:01,463 - INFO - Loading performance data from data/raw/sample_2011/sample_svcg_2011.txt
+2026-01-15 17:06:08,594 - INFO - Loaded 3,583,504 performance records
+2026-01-15 17:06:08,594 - INFO - Aggregating performance data...
+2026-01-15 17:06:11,203 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:06:11,305 - INFO - Creating survival variables...
+2026-01-15 17:06:11,406 - INFO - Cleaning origination data...
+2026-01-15 17:06:11,534 - INFO - Merging origination and performance data...
+2026-01-15 17:06:11,559 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:06:11,565 - INFO - Year 2011: 50,000 loans processed
+2026-01-15 17:06:11,679 - INFO - 
+============================================================
+2026-01-15 17:06:11,679 - INFO - Processing year 2012
+2026-01-15 17:06:11,679 - INFO - ============================================================
+2026-01-15 17:06:11,679 - INFO - Loading origination data from data/raw/sample_2012/sample_orig_2012.txt
+2026-01-15 17:06:11,842 - INFO - Loaded 50,000 origination records
+2026-01-15 17:06:11,842 - INFO - Loading performance data from data/raw/sample_2012/sample_svcg_2012.txt
+2026-01-15 17:06:20,901 - INFO - Loaded 4,418,463 performance records
+2026-01-15 17:06:20,902 - INFO - Aggregating performance data...
+2026-01-15 17:06:23,772 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:06:23,891 - INFO - Creating survival variables...
+2026-01-15 17:06:23,913 - INFO - Cleaning origination data...
+2026-01-15 17:06:24,038 - INFO - Merging origination and performance data...
+2026-01-15 17:06:24,063 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:06:24,069 - INFO - Year 2012: 50,000 loans processed
+2026-01-15 17:06:24,192 - INFO - 
+============================================================
+2026-01-15 17:06:24,192 - INFO - Processing year 2013
+2026-01-15 17:06:24,192 - INFO - ============================================================
+2026-01-15 17:06:24,192 - INFO - Loading origination data from data/raw/sample_2013/sample_orig_2013.txt
+2026-01-15 17:06:24,353 - INFO - Loaded 50,000 origination records
+2026-01-15 17:06:24,353 - INFO - Loading performance data from data/raw/sample_2013/sample_svcg_2013.txt
+2026-01-15 17:06:32,769 - INFO - Loaded 4,097,585 performance records
+2026-01-15 17:06:32,770 - INFO - Aggregating performance data...
+2026-01-15 17:06:35,462 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:06:35,577 - INFO - Creating survival variables...
+2026-01-15 17:06:35,597 - INFO - Cleaning origination data...
+2026-01-15 17:06:35,724 - INFO - Merging origination and performance data...
+2026-01-15 17:06:35,750 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:06:35,756 - INFO - Year 2013: 50,000 loans processed
+2026-01-15 17:06:35,872 - INFO - 
+============================================================
+2026-01-15 17:06:35,872 - INFO - Processing year 2014
+2026-01-15 17:06:35,872 - INFO - ============================================================
+2026-01-15 17:06:35,872 - INFO - Loading origination data from data/raw/sample_2014/sample_orig_2014.txt
+2026-01-15 17:06:36,029 - INFO - Loaded 50,000 origination records
+2026-01-15 17:06:36,029 - INFO - Loading performance data from data/raw/sample_2014/sample_svcg_2014.txt
+2026-01-15 17:06:42,593 - INFO - Loaded 3,311,914 performance records
+2026-01-15 17:06:42,593 - INFO - Aggregating performance data...
+2026-01-15 17:06:44,868 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:06:44,955 - INFO - Creating survival variables...
+2026-01-15 17:06:44,976 - INFO - Cleaning origination data...
+2026-01-15 17:06:45,106 - INFO - Merging origination and performance data...
+2026-01-15 17:06:45,131 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:06:45,136 - INFO - Year 2014: 50,000 loans processed
+2026-01-15 17:06:45,228 - INFO - 
+============================================================
+2026-01-15 17:06:45,228 - INFO - Processing year 2015
+2026-01-15 17:06:45,228 - INFO - ============================================================
+2026-01-15 17:06:45,228 - INFO - Loading origination data from data/raw/sample_2015/sample_orig_2015.txt
+2026-01-15 17:06:45,379 - INFO - Loaded 50,000 origination records
+2026-01-15 17:06:45,379 - INFO - Loading performance data from data/raw/sample_2015/sample_svcg_2015.txt
+2026-01-15 17:06:52,474 - INFO - Loaded 3,359,337 performance records
+2026-01-15 17:06:52,474 - INFO - Aggregating performance data...
+2026-01-15 17:06:54,804 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:06:54,892 - INFO - Creating survival variables...
+2026-01-15 17:06:54,912 - INFO - Cleaning origination data...
+2026-01-15 17:06:55,040 - INFO - Merging origination and performance data...
+2026-01-15 17:06:55,065 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:06:55,070 - INFO - Year 2015: 50,000 loans processed
+2026-01-15 17:06:55,162 - INFO - 
+============================================================
+2026-01-15 17:06:55,162 - INFO - Processing year 2016
+2026-01-15 17:06:55,162 - INFO - ============================================================
+2026-01-15 17:06:55,162 - INFO - Loading origination data from data/raw/sample_2016/sample_orig_2016.txt
+2026-01-15 17:06:55,317 - INFO - Loaded 50,000 origination records
+2026-01-15 17:06:55,317 - INFO - Loading performance data from data/raw/sample_2016/sample_svcg_2016.txt
+2026-01-15 17:07:01,683 - INFO - Loaded 3,249,000 performance records
+2026-01-15 17:07:01,683 - INFO - Aggregating performance data...
+2026-01-15 17:07:03,941 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:07:04,029 - INFO - Creating survival variables...
+2026-01-15 17:07:04,049 - INFO - Cleaning origination data...
+2026-01-15 17:07:04,174 - INFO - Merging origination and performance data...
+2026-01-15 17:07:04,199 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:07:04,205 - INFO - Year 2016: 50,000 loans processed
+2026-01-15 17:07:04,296 - INFO - 
+============================================================
+2026-01-15 17:07:04,296 - INFO - Processing year 2017
+2026-01-15 17:07:04,296 - INFO - ============================================================
+2026-01-15 17:07:04,296 - INFO - Loading origination data from data/raw/sample_2017/sample_orig_2017.txt
+2026-01-15 17:07:04,453 - INFO - Loaded 50,000 origination records
+2026-01-15 17:07:04,453 - INFO - Loading performance data from data/raw/sample_2017/sample_svcg_2017.txt
+2026-01-15 17:07:09,516 - INFO - Loaded 2,684,717 performance records
+2026-01-15 17:07:09,516 - INFO - Aggregating performance data...
+2026-01-15 17:07:11,486 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:07:11,557 - INFO - Creating survival variables...
+2026-01-15 17:07:11,577 - INFO - Cleaning origination data...
+2026-01-15 17:07:11,705 - INFO - Merging origination and performance data...
+2026-01-15 17:07:11,729 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:07:11,734 - INFO - Year 2017: 50,000 loans processed
+2026-01-15 17:07:11,807 - INFO - 
+============================================================
+2026-01-15 17:07:11,807 - INFO - Processing year 2018
+2026-01-15 17:07:11,807 - INFO - ============================================================
+2026-01-15 17:07:11,807 - INFO - Loading origination data from data/raw/sample_2018/sample_orig_2018.txt
+2026-01-15 17:07:11,960 - INFO - Loaded 50,000 origination records
+2026-01-15 17:07:11,960 - INFO - Loading performance data from data/raw/sample_2018/sample_svcg_2018.txt
+2026-01-15 17:07:15,722 - INFO - Loaded 1,966,665 performance records
+2026-01-15 17:07:15,722 - INFO - Aggregating performance data...
+2026-01-15 17:07:17,355 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:07:17,407 - INFO - Creating survival variables...
+2026-01-15 17:07:17,427 - INFO - Cleaning origination data...
+2026-01-15 17:07:17,559 - INFO - Merging origination and performance data...
+2026-01-15 17:07:17,582 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:07:17,587 - INFO - Year 2018: 50,000 loans processed
+2026-01-15 17:07:17,641 - INFO - 
+============================================================
+2026-01-15 17:07:17,641 - INFO - Processing year 2019
+2026-01-15 17:07:17,641 - INFO - ============================================================
+2026-01-15 17:07:17,641 - INFO - Loading origination data from data/raw/sample_2019/sample_orig_2019.txt
+2026-01-15 17:07:17,797 - INFO - Loaded 50,000 origination records
+2026-01-15 17:07:17,797 - INFO - Loading performance data from data/raw/sample_2019/sample_svcg_2019.txt
+2026-01-15 17:07:21,192 - INFO - Loaded 1,802,010 performance records
+2026-01-15 17:07:21,192 - INFO - Aggregating performance data...
+2026-01-15 17:07:22,752 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:07:22,799 - INFO - Creating survival variables...
+2026-01-15 17:07:22,820 - INFO - Cleaning origination data...
+2026-01-15 17:07:22,959 - INFO - Merging origination and performance data...
+2026-01-15 17:07:22,983 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:07:22,988 - INFO - Year 2019: 50,000 loans processed
+2026-01-15 17:07:23,038 - INFO - 
+============================================================
+2026-01-15 17:07:23,038 - INFO - Processing year 2020
+2026-01-15 17:07:23,038 - INFO - ============================================================
+2026-01-15 17:07:23,038 - INFO - Loading origination data from data/raw/sample_2020/sample_orig_2020.txt
+2026-01-15 17:07:23,194 - INFO - Loaded 50,000 origination records
+2026-01-15 17:07:23,194 - INFO - Loading performance data from data/raw/sample_2020/sample_svcg_2020.txt
+2026-01-15 17:07:27,413 - INFO - Loaded 2,240,135 performance records
+2026-01-15 17:07:27,414 - INFO - Aggregating performance data...
+2026-01-15 17:07:29,348 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:07:29,410 - INFO - Creating survival variables...
+2026-01-15 17:07:29,430 - INFO - Cleaning origination data...
+2026-01-15 17:07:29,563 - INFO - Merging origination and performance data...
+2026-01-15 17:07:29,588 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:07:29,593 - INFO - Year 2020: 50,000 loans processed
+2026-01-15 17:07:29,656 - INFO - 
+============================================================
+2026-01-15 17:07:29,656 - INFO - Processing year 2021
+2026-01-15 17:07:29,656 - INFO - ============================================================
+2026-01-15 17:07:29,656 - INFO - Loading origination data from data/raw/sample_2021/sample_orig_2021.txt
+2026-01-15 17:07:29,817 - INFO - Loaded 50,000 origination records
+2026-01-15 17:07:29,817 - INFO - Loading performance data from data/raw/sample_2021/sample_svcg_2021.txt
+2026-01-15 17:07:34,044 - INFO - Loaded 2,166,170 performance records
+2026-01-15 17:07:34,044 - INFO - Aggregating performance data...
+2026-01-15 17:07:35,777 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:07:35,835 - INFO - Creating survival variables...
+2026-01-15 17:07:35,852 - INFO - Cleaning origination data...
+2026-01-15 17:07:35,982 - INFO - Merging origination and performance data...
+2026-01-15 17:07:36,004 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:07:36,008 - INFO - Year 2021: 50,000 loans processed
+2026-01-15 17:07:36,069 - INFO - 
+============================================================
+2026-01-15 17:07:36,069 - INFO - Processing year 2022
+2026-01-15 17:07:36,069 - INFO - ============================================================
+2026-01-15 17:07:36,069 - INFO - Loading origination data from data/raw/sample_2022/sample_orig_2022.txt
+2026-01-15 17:07:36,224 - INFO - Loaded 50,000 origination records
+2026-01-15 17:07:36,224 - INFO - Loading performance data from data/raw/sample_2022/sample_svcg_2022.txt
+2026-01-15 17:07:39,380 - INFO - Loaded 1,660,755 performance records
+2026-01-15 17:07:39,380 - INFO - Aggregating performance data...
+2026-01-15 17:07:40,861 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:07:40,905 - INFO - Creating survival variables...
+2026-01-15 17:07:40,923 - INFO - Cleaning origination data...
+2026-01-15 17:07:41,050 - INFO - Merging origination and performance data...
+2026-01-15 17:07:41,073 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:07:41,078 - INFO - Year 2022: 50,000 loans processed
+2026-01-15 17:07:41,125 - INFO - 
+============================================================
+2026-01-15 17:07:41,125 - INFO - Processing year 2023
+2026-01-15 17:07:41,125 - INFO - ============================================================
+2026-01-15 17:07:41,125 - INFO - Loading origination data from data/raw/sample_2023/sample_orig_2023.txt
+2026-01-15 17:07:41,280 - INFO - Loaded 50,000 origination records
+2026-01-15 17:07:41,280 - INFO - Loading performance data from data/raw/sample_2023/sample_svcg_2023.txt
+2026-01-15 17:07:43,346 - INFO - Loaded 1,097,475 performance records
+2026-01-15 17:07:43,346 - INFO - Aggregating performance data...
+2026-01-15 17:07:44,577 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:07:44,606 - INFO - Creating survival variables...
+2026-01-15 17:07:44,623 - INFO - Cleaning origination data...
+2026-01-15 17:07:44,754 - INFO - Merging origination and performance data...
+2026-01-15 17:07:44,778 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:07:44,783 - INFO - Year 2023: 50,000 loans processed
+2026-01-15 17:07:44,815 - INFO - 
+============================================================
+2026-01-15 17:07:44,815 - INFO - Processing year 2024
+2026-01-15 17:07:44,815 - INFO - ============================================================
+2026-01-15 17:07:44,815 - INFO - Loading origination data from data/raw/sample_2024/sample_orig_2024.txt
+2026-01-15 17:07:44,969 - INFO - Loaded 50,000 origination records
+2026-01-15 17:07:44,969 - INFO - Loading performance data from data/raw/sample_2024/sample_svcg_2024.txt
+2026-01-15 17:07:46,008 - INFO - Loaded 553,835 performance records
+2026-01-15 17:07:46,008 - INFO - Aggregating performance data...
+2026-01-15 17:07:46,974 - INFO - Aggregated to 50,000 unique loans
+2026-01-15 17:07:46,989 - INFO - Creating survival variables...
+2026-01-15 17:07:47,007 - INFO - Cleaning origination data...
+2026-01-15 17:07:47,134 - INFO - Merging origination and performance data...
+2026-01-15 17:07:47,156 - INFO - Merged dataset has 50,000 loans
+2026-01-15 17:07:47,160 - INFO - Year 2024: 50,000 loans processed
+2026-01-15 17:07:47,179 - INFO - 
+============================================================
+2026-01-15 17:07:47,179 - INFO - Processing year 2025
+2026-01-15 17:07:47,179 - INFO - ============================================================
+2026-01-15 17:07:47,179 - INFO - Loading origination data from data/raw/sample_2025/sample_orig_2025.txt
+2026-01-15 17:07:47,257 - INFO - Loaded 25,000 origination records
+2026-01-15 17:07:47,257 - INFO - Loading performance data from data/raw/sample_2025/sample_svcg_2025.txt
+2026-01-15 17:07:47,384 - INFO - Loaded 67,173 performance records
+2026-01-15 17:07:47,384 - INFO - Aggregating performance data...
+2026-01-15 17:07:47,761 - INFO - Aggregated to 24,950 unique loans
+2026-01-15 17:07:47,763 - INFO - Creating survival variables...
+2026-01-15 17:07:47,772 - INFO - Cleaning origination data...
+2026-01-15 17:07:47,838 - INFO - Merging origination and performance data...
+2026-01-15 17:07:47,856 - INFO - Merged dataset has 24,950 loans
+2026-01-15 17:07:47,859 - INFO - Year 2025: 24,950 loans processed
+2026-01-15 17:07:47,862 - INFO - 
+Combining all years...
+2026-01-15 17:07:49,888 - INFO - Saved 1,324,950 loans to data/processed/survival_data.parquet
+2026-01-15 17:07:54,976 - INFO - Saved CSV to data/processed/survival_data.csv
+2026-01-15 17:07:56,491 - INFO - Saved default dataset (365,700 loans) to data/processed/survival_data_default.csv
+2026-01-15 17:08:01,878 - INFO - Saved prepayment dataset (1,294,620 loans) to data/processed/survival_data_prepay.csv
+2026-01-16 09:15:29,025 - INFO - Found 27 year(s) of data
+2026-01-16 09:15:29,026 - INFO - 
+============================================================
+2026-01-16 09:15:29,026 - INFO - Processing year 1999
+2026-01-16 09:15:29,026 - INFO - ============================================================
+2026-01-16 09:15:29,026 - INFO - Loading origination data from data/raw/sample_1999/sample_orig_1999.txt
+2026-01-16 09:15:29,194 - INFO - Loaded 50,000 origination records
+2026-01-16 09:15:29,195 - INFO - Loading performance data from data/raw/sample_1999/sample_svcg_1999.txt
+2026-01-16 09:15:33,668 - INFO - Loaded 2,500,667 performance records
+2026-01-16 09:15:33,668 - INFO - Aggregating performance data...
+2026-01-16 09:15:35,566 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:15:35,640 - INFO - Creating survival variables...
+2026-01-16 09:15:35,662 - INFO - Cleaning origination data...
+2026-01-16 09:15:35,798 - INFO - Merging origination and performance data...
+2026-01-16 09:15:35,821 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:15:35,826 - INFO - Year 1999: 50,000 loans processed
+2026-01-16 09:15:35,901 - INFO - 
+============================================================
+2026-01-16 09:15:35,901 - INFO - Processing year 2000
+2026-01-16 09:15:35,901 - INFO - ============================================================
+2026-01-16 09:15:35,901 - INFO - Loading origination data from data/raw/sample_2000/sample_orig_2000.txt
+2026-01-16 09:15:36,059 - INFO - Loaded 50,000 origination records
+2026-01-16 09:15:36,059 - INFO - Loading performance data from data/raw/sample_2000/sample_svcg_2000.txt
+2026-01-16 09:15:38,486 - INFO - Loaded 1,440,666 performance records
+2026-01-16 09:15:38,486 - INFO - Aggregating performance data...
+2026-01-16 09:15:39,819 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:15:39,860 - INFO - Creating survival variables...
+2026-01-16 09:15:39,881 - INFO - Cleaning origination data...
+2026-01-16 09:15:40,015 - INFO - Merging origination and performance data...
+2026-01-16 09:15:40,037 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:15:40,041 - INFO - Year 2000: 50,000 loans processed
+2026-01-16 09:15:40,085 - INFO - 
+============================================================
+2026-01-16 09:15:40,085 - INFO - Processing year 2001
+2026-01-16 09:15:40,085 - INFO - ============================================================
+2026-01-16 09:15:40,085 - INFO - Loading origination data from data/raw/sample_2001/sample_orig_2001.txt
+2026-01-16 09:15:40,237 - INFO - Loaded 50,000 origination records
+2026-01-16 09:15:40,237 - INFO - Loading performance data from data/raw/sample_2001/sample_svcg_2001.txt
+2026-01-16 09:15:43,602 - INFO - Loaded 1,974,136 performance records
+2026-01-16 09:15:43,603 - INFO - Aggregating performance data...
+2026-01-16 09:15:45,221 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:15:45,279 - INFO - Creating survival variables...
+2026-01-16 09:15:45,300 - INFO - Cleaning origination data...
+2026-01-16 09:15:45,441 - INFO - Merging origination and performance data...
+2026-01-16 09:15:45,463 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:15:45,467 - INFO - Year 2001: 50,000 loans processed
+2026-01-16 09:15:45,529 - INFO - 
+============================================================
+2026-01-16 09:15:45,529 - INFO - Processing year 2002
+2026-01-16 09:15:45,529 - INFO - ============================================================
+2026-01-16 09:15:45,529 - INFO - Loading origination data from data/raw/sample_2002/sample_orig_2002.txt
+2026-01-16 09:15:45,693 - INFO - Loaded 50,000 origination records
+2026-01-16 09:15:45,693 - INFO - Loading performance data from data/raw/sample_2002/sample_svcg_2002.txt
+2026-01-16 09:15:50,075 - INFO - Loaded 2,492,140 performance records
+2026-01-16 09:15:50,075 - INFO - Aggregating performance data...
+2026-01-16 09:15:51,935 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:15:52,006 - INFO - Creating survival variables...
+2026-01-16 09:15:52,028 - INFO - Cleaning origination data...
+2026-01-16 09:15:52,159 - INFO - Merging origination and performance data...
+2026-01-16 09:15:52,181 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:15:52,186 - INFO - Year 2002: 50,000 loans processed
+2026-01-16 09:15:52,259 - INFO - 
+============================================================
+2026-01-16 09:15:52,259 - INFO - Processing year 2003
+2026-01-16 09:15:52,259 - INFO - ============================================================
+2026-01-16 09:15:52,259 - INFO - Loading origination data from data/raw/sample_2003/sample_orig_2003.txt
+2026-01-16 09:15:52,415 - INFO - Loaded 50,000 origination records
+2026-01-16 09:15:52,415 - INFO - Loading performance data from data/raw/sample_2003/sample_svcg_2003.txt
+2026-01-16 09:15:59,691 - INFO - Loaded 4,069,611 performance records
+2026-01-16 09:15:59,691 - INFO - Aggregating performance data...
+2026-01-16 09:16:02,337 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:16:02,459 - INFO - Creating survival variables...
+2026-01-16 09:16:02,481 - INFO - Cleaning origination data...
+2026-01-16 09:16:02,609 - INFO - Merging origination and performance data...
+2026-01-16 09:16:02,630 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:16:02,635 - INFO - Year 2003: 50,000 loans processed
+2026-01-16 09:16:02,750 - INFO - 
+============================================================
+2026-01-16 09:16:02,751 - INFO - Processing year 2004
+2026-01-16 09:16:02,751 - INFO - ============================================================
+2026-01-16 09:16:02,751 - INFO - Loading origination data from data/raw/sample_2004/sample_orig_2004.txt
+2026-01-16 09:16:02,903 - INFO - Loaded 50,000 origination records
+2026-01-16 09:16:02,903 - INFO - Loading performance data from data/raw/sample_2004/sample_svcg_2004.txt
+2026-01-16 09:16:09,849 - INFO - Loaded 3,974,583 performance records
+2026-01-16 09:16:09,849 - INFO - Aggregating performance data...
+2026-01-16 09:16:12,447 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:16:12,558 - INFO - Creating survival variables...
+2026-01-16 09:16:12,579 - INFO - Cleaning origination data...
+2026-01-16 09:16:12,709 - INFO - Merging origination and performance data...
+2026-01-16 09:16:12,733 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:16:12,738 - INFO - Year 2004: 50,000 loans processed
+2026-01-16 09:16:12,850 - INFO - 
+============================================================
+2026-01-16 09:16:12,850 - INFO - Processing year 2005
+2026-01-16 09:16:12,850 - INFO - ============================================================
+2026-01-16 09:16:12,850 - INFO - Loading origination data from data/raw/sample_2005/sample_orig_2005.txt
+2026-01-16 09:16:12,997 - INFO - Loaded 50,000 origination records
+2026-01-16 09:16:12,997 - INFO - Loading performance data from data/raw/sample_2005/sample_svcg_2005.txt
+2026-01-16 09:16:19,792 - INFO - Loaded 3,864,978 performance records
+2026-01-16 09:16:19,792 - INFO - Aggregating performance data...
+2026-01-16 09:16:22,307 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:16:22,412 - INFO - Creating survival variables...
+2026-01-16 09:16:22,434 - INFO - Cleaning origination data...
+2026-01-16 09:16:22,566 - INFO - Merging origination and performance data...
+2026-01-16 09:16:22,588 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:16:22,592 - INFO - Year 2005: 50,000 loans processed
+2026-01-16 09:16:22,701 - INFO - 
+============================================================
+2026-01-16 09:16:22,701 - INFO - Processing year 2006
+2026-01-16 09:16:22,701 - INFO - ============================================================
+2026-01-16 09:16:22,701 - INFO - Loading origination data from data/raw/sample_2006/sample_orig_2006.txt
+2026-01-16 09:16:22,850 - INFO - Loaded 50,000 origination records
+2026-01-16 09:16:22,850 - INFO - Loading performance data from data/raw/sample_2006/sample_svcg_2006.txt
+2026-01-16 09:16:28,452 - INFO - Loaded 3,192,103 performance records
+2026-01-16 09:16:28,453 - INFO - Aggregating performance data...
+2026-01-16 09:16:30,651 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:16:30,740 - INFO - Creating survival variables...
+2026-01-16 09:16:30,761 - INFO - Cleaning origination data...
+2026-01-16 09:16:30,892 - INFO - Merging origination and performance data...
+2026-01-16 09:16:30,914 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:16:30,919 - INFO - Year 2006: 50,000 loans processed
+2026-01-16 09:16:31,010 - INFO - 
+============================================================
+2026-01-16 09:16:31,010 - INFO - Processing year 2007
+2026-01-16 09:16:31,010 - INFO - ============================================================
+2026-01-16 09:16:31,010 - INFO - Loading origination data from data/raw/sample_2007/sample_orig_2007.txt
+2026-01-16 09:16:31,161 - INFO - Loaded 50,000 origination records
+2026-01-16 09:16:31,161 - INFO - Loading performance data from data/raw/sample_2007/sample_svcg_2007.txt
+2026-01-16 09:16:36,236 - INFO - Loaded 2,998,694 performance records
+2026-01-16 09:16:36,236 - INFO - Aggregating performance data...
+2026-01-16 09:16:38,337 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:16:38,424 - INFO - Creating survival variables...
+2026-01-16 09:16:38,446 - INFO - Cleaning origination data...
+2026-01-16 09:16:38,578 - INFO - Merging origination and performance data...
+2026-01-16 09:16:38,599 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:16:38,604 - INFO - Year 2007: 50,000 loans processed
+2026-01-16 09:16:38,690 - INFO - 
+============================================================
+2026-01-16 09:16:38,690 - INFO - Processing year 2008
+2026-01-16 09:16:38,690 - INFO - ============================================================
+2026-01-16 09:16:38,690 - INFO - Loading origination data from data/raw/sample_2008/sample_orig_2008.txt
+2026-01-16 09:16:38,842 - INFO - Loaded 50,000 origination records
+2026-01-16 09:16:38,842 - INFO - Loading performance data from data/raw/sample_2008/sample_svcg_2008.txt
+2026-01-16 09:16:43,319 - INFO - Loaded 2,444,931 performance records
+2026-01-16 09:16:43,320 - INFO - Aggregating performance data...
+2026-01-16 09:16:45,143 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:16:45,213 - INFO - Creating survival variables...
+2026-01-16 09:16:45,234 - INFO - Cleaning origination data...
+2026-01-16 09:16:45,368 - INFO - Merging origination and performance data...
+2026-01-16 09:16:45,389 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:16:45,394 - INFO - Year 2008: 50,000 loans processed
+2026-01-16 09:16:45,471 - INFO - 
+============================================================
+2026-01-16 09:16:45,471 - INFO - Processing year 2009
+2026-01-16 09:16:45,471 - INFO - ============================================================
+2026-01-16 09:16:45,471 - INFO - Loading origination data from data/raw/sample_2009/sample_orig_2009.txt
+2026-01-16 09:16:45,619 - INFO - Loaded 50,000 origination records
+2026-01-16 09:16:45,619 - INFO - Loading performance data from data/raw/sample_2009/sample_svcg_2009.txt
+2026-01-16 09:16:51,089 - INFO - Loaded 3,137,679 performance records
+2026-01-16 09:16:51,089 - INFO - Aggregating performance data...
+2026-01-16 09:16:53,774 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:16:53,862 - INFO - Creating survival variables...
+2026-01-16 09:16:53,884 - INFO - Cleaning origination data...
+2026-01-16 09:16:54,019 - INFO - Merging origination and performance data...
+2026-01-16 09:16:54,043 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:16:54,048 - INFO - Year 2009: 50,000 loans processed
+2026-01-16 09:16:54,160 - INFO - 
+============================================================
+2026-01-16 09:16:54,160 - INFO - Processing year 2010
+2026-01-16 09:16:54,160 - INFO - ============================================================
+2026-01-16 09:16:54,160 - INFO - Loading origination data from data/raw/sample_2010/sample_orig_2010.txt
+2026-01-16 09:16:54,313 - INFO - Loaded 50,000 origination records
+2026-01-16 09:16:54,313 - INFO - Loading performance data from data/raw/sample_2010/sample_svcg_2010.txt
+2026-01-16 09:17:00,529 - INFO - Loaded 3,414,559 performance records
+2026-01-16 09:17:00,530 - INFO - Aggregating performance data...
+2026-01-16 09:17:02,834 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:17:02,931 - INFO - Creating survival variables...
+2026-01-16 09:17:02,952 - INFO - Cleaning origination data...
+2026-01-16 09:17:03,079 - INFO - Merging origination and performance data...
+2026-01-16 09:17:03,103 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:17:03,108 - INFO - Year 2010: 50,000 loans processed
+2026-01-16 09:17:03,205 - INFO - 
+============================================================
+2026-01-16 09:17:03,205 - INFO - Processing year 2011
+2026-01-16 09:17:03,205 - INFO - ============================================================
+2026-01-16 09:17:03,205 - INFO - Loading origination data from data/raw/sample_2011/sample_orig_2011.txt
+2026-01-16 09:17:03,358 - INFO - Loaded 50,000 origination records
+2026-01-16 09:17:03,358 - INFO - Loading performance data from data/raw/sample_2011/sample_svcg_2011.txt
+2026-01-16 09:17:09,505 - INFO - Loaded 3,583,504 performance records
+2026-01-16 09:17:09,505 - INFO - Aggregating performance data...
+2026-01-16 09:17:11,879 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:17:11,979 - INFO - Creating survival variables...
+2026-01-16 09:17:12,000 - INFO - Cleaning origination data...
+2026-01-16 09:17:12,137 - INFO - Merging origination and performance data...
+2026-01-16 09:17:12,160 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:17:12,165 - INFO - Year 2011: 50,000 loans processed
+2026-01-16 09:17:12,266 - INFO - 
+============================================================
+2026-01-16 09:17:12,266 - INFO - Processing year 2012
+2026-01-16 09:17:12,266 - INFO - ============================================================
+2026-01-16 09:17:12,266 - INFO - Loading origination data from data/raw/sample_2012/sample_orig_2012.txt
+2026-01-16 09:17:12,419 - INFO - Loaded 50,000 origination records
+2026-01-16 09:17:12,419 - INFO - Loading performance data from data/raw/sample_2012/sample_svcg_2012.txt
+2026-01-16 09:17:20,139 - INFO - Loaded 4,418,463 performance records
+2026-01-16 09:17:20,139 - INFO - Aggregating performance data...
+2026-01-16 09:17:22,939 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:17:23,062 - INFO - Creating survival variables...
+2026-01-16 09:17:23,083 - INFO - Cleaning origination data...
+2026-01-16 09:17:23,211 - INFO - Merging origination and performance data...
+2026-01-16 09:17:23,234 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:17:23,238 - INFO - Year 2012: 50,000 loans processed
+2026-01-16 09:17:23,362 - INFO - 
+============================================================
+2026-01-16 09:17:23,362 - INFO - Processing year 2013
+2026-01-16 09:17:23,362 - INFO - ============================================================
+2026-01-16 09:17:23,362 - INFO - Loading origination data from data/raw/sample_2013/sample_orig_2013.txt
+2026-01-16 09:17:23,516 - INFO - Loaded 50,000 origination records
+2026-01-16 09:17:23,516 - INFO - Loading performance data from data/raw/sample_2013/sample_svcg_2013.txt
+2026-01-16 09:17:30,532 - INFO - Loaded 4,097,585 performance records
+2026-01-16 09:17:30,532 - INFO - Aggregating performance data...
+2026-01-16 09:17:33,172 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:17:33,285 - INFO - Creating survival variables...
+2026-01-16 09:17:33,305 - INFO - Cleaning origination data...
+2026-01-16 09:17:33,432 - INFO - Merging origination and performance data...
+2026-01-16 09:17:33,455 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:17:33,460 - INFO - Year 2013: 50,000 loans processed
+2026-01-16 09:17:33,573 - INFO - 
+============================================================
+2026-01-16 09:17:33,574 - INFO - Processing year 2014
+2026-01-16 09:17:33,574 - INFO - ============================================================
+2026-01-16 09:17:33,574 - INFO - Loading origination data from data/raw/sample_2014/sample_orig_2014.txt
+2026-01-16 09:17:33,724 - INFO - Loaded 50,000 origination records
+2026-01-16 09:17:33,724 - INFO - Loading performance data from data/raw/sample_2014/sample_svcg_2014.txt
+2026-01-16 09:17:39,410 - INFO - Loaded 3,311,914 performance records
+2026-01-16 09:17:39,410 - INFO - Aggregating performance data...
+2026-01-16 09:17:41,765 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:17:41,869 - INFO - Creating survival variables...
+2026-01-16 09:17:41,890 - INFO - Cleaning origination data...
+2026-01-16 09:17:42,022 - INFO - Merging origination and performance data...
+2026-01-16 09:17:42,045 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:17:42,049 - INFO - Year 2014: 50,000 loans processed
+2026-01-16 09:17:42,142 - INFO - 
+============================================================
+2026-01-16 09:17:42,142 - INFO - Processing year 2015
+2026-01-16 09:17:42,142 - INFO - ============================================================
+2026-01-16 09:17:42,142 - INFO - Loading origination data from data/raw/sample_2015/sample_orig_2015.txt
+2026-01-16 09:17:42,291 - INFO - Loaded 50,000 origination records
+2026-01-16 09:17:42,291 - INFO - Loading performance data from data/raw/sample_2015/sample_svcg_2015.txt
+2026-01-16 09:17:48,209 - INFO - Loaded 3,359,337 performance records
+2026-01-16 09:17:48,210 - INFO - Aggregating performance data...
+2026-01-16 09:17:50,507 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:17:50,596 - INFO - Creating survival variables...
+2026-01-16 09:17:50,617 - INFO - Cleaning origination data...
+2026-01-16 09:17:50,745 - INFO - Merging origination and performance data...
+2026-01-16 09:17:50,768 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:17:50,772 - INFO - Year 2015: 50,000 loans processed
+2026-01-16 09:17:50,871 - INFO - 
+============================================================
+2026-01-16 09:17:50,871 - INFO - Processing year 2016
+2026-01-16 09:17:50,871 - INFO - ============================================================
+2026-01-16 09:17:50,871 - INFO - Loading origination data from data/raw/sample_2016/sample_orig_2016.txt
+2026-01-16 09:17:51,025 - INFO - Loaded 50,000 origination records
+2026-01-16 09:17:51,025 - INFO - Loading performance data from data/raw/sample_2016/sample_svcg_2016.txt
+2026-01-16 09:17:56,676 - INFO - Loaded 3,249,000 performance records
+2026-01-16 09:17:56,677 - INFO - Aggregating performance data...
+2026-01-16 09:17:58,884 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:17:58,974 - INFO - Creating survival variables...
+2026-01-16 09:17:58,995 - INFO - Cleaning origination data...
+2026-01-16 09:17:59,122 - INFO - Merging origination and performance data...
+2026-01-16 09:17:59,144 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:17:59,149 - INFO - Year 2016: 50,000 loans processed
+2026-01-16 09:17:59,240 - INFO - 
+============================================================
+2026-01-16 09:17:59,240 - INFO - Processing year 2017
+2026-01-16 09:17:59,240 - INFO - ============================================================
+2026-01-16 09:17:59,240 - INFO - Loading origination data from data/raw/sample_2017/sample_orig_2017.txt
+2026-01-16 09:17:59,391 - INFO - Loaded 50,000 origination records
+2026-01-16 09:17:59,391 - INFO - Loading performance data from data/raw/sample_2017/sample_svcg_2017.txt
+2026-01-16 09:18:03,815 - INFO - Loaded 2,684,717 performance records
+2026-01-16 09:18:03,815 - INFO - Aggregating performance data...
+2026-01-16 09:18:05,761 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:18:05,834 - INFO - Creating survival variables...
+2026-01-16 09:18:05,855 - INFO - Cleaning origination data...
+2026-01-16 09:18:05,984 - INFO - Merging origination and performance data...
+2026-01-16 09:18:06,006 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:18:06,011 - INFO - Year 2017: 50,000 loans processed
+2026-01-16 09:18:06,085 - INFO - 
+============================================================
+2026-01-16 09:18:06,085 - INFO - Processing year 2018
+2026-01-16 09:18:06,085 - INFO - ============================================================
+2026-01-16 09:18:06,085 - INFO - Loading origination data from data/raw/sample_2018/sample_orig_2018.txt
+2026-01-16 09:18:06,236 - INFO - Loaded 50,000 origination records
+2026-01-16 09:18:06,236 - INFO - Loading performance data from data/raw/sample_2018/sample_svcg_2018.txt
+2026-01-16 09:18:09,433 - INFO - Loaded 1,966,665 performance records
+2026-01-16 09:18:09,434 - INFO - Aggregating performance data...
+2026-01-16 09:18:11,003 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:18:11,054 - INFO - Creating survival variables...
+2026-01-16 09:18:11,074 - INFO - Cleaning origination data...
+2026-01-16 09:18:11,207 - INFO - Merging origination and performance data...
+2026-01-16 09:18:11,228 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:18:11,232 - INFO - Year 2018: 50,000 loans processed
+2026-01-16 09:18:11,287 - INFO - 
+============================================================
+2026-01-16 09:18:11,287 - INFO - Processing year 2019
+2026-01-16 09:18:11,287 - INFO - ============================================================
+2026-01-16 09:18:11,287 - INFO - Loading origination data from data/raw/sample_2019/sample_orig_2019.txt
+2026-01-16 09:18:11,437 - INFO - Loaded 50,000 origination records
+2026-01-16 09:18:11,437 - INFO - Loading performance data from data/raw/sample_2019/sample_svcg_2019.txt
+2026-01-16 09:18:14,436 - INFO - Loaded 1,802,010 performance records
+2026-01-16 09:18:14,437 - INFO - Aggregating performance data...
+2026-01-16 09:18:15,930 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:18:15,979 - INFO - Creating survival variables...
+2026-01-16 09:18:15,999 - INFO - Cleaning origination data...
+2026-01-16 09:18:16,132 - INFO - Merging origination and performance data...
+2026-01-16 09:18:16,154 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:18:16,158 - INFO - Year 2019: 50,000 loans processed
+2026-01-16 09:18:16,207 - INFO - 
+============================================================
+2026-01-16 09:18:16,207 - INFO - Processing year 2020
+2026-01-16 09:18:16,207 - INFO - ============================================================
+2026-01-16 09:18:16,207 - INFO - Loading origination data from data/raw/sample_2020/sample_orig_2020.txt
+2026-01-16 09:18:16,357 - INFO - Loaded 50,000 origination records
+2026-01-16 09:18:16,358 - INFO - Loading performance data from data/raw/sample_2020/sample_svcg_2020.txt
+2026-01-16 09:18:20,054 - INFO - Loaded 2,240,135 performance records
+2026-01-16 09:18:20,054 - INFO - Aggregating performance data...
+2026-01-16 09:18:21,746 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:18:21,806 - INFO - Creating survival variables...
+2026-01-16 09:18:21,826 - INFO - Cleaning origination data...
+2026-01-16 09:18:21,953 - INFO - Merging origination and performance data...
+2026-01-16 09:18:21,974 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:18:21,978 - INFO - Year 2020: 50,000 loans processed
+2026-01-16 09:18:22,040 - INFO - 
+============================================================
+2026-01-16 09:18:22,040 - INFO - Processing year 2021
+2026-01-16 09:18:22,040 - INFO - ============================================================
+2026-01-16 09:18:22,040 - INFO - Loading origination data from data/raw/sample_2021/sample_orig_2021.txt
+2026-01-16 09:18:22,190 - INFO - Loaded 50,000 origination records
+2026-01-16 09:18:22,190 - INFO - Loading performance data from data/raw/sample_2021/sample_svcg_2021.txt
+2026-01-16 09:18:25,754 - INFO - Loaded 2,166,170 performance records
+2026-01-16 09:18:25,754 - INFO - Aggregating performance data...
+2026-01-16 09:18:27,431 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:18:27,491 - INFO - Creating survival variables...
+2026-01-16 09:18:27,509 - INFO - Cleaning origination data...
+2026-01-16 09:18:27,638 - INFO - Merging origination and performance data...
+2026-01-16 09:18:27,659 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:18:27,662 - INFO - Year 2021: 50,000 loans processed
+2026-01-16 09:18:27,724 - INFO - 
+============================================================
+2026-01-16 09:18:27,724 - INFO - Processing year 2022
+2026-01-16 09:18:27,724 - INFO - ============================================================
+2026-01-16 09:18:27,724 - INFO - Loading origination data from data/raw/sample_2022/sample_orig_2022.txt
+2026-01-16 09:18:27,875 - INFO - Loaded 50,000 origination records
+2026-01-16 09:18:27,875 - INFO - Loading performance data from data/raw/sample_2022/sample_svcg_2022.txt
+2026-01-16 09:18:30,658 - INFO - Loaded 1,660,755 performance records
+2026-01-16 09:18:30,658 - INFO - Aggregating performance data...
+2026-01-16 09:18:32,082 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:18:32,127 - INFO - Creating survival variables...
+2026-01-16 09:18:32,145 - INFO - Cleaning origination data...
+2026-01-16 09:18:32,276 - INFO - Merging origination and performance data...
+2026-01-16 09:18:32,296 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:18:32,300 - INFO - Year 2022: 50,000 loans processed
+2026-01-16 09:18:32,350 - INFO - 
+============================================================
+2026-01-16 09:18:32,350 - INFO - Processing year 2023
+2026-01-16 09:18:32,350 - INFO - ============================================================
+2026-01-16 09:18:32,350 - INFO - Loading origination data from data/raw/sample_2023/sample_orig_2023.txt
+2026-01-16 09:18:32,501 - INFO - Loaded 50,000 origination records
+2026-01-16 09:18:32,501 - INFO - Loading performance data from data/raw/sample_2023/sample_svcg_2023.txt
+2026-01-16 09:18:34,292 - INFO - Loaded 1,097,475 performance records
+2026-01-16 09:18:34,292 - INFO - Aggregating performance data...
+2026-01-16 09:18:35,458 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:18:35,490 - INFO - Creating survival variables...
+2026-01-16 09:18:35,508 - INFO - Cleaning origination data...
+2026-01-16 09:18:35,641 - INFO - Merging origination and performance data...
+2026-01-16 09:18:35,662 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:18:35,666 - INFO - Year 2023: 50,000 loans processed
+2026-01-16 09:18:35,698 - INFO - 
+============================================================
+2026-01-16 09:18:35,698 - INFO - Processing year 2024
+2026-01-16 09:18:35,698 - INFO - ============================================================
+2026-01-16 09:18:35,698 - INFO - Loading origination data from data/raw/sample_2024/sample_orig_2024.txt
+2026-01-16 09:18:35,846 - INFO - Loaded 50,000 origination records
+2026-01-16 09:18:35,846 - INFO - Loading performance data from data/raw/sample_2024/sample_svcg_2024.txt
+2026-01-16 09:18:36,753 - INFO - Loaded 553,835 performance records
+2026-01-16 09:18:36,753 - INFO - Aggregating performance data...
+2026-01-16 09:18:37,670 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:18:37,686 - INFO - Creating survival variables...
+2026-01-16 09:18:37,703 - INFO - Cleaning origination data...
+2026-01-16 09:18:37,831 - INFO - Merging origination and performance data...
+2026-01-16 09:18:37,857 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:18:37,863 - INFO - Year 2024: 50,000 loans processed
+2026-01-16 09:18:37,884 - INFO - 
+============================================================
+2026-01-16 09:18:37,884 - INFO - Processing year 2025
+2026-01-16 09:18:37,884 - INFO - ============================================================
+2026-01-16 09:18:37,884 - INFO - Loading origination data from data/raw/sample_2025/sample_orig_2025.txt
+2026-01-16 09:18:37,979 - INFO - Loaded 25,000 origination records
+2026-01-16 09:18:37,980 - INFO - Loading performance data from data/raw/sample_2025/sample_svcg_2025.txt
+2026-01-16 09:18:38,086 - INFO - Loaded 67,173 performance records
+2026-01-16 09:18:38,086 - INFO - Aggregating performance data...
+2026-01-16 09:18:38,440 - INFO - Aggregated to 24,950 unique loans
+2026-01-16 09:18:38,441 - INFO - Creating survival variables...
+2026-01-16 09:18:38,450 - INFO - Cleaning origination data...
+2026-01-16 09:18:38,516 - INFO - Merging origination and performance data...
+2026-01-16 09:18:38,533 - INFO - Merged dataset has 24,950 loans
+2026-01-16 09:18:38,535 - INFO - Year 2025: 24,950 loans processed
+2026-01-16 09:18:38,539 - INFO - 
+Combining all years...
+2026-01-16 09:21:47,330 - INFO - Found 27 year(s) of data
+2026-01-16 09:21:47,330 - INFO - 
+============================================================
+2026-01-16 09:21:47,330 - INFO - Processing year 1999
+2026-01-16 09:21:47,330 - INFO - ============================================================
+2026-01-16 09:21:47,330 - INFO - Loading origination data from data/raw/sample_1999/sample_orig_1999.txt
+2026-01-16 09:21:47,488 - INFO - Loaded 50,000 origination records
+2026-01-16 09:21:47,488 - INFO - Loading performance data from data/raw/sample_1999/sample_svcg_1999.txt
+2026-01-16 09:21:51,842 - INFO - Loaded 2,500,667 performance records
+2026-01-16 09:21:51,842 - INFO - Aggregating performance data...
+2026-01-16 09:21:53,699 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:21:53,774 - INFO - Creating survival variables...
+2026-01-16 09:21:53,796 - INFO - Cleaning origination data...
+2026-01-16 09:21:53,928 - INFO - Merging origination and performance data...
+2026-01-16 09:21:53,951 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:21:53,955 - INFO - Year 1999: 50,000 loans processed
+2026-01-16 09:21:54,033 - INFO - 
+============================================================
+2026-01-16 09:21:54,034 - INFO - Processing year 2000
+2026-01-16 09:21:54,034 - INFO - ============================================================
+2026-01-16 09:21:54,034 - INFO - Loading origination data from data/raw/sample_2000/sample_orig_2000.txt
+2026-01-16 09:21:54,187 - INFO - Loaded 50,000 origination records
+2026-01-16 09:21:54,187 - INFO - Loading performance data from data/raw/sample_2000/sample_svcg_2000.txt
+2026-01-16 09:21:56,584 - INFO - Loaded 1,440,666 performance records
+2026-01-16 09:21:56,584 - INFO - Aggregating performance data...
+2026-01-16 09:21:57,925 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:21:57,969 - INFO - Creating survival variables...
+2026-01-16 09:21:57,990 - INFO - Cleaning origination data...
+2026-01-16 09:21:58,122 - INFO - Merging origination and performance data...
+2026-01-16 09:21:58,144 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:21:58,148 - INFO - Year 2000: 50,000 loans processed
+2026-01-16 09:21:58,192 - INFO - 
+============================================================
+2026-01-16 09:21:58,192 - INFO - Processing year 2001
+2026-01-16 09:21:58,192 - INFO - ============================================================
+2026-01-16 09:21:58,192 - INFO - Loading origination data from data/raw/sample_2001/sample_orig_2001.txt
+2026-01-16 09:21:58,346 - INFO - Loaded 50,000 origination records
+2026-01-16 09:21:58,346 - INFO - Loading performance data from data/raw/sample_2001/sample_svcg_2001.txt
+2026-01-16 09:22:01,733 - INFO - Loaded 1,974,136 performance records
+2026-01-16 09:22:01,733 - INFO - Aggregating performance data...
+2026-01-16 09:22:03,348 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:22:03,401 - INFO - Creating survival variables...
+2026-01-16 09:22:03,424 - INFO - Cleaning origination data...
+2026-01-16 09:22:03,552 - INFO - Merging origination and performance data...
+2026-01-16 09:22:03,574 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:22:03,578 - INFO - Year 2001: 50,000 loans processed
+2026-01-16 09:22:03,640 - INFO - 
+============================================================
+2026-01-16 09:22:03,640 - INFO - Processing year 2002
+2026-01-16 09:22:03,640 - INFO - ============================================================
+2026-01-16 09:22:03,640 - INFO - Loading origination data from data/raw/sample_2002/sample_orig_2002.txt
+2026-01-16 09:22:03,793 - INFO - Loaded 50,000 origination records
+2026-01-16 09:22:03,793 - INFO - Loading performance data from data/raw/sample_2002/sample_svcg_2002.txt
+2026-01-16 09:22:07,956 - INFO - Loaded 2,492,140 performance records
+2026-01-16 09:22:07,956 - INFO - Aggregating performance data...
+2026-01-16 09:22:09,810 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:22:09,882 - INFO - Creating survival variables...
+2026-01-16 09:22:09,904 - INFO - Cleaning origination data...
+2026-01-16 09:22:10,034 - INFO - Merging origination and performance data...
+2026-01-16 09:22:10,057 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:22:10,062 - INFO - Year 2002: 50,000 loans processed
+2026-01-16 09:22:10,138 - INFO - 
+============================================================
+2026-01-16 09:22:10,138 - INFO - Processing year 2003
+2026-01-16 09:22:10,138 - INFO - ============================================================
+2026-01-16 09:22:10,138 - INFO - Loading origination data from data/raw/sample_2003/sample_orig_2003.txt
+2026-01-16 09:22:10,291 - INFO - Loaded 50,000 origination records
+2026-01-16 09:22:10,291 - INFO - Loading performance data from data/raw/sample_2003/sample_svcg_2003.txt
+2026-01-16 09:22:17,378 - INFO - Loaded 4,069,611 performance records
+2026-01-16 09:22:17,378 - INFO - Aggregating performance data...
+2026-01-16 09:22:20,091 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:22:20,237 - INFO - Creating survival variables...
+2026-01-16 09:22:20,259 - INFO - Cleaning origination data...
+2026-01-16 09:22:20,390 - INFO - Merging origination and performance data...
+2026-01-16 09:22:20,412 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:22:20,418 - INFO - Year 2003: 50,000 loans processed
+2026-01-16 09:22:20,553 - INFO - 
+============================================================
+2026-01-16 09:22:20,553 - INFO - Processing year 2004
+2026-01-16 09:22:20,553 - INFO - ============================================================
+2026-01-16 09:22:20,553 - INFO - Loading origination data from data/raw/sample_2004/sample_orig_2004.txt
+2026-01-16 09:22:20,705 - INFO - Loaded 50,000 origination records
+2026-01-16 09:22:20,705 - INFO - Loading performance data from data/raw/sample_2004/sample_svcg_2004.txt
+2026-01-16 09:22:27,679 - INFO - Loaded 3,974,583 performance records
+2026-01-16 09:22:27,679 - INFO - Aggregating performance data...
+2026-01-16 09:22:30,261 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:22:30,373 - INFO - Creating survival variables...
+2026-01-16 09:22:30,395 - INFO - Cleaning origination data...
+2026-01-16 09:22:30,524 - INFO - Merging origination and performance data...
+2026-01-16 09:22:30,547 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:22:30,552 - INFO - Year 2004: 50,000 loans processed
+2026-01-16 09:22:30,664 - INFO - 
+============================================================
+2026-01-16 09:22:30,664 - INFO - Processing year 2005
+2026-01-16 09:22:30,664 - INFO - ============================================================
+2026-01-16 09:22:30,664 - INFO - Loading origination data from data/raw/sample_2005/sample_orig_2005.txt
+2026-01-16 09:22:30,816 - INFO - Loaded 50,000 origination records
+2026-01-16 09:22:30,816 - INFO - Loading performance data from data/raw/sample_2005/sample_svcg_2005.txt
+2026-01-16 09:22:37,517 - INFO - Loaded 3,864,978 performance records
+2026-01-16 09:22:37,517 - INFO - Aggregating performance data...
+2026-01-16 09:22:40,019 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:22:40,122 - INFO - Creating survival variables...
+2026-01-16 09:22:40,144 - INFO - Cleaning origination data...
+2026-01-16 09:22:40,277 - INFO - Merging origination and performance data...
+2026-01-16 09:22:40,299 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:22:40,303 - INFO - Year 2005: 50,000 loans processed
+2026-01-16 09:22:40,412 - INFO - 
+============================================================
+2026-01-16 09:22:40,413 - INFO - Processing year 2006
+2026-01-16 09:22:40,413 - INFO - ============================================================
+2026-01-16 09:22:40,413 - INFO - Loading origination data from data/raw/sample_2006/sample_orig_2006.txt
+2026-01-16 09:22:40,564 - INFO - Loaded 50,000 origination records
+2026-01-16 09:22:40,564 - INFO - Loading performance data from data/raw/sample_2006/sample_svcg_2006.txt
+2026-01-16 09:22:45,939 - INFO - Loaded 3,192,103 performance records
+2026-01-16 09:22:45,939 - INFO - Aggregating performance data...
+2026-01-16 09:22:48,093 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:22:48,178 - INFO - Creating survival variables...
+2026-01-16 09:22:48,200 - INFO - Cleaning origination data...
+2026-01-16 09:22:48,330 - INFO - Merging origination and performance data...
+2026-01-16 09:22:48,353 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:22:48,357 - INFO - Year 2006: 50,000 loans processed
+2026-01-16 09:22:48,446 - INFO - 
+============================================================
+2026-01-16 09:22:48,446 - INFO - Processing year 2007
+2026-01-16 09:22:48,446 - INFO - ============================================================
+2026-01-16 09:22:48,446 - INFO - Loading origination data from data/raw/sample_2007/sample_orig_2007.txt
+2026-01-16 09:22:48,598 - INFO - Loaded 50,000 origination records
+2026-01-16 09:22:48,598 - INFO - Loading performance data from data/raw/sample_2007/sample_svcg_2007.txt
+2026-01-16 09:22:53,821 - INFO - Loaded 2,998,694 performance records
+2026-01-16 09:22:53,822 - INFO - Aggregating performance data...
+2026-01-16 09:22:55,922 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:22:56,004 - INFO - Creating survival variables...
+2026-01-16 09:22:56,025 - INFO - Cleaning origination data...
+2026-01-16 09:22:56,156 - INFO - Merging origination and performance data...
+2026-01-16 09:22:56,179 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:22:56,183 - INFO - Year 2007: 50,000 loans processed
+2026-01-16 09:22:56,268 - INFO - 
+============================================================
+2026-01-16 09:22:56,268 - INFO - Processing year 2008
+2026-01-16 09:22:56,268 - INFO - ============================================================
+2026-01-16 09:22:56,268 - INFO - Loading origination data from data/raw/sample_2008/sample_orig_2008.txt
+2026-01-16 09:22:56,420 - INFO - Loaded 50,000 origination records
+2026-01-16 09:22:56,420 - INFO - Loading performance data from data/raw/sample_2008/sample_svcg_2008.txt
+2026-01-16 09:23:00,535 - INFO - Loaded 2,444,931 performance records
+2026-01-16 09:23:00,535 - INFO - Aggregating performance data...
+2026-01-16 09:23:02,334 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:23:02,401 - INFO - Creating survival variables...
+2026-01-16 09:23:02,423 - INFO - Cleaning origination data...
+2026-01-16 09:23:02,553 - INFO - Merging origination and performance data...
+2026-01-16 09:23:02,574 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:23:02,578 - INFO - Year 2008: 50,000 loans processed
+2026-01-16 09:23:02,650 - INFO - 
+============================================================
+2026-01-16 09:23:02,651 - INFO - Processing year 2009
+2026-01-16 09:23:02,651 - INFO - ============================================================
+2026-01-16 09:23:02,651 - INFO - Loading origination data from data/raw/sample_2009/sample_orig_2009.txt
+2026-01-16 09:23:02,804 - INFO - Loaded 50,000 origination records
+2026-01-16 09:23:02,804 - INFO - Loading performance data from data/raw/sample_2009/sample_svcg_2009.txt
+2026-01-16 09:23:08,142 - INFO - Loaded 3,137,679 performance records
+2026-01-16 09:23:08,143 - INFO - Aggregating performance data...
+2026-01-16 09:23:10,279 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:23:10,363 - INFO - Creating survival variables...
+2026-01-16 09:23:10,385 - INFO - Cleaning origination data...
+2026-01-16 09:23:10,513 - INFO - Merging origination and performance data...
+2026-01-16 09:23:10,535 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:23:10,539 - INFO - Year 2009: 50,000 loans processed
+2026-01-16 09:23:10,628 - INFO - 
+============================================================
+2026-01-16 09:23:10,628 - INFO - Processing year 2010
+2026-01-16 09:23:10,628 - INFO - ============================================================
+2026-01-16 09:23:10,628 - INFO - Loading origination data from data/raw/sample_2010/sample_orig_2010.txt
+2026-01-16 09:23:10,782 - INFO - Loaded 50,000 origination records
+2026-01-16 09:23:10,782 - INFO - Loading performance data from data/raw/sample_2010/sample_svcg_2010.txt
+2026-01-16 09:23:16,666 - INFO - Loaded 3,414,559 performance records
+2026-01-16 09:23:16,666 - INFO - Aggregating performance data...
+2026-01-16 09:23:18,936 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:23:19,042 - INFO - Creating survival variables...
+2026-01-16 09:23:19,064 - INFO - Cleaning origination data...
+2026-01-16 09:23:19,191 - INFO - Merging origination and performance data...
+2026-01-16 09:23:19,214 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:23:19,219 - INFO - Year 2010: 50,000 loans processed
+2026-01-16 09:23:19,317 - INFO - 
+============================================================
+2026-01-16 09:23:19,317 - INFO - Processing year 2011
+2026-01-16 09:23:19,317 - INFO - ============================================================
+2026-01-16 09:23:19,317 - INFO - Loading origination data from data/raw/sample_2011/sample_orig_2011.txt
+2026-01-16 09:23:19,470 - INFO - Loaded 50,000 origination records
+2026-01-16 09:23:19,470 - INFO - Loading performance data from data/raw/sample_2011/sample_svcg_2011.txt
+2026-01-16 09:23:25,697 - INFO - Loaded 3,583,504 performance records
+2026-01-16 09:23:25,698 - INFO - Aggregating performance data...
+2026-01-16 09:23:28,058 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:23:28,162 - INFO - Creating survival variables...
+2026-01-16 09:23:28,183 - INFO - Cleaning origination data...
+2026-01-16 09:23:28,307 - INFO - Merging origination and performance data...
+2026-01-16 09:23:28,331 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:23:28,336 - INFO - Year 2011: 50,000 loans processed
+2026-01-16 09:23:28,436 - INFO - 
+============================================================
+2026-01-16 09:23:28,436 - INFO - Processing year 2012
+2026-01-16 09:23:28,436 - INFO - ============================================================
+2026-01-16 09:23:28,436 - INFO - Loading origination data from data/raw/sample_2012/sample_orig_2012.txt
+2026-01-16 09:23:28,589 - INFO - Loaded 50,000 origination records
+2026-01-16 09:23:28,589 - INFO - Loading performance data from data/raw/sample_2012/sample_svcg_2012.txt
+2026-01-16 09:23:36,123 - INFO - Loaded 4,418,463 performance records
+2026-01-16 09:23:36,124 - INFO - Aggregating performance data...
+2026-01-16 09:23:38,902 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:23:39,019 - INFO - Creating survival variables...
+2026-01-16 09:23:39,041 - INFO - Cleaning origination data...
+2026-01-16 09:23:39,165 - INFO - Merging origination and performance data...
+2026-01-16 09:23:39,187 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:23:39,191 - INFO - Year 2012: 50,000 loans processed
+2026-01-16 09:23:39,314 - INFO - 
+============================================================
+2026-01-16 09:23:39,314 - INFO - Processing year 2013
+2026-01-16 09:23:39,314 - INFO - ============================================================
+2026-01-16 09:23:39,314 - INFO - Loading origination data from data/raw/sample_2013/sample_orig_2013.txt
+2026-01-16 09:23:39,468 - INFO - Loaded 50,000 origination records
+2026-01-16 09:23:39,468 - INFO - Loading performance data from data/raw/sample_2013/sample_svcg_2013.txt
+2026-01-16 09:23:46,794 - INFO - Loaded 4,097,585 performance records
+2026-01-16 09:23:46,795 - INFO - Aggregating performance data...
+2026-01-16 09:23:49,425 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:23:49,544 - INFO - Creating survival variables...
+2026-01-16 09:23:49,565 - INFO - Cleaning origination data...
+2026-01-16 09:23:49,691 - INFO - Merging origination and performance data...
+2026-01-16 09:23:49,715 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:23:49,719 - INFO - Year 2013: 50,000 loans processed
+2026-01-16 09:23:49,835 - INFO - 
+============================================================
+2026-01-16 09:23:49,835 - INFO - Processing year 2014
+2026-01-16 09:23:49,835 - INFO - ============================================================
+2026-01-16 09:23:49,835 - INFO - Loading origination data from data/raw/sample_2014/sample_orig_2014.txt
+2026-01-16 09:23:49,986 - INFO - Loaded 50,000 origination records
+2026-01-16 09:23:49,986 - INFO - Loading performance data from data/raw/sample_2014/sample_svcg_2014.txt
+2026-01-16 09:23:55,548 - INFO - Loaded 3,311,914 performance records
+2026-01-16 09:23:55,549 - INFO - Aggregating performance data...
+2026-01-16 09:23:57,769 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:23:57,860 - INFO - Creating survival variables...
+2026-01-16 09:23:57,881 - INFO - Cleaning origination data...
+2026-01-16 09:23:58,014 - INFO - Merging origination and performance data...
+2026-01-16 09:23:58,036 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:23:58,040 - INFO - Year 2014: 50,000 loans processed
+2026-01-16 09:23:58,131 - INFO - 
+============================================================
+2026-01-16 09:23:58,131 - INFO - Processing year 2015
+2026-01-16 09:23:58,131 - INFO - ============================================================
+2026-01-16 09:23:58,131 - INFO - Loading origination data from data/raw/sample_2015/sample_orig_2015.txt
+2026-01-16 09:23:58,281 - INFO - Loaded 50,000 origination records
+2026-01-16 09:23:58,281 - INFO - Loading performance data from data/raw/sample_2015/sample_svcg_2015.txt
+2026-01-16 09:24:04,053 - INFO - Loaded 3,359,337 performance records
+2026-01-16 09:24:04,054 - INFO - Aggregating performance data...
+2026-01-16 09:24:06,293 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:24:06,384 - INFO - Creating survival variables...
+2026-01-16 09:24:06,406 - INFO - Cleaning origination data...
+2026-01-16 09:24:06,532 - INFO - Merging origination and performance data...
+2026-01-16 09:24:06,554 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:24:06,559 - INFO - Year 2015: 50,000 loans processed
+2026-01-16 09:24:06,650 - INFO - 
+============================================================
+2026-01-16 09:24:06,651 - INFO - Processing year 2016
+2026-01-16 09:24:06,651 - INFO - ============================================================
+2026-01-16 09:24:06,651 - INFO - Loading origination data from data/raw/sample_2016/sample_orig_2016.txt
+2026-01-16 09:24:06,798 - INFO - Loaded 50,000 origination records
+2026-01-16 09:24:06,798 - INFO - Loading performance data from data/raw/sample_2016/sample_svcg_2016.txt
+2026-01-16 09:24:12,178 - INFO - Loaded 3,249,000 performance records
+2026-01-16 09:24:12,179 - INFO - Aggregating performance data...
+2026-01-16 09:24:14,340 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:24:14,427 - INFO - Creating survival variables...
+2026-01-16 09:24:14,448 - INFO - Cleaning origination data...
+2026-01-16 09:24:14,571 - INFO - Merging origination and performance data...
+2026-01-16 09:24:14,594 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:24:14,598 - INFO - Year 2016: 50,000 loans processed
+2026-01-16 09:24:14,689 - INFO - 
+============================================================
+2026-01-16 09:24:14,689 - INFO - Processing year 2017
+2026-01-16 09:24:14,689 - INFO - ============================================================
+2026-01-16 09:24:14,689 - INFO - Loading origination data from data/raw/sample_2017/sample_orig_2017.txt
+2026-01-16 09:24:14,838 - INFO - Loaded 50,000 origination records
+2026-01-16 09:24:14,839 - INFO - Loading performance data from data/raw/sample_2017/sample_svcg_2017.txt
+2026-01-16 09:24:19,202 - INFO - Loaded 2,684,717 performance records
+2026-01-16 09:24:19,203 - INFO - Aggregating performance data...
+2026-01-16 09:24:21,101 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:24:21,169 - INFO - Creating survival variables...
+2026-01-16 09:24:21,190 - INFO - Cleaning origination data...
+2026-01-16 09:24:21,318 - INFO - Merging origination and performance data...
+2026-01-16 09:24:21,339 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:24:21,343 - INFO - Year 2017: 50,000 loans processed
+2026-01-16 09:24:21,415 - INFO - 
+============================================================
+2026-01-16 09:24:21,415 - INFO - Processing year 2018
+2026-01-16 09:24:21,415 - INFO - ============================================================
+2026-01-16 09:24:21,415 - INFO - Loading origination data from data/raw/sample_2018/sample_orig_2018.txt
+2026-01-16 09:24:21,565 - INFO - Loaded 50,000 origination records
+2026-01-16 09:24:21,565 - INFO - Loading performance data from data/raw/sample_2018/sample_svcg_2018.txt
+2026-01-16 09:24:24,757 - INFO - Loaded 1,966,665 performance records
+2026-01-16 09:24:24,757 - INFO - Aggregating performance data...
+2026-01-16 09:24:26,325 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:24:26,379 - INFO - Creating survival variables...
+2026-01-16 09:24:26,400 - INFO - Cleaning origination data...
+2026-01-16 09:24:26,531 - INFO - Merging origination and performance data...
+2026-01-16 09:24:26,551 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:24:26,555 - INFO - Year 2018: 50,000 loans processed
+2026-01-16 09:24:26,608 - INFO - 
+============================================================
+2026-01-16 09:24:26,608 - INFO - Processing year 2019
+2026-01-16 09:24:26,608 - INFO - ============================================================
+2026-01-16 09:24:26,608 - INFO - Loading origination data from data/raw/sample_2019/sample_orig_2019.txt
+2026-01-16 09:24:26,756 - INFO - Loaded 50,000 origination records
+2026-01-16 09:24:26,756 - INFO - Loading performance data from data/raw/sample_2019/sample_svcg_2019.txt
+2026-01-16 09:24:29,695 - INFO - Loaded 1,802,010 performance records
+2026-01-16 09:24:29,695 - INFO - Aggregating performance data...
+2026-01-16 09:24:31,187 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:24:31,234 - INFO - Creating survival variables...
+2026-01-16 09:24:31,255 - INFO - Cleaning origination data...
+2026-01-16 09:24:31,384 - INFO - Merging origination and performance data...
+2026-01-16 09:24:31,405 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:24:31,409 - INFO - Year 2019: 50,000 loans processed
+2026-01-16 09:24:31,458 - INFO - 
+============================================================
+2026-01-16 09:24:31,458 - INFO - Processing year 2020
+2026-01-16 09:24:31,458 - INFO - ============================================================
+2026-01-16 09:24:31,458 - INFO - Loading origination data from data/raw/sample_2020/sample_orig_2020.txt
+2026-01-16 09:24:31,606 - INFO - Loaded 50,000 origination records
+2026-01-16 09:24:31,606 - INFO - Loading performance data from data/raw/sample_2020/sample_svcg_2020.txt
+2026-01-16 09:24:35,341 - INFO - Loaded 2,240,135 performance records
+2026-01-16 09:24:35,342 - INFO - Aggregating performance data...
+2026-01-16 09:24:37,037 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:24:37,095 - INFO - Creating survival variables...
+2026-01-16 09:24:37,114 - INFO - Cleaning origination data...
+2026-01-16 09:24:37,240 - INFO - Merging origination and performance data...
+2026-01-16 09:24:37,261 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:24:37,265 - INFO - Year 2020: 50,000 loans processed
+2026-01-16 09:24:37,453 - INFO - 
+============================================================
+2026-01-16 09:24:37,453 - INFO - Processing year 2021
+2026-01-16 09:24:37,453 - INFO - ============================================================
+2026-01-16 09:24:37,453 - INFO - Loading origination data from data/raw/sample_2021/sample_orig_2021.txt
+2026-01-16 09:24:37,638 - INFO - Loaded 50,000 origination records
+2026-01-16 09:24:37,638 - INFO - Loading performance data from data/raw/sample_2021/sample_svcg_2021.txt
+2026-01-16 09:24:41,364 - INFO - Loaded 2,166,170 performance records
+2026-01-16 09:24:41,364 - INFO - Aggregating performance data...
+2026-01-16 09:24:43,004 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:24:43,066 - INFO - Creating survival variables...
+2026-01-16 09:24:43,084 - INFO - Cleaning origination data...
+2026-01-16 09:24:43,212 - INFO - Merging origination and performance data...
+2026-01-16 09:24:43,233 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:24:43,236 - INFO - Year 2021: 50,000 loans processed
+2026-01-16 09:24:43,300 - INFO - 
+============================================================
+2026-01-16 09:24:43,300 - INFO - Processing year 2022
+2026-01-16 09:24:43,300 - INFO - ============================================================
+2026-01-16 09:24:43,300 - INFO - Loading origination data from data/raw/sample_2022/sample_orig_2022.txt
+2026-01-16 09:24:43,455 - INFO - Loaded 50,000 origination records
+2026-01-16 09:24:43,455 - INFO - Loading performance data from data/raw/sample_2022/sample_svcg_2022.txt
+2026-01-16 09:24:46,224 - INFO - Loaded 1,660,755 performance records
+2026-01-16 09:24:46,224 - INFO - Aggregating performance data...
+2026-01-16 09:24:47,627 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:24:47,670 - INFO - Creating survival variables...
+2026-01-16 09:24:47,689 - INFO - Cleaning origination data...
+2026-01-16 09:24:47,817 - INFO - Merging origination and performance data...
+2026-01-16 09:24:47,838 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:24:47,842 - INFO - Year 2022: 50,000 loans processed
+2026-01-16 09:24:47,889 - INFO - 
+============================================================
+2026-01-16 09:24:47,889 - INFO - Processing year 2023
+2026-01-16 09:24:47,889 - INFO - ============================================================
+2026-01-16 09:24:47,889 - INFO - Loading origination data from data/raw/sample_2023/sample_orig_2023.txt
+2026-01-16 09:24:48,040 - INFO - Loaded 50,000 origination records
+2026-01-16 09:24:48,040 - INFO - Loading performance data from data/raw/sample_2023/sample_svcg_2023.txt
+2026-01-16 09:24:49,853 - INFO - Loaded 1,097,475 performance records
+2026-01-16 09:24:49,853 - INFO - Aggregating performance data...
+2026-01-16 09:24:51,013 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:24:51,044 - INFO - Creating survival variables...
+2026-01-16 09:24:51,063 - INFO - Cleaning origination data...
+2026-01-16 09:24:51,193 - INFO - Merging origination and performance data...
+2026-01-16 09:24:51,213 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:24:51,216 - INFO - Year 2023: 50,000 loans processed
+2026-01-16 09:24:51,248 - INFO - 
+============================================================
+2026-01-16 09:24:51,248 - INFO - Processing year 2024
+2026-01-16 09:24:51,249 - INFO - ============================================================
+2026-01-16 09:24:51,249 - INFO - Loading origination data from data/raw/sample_2024/sample_orig_2024.txt
+2026-01-16 09:24:51,400 - INFO - Loaded 50,000 origination records
+2026-01-16 09:24:51,400 - INFO - Loading performance data from data/raw/sample_2024/sample_svcg_2024.txt
+2026-01-16 09:24:52,312 - INFO - Loaded 553,835 performance records
+2026-01-16 09:24:52,313 - INFO - Aggregating performance data...
+2026-01-16 09:24:53,216 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 09:24:53,232 - INFO - Creating survival variables...
+2026-01-16 09:24:53,250 - INFO - Cleaning origination data...
+2026-01-16 09:24:53,377 - INFO - Merging origination and performance data...
+2026-01-16 09:24:53,396 - INFO - Merged dataset has 50,000 loans
+2026-01-16 09:24:53,400 - INFO - Year 2024: 50,000 loans processed
+2026-01-16 09:24:53,418 - INFO - 
+============================================================
+2026-01-16 09:24:53,419 - INFO - Processing year 2025
+2026-01-16 09:24:53,419 - INFO - ============================================================
+2026-01-16 09:24:53,419 - INFO - Loading origination data from data/raw/sample_2025/sample_orig_2025.txt
+2026-01-16 09:24:53,516 - INFO - Loaded 25,000 origination records
+2026-01-16 09:24:53,516 - INFO - Loading performance data from data/raw/sample_2025/sample_svcg_2025.txt
+2026-01-16 09:24:53,619 - INFO - Loaded 67,173 performance records
+2026-01-16 09:24:53,620 - INFO - Aggregating performance data...
+2026-01-16 09:24:53,966 - INFO - Aggregated to 24,950 unique loans
+2026-01-16 09:24:53,968 - INFO - Creating survival variables...
+2026-01-16 09:24:53,977 - INFO - Cleaning origination data...
+2026-01-16 09:24:54,041 - INFO - Merging origination and performance data...
+2026-01-16 09:24:54,056 - INFO - Merged dataset has 24,950 loans
+2026-01-16 09:24:54,058 - INFO - Year 2025: 24,950 loans processed
+2026-01-16 09:24:54,063 - INFO - 
+Combining all years...
+2026-01-16 09:24:59,104 - INFO - Saved 1,324,950 loans to data/processed/survival_data.csv
+2026-01-16 09:24:59,104 - WARNING - Parquet not saved (pyarrow/fastparquet not installed)
+2026-01-16 09:25:00,563 - INFO - Saved default dataset (365,700 loans) to data/processed/survival_data_default.csv
+2026-01-16 09:25:05,791 - INFO - Saved prepayment dataset (1,294,620 loans) to data/processed/survival_data_prepay.csv
+2026-01-16 09:25:05,795 - INFO - 
+Saving datasets by vintage for 27 vintages...
+2026-01-16 09:25:05,996 - INFO - Vintage 1999: saved 50,000 loans to data/processed/by_vintage/vintage_1999
+2026-01-16 09:25:06,394 - INFO - Vintage 2000: saved 50,000 loans to data/processed/by_vintage/vintage_2000
+2026-01-16 09:25:06,793 - INFO - Vintage 2001: saved 50,000 loans to data/processed/by_vintage/vintage_2001
+2026-01-16 09:25:07,194 - INFO - Vintage 2002: saved 50,000 loans to data/processed/by_vintage/vintage_2002
+2026-01-16 09:25:07,595 - INFO - Vintage 2003: saved 50,000 loans to data/processed/by_vintage/vintage_2003
+2026-01-16 09:25:07,999 - INFO - Vintage 2004: saved 50,000 loans to data/processed/by_vintage/vintage_2004
+2026-01-16 09:25:08,397 - INFO - Vintage 2005: saved 50,000 loans to data/processed/by_vintage/vintage_2005
+2026-01-16 09:25:08,796 - INFO - Vintage 2006: saved 50,000 loans to data/processed/by_vintage/vintage_2006
+2026-01-16 09:25:09,196 - INFO - Vintage 2007: saved 50,000 loans to data/processed/by_vintage/vintage_2007
+2026-01-16 09:25:09,589 - INFO - Vintage 2008: saved 49,999 loans to data/processed/by_vintage/vintage_2008
+2026-01-16 09:25:09,997 - INFO - Vintage 2009: saved 50,001 loans to data/processed/by_vintage/vintage_2009
+2026-01-16 09:25:10,405 - INFO - Vintage 2010: saved 50,000 loans to data/processed/by_vintage/vintage_2010
+2026-01-16 09:25:10,822 - INFO - Vintage 2011: saved 50,000 loans to data/processed/by_vintage/vintage_2011
+2026-01-16 09:25:11,245 - INFO - Vintage 2012: saved 50,000 loans to data/processed/by_vintage/vintage_2012
+2026-01-16 09:25:11,685 - INFO - Vintage 2013: saved 50,000 loans to data/processed/by_vintage/vintage_2013
+2026-01-16 09:25:12,130 - INFO - Vintage 2014: saved 50,000 loans to data/processed/by_vintage/vintage_2014
+2026-01-16 09:25:12,567 - INFO - Vintage 2015: saved 50,000 loans to data/processed/by_vintage/vintage_2015
+2026-01-16 09:25:13,013 - INFO - Vintage 2016: saved 50,000 loans to data/processed/by_vintage/vintage_2016
+2026-01-16 09:25:13,478 - INFO - Vintage 2017: saved 50,000 loans to data/processed/by_vintage/vintage_2017
+2026-01-16 09:25:13,934 - INFO - Vintage 2018: saved 50,000 loans to data/processed/by_vintage/vintage_2018
+2026-01-16 09:25:14,388 - INFO - Vintage 2019: saved 50,000 loans to data/processed/by_vintage/vintage_2019
+2026-01-16 09:25:14,855 - INFO - Vintage 2020: saved 50,000 loans to data/processed/by_vintage/vintage_2020
+2026-01-16 09:25:15,399 - INFO - Vintage 2021: saved 50,000 loans to data/processed/by_vintage/vintage_2021
+2026-01-16 09:25:15,968 - INFO - Vintage 2022: saved 50,000 loans to data/processed/by_vintage/vintage_2022
+2026-01-16 09:25:16,530 - INFO - Vintage 2023: saved 50,000 loans to data/processed/by_vintage/vintage_2023
+2026-01-16 09:25:17,093 - INFO - Vintage 2024: saved 50,000 loans to data/processed/by_vintage/vintage_2024
+2026-01-16 09:25:17,574 - INFO - Vintage 2025: saved 24,950 loans to data/processed/by_vintage/vintage_2025
+2026-01-16 09:25:17,769 - INFO - Saved 27 vintage-specific datasets to data/processed/by_vintage
+2026-01-16 11:18:00,370 - INFO - Found 27 year(s) of data
+2026-01-16 11:18:00,370 - INFO - 
+============================================================
+2026-01-16 11:18:00,370 - INFO - Processing year 1999
+2026-01-16 11:18:00,370 - INFO - ============================================================
+2026-01-16 11:18:00,370 - INFO - Loading origination data from data/raw/sample_1999/sample_orig_1999.txt
+2026-01-16 11:18:00,531 - INFO - Loaded 50,000 origination records
+2026-01-16 11:18:00,531 - INFO - Loading performance data from data/raw/sample_1999/sample_svcg_1999.txt
+2026-01-16 11:18:05,394 - INFO - Loaded 2,500,667 performance records
+2026-01-16 11:18:05,394 - INFO - Aggregating performance data...
+2026-01-16 11:18:07,479 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:18:07,555 - INFO - Creating survival variables...
+2026-01-16 11:18:07,568 - INFO - Cleaning origination data...
+2026-01-16 11:18:07,706 - INFO - Merging origination and performance data...
+2026-01-16 11:18:07,731 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:18:07,961 - INFO - Year 1999: 50,000 loans processed
+2026-01-16 11:18:08,036 - INFO - 
+============================================================
+2026-01-16 11:18:08,037 - INFO - Processing year 2000
+2026-01-16 11:18:08,037 - INFO - ============================================================
+2026-01-16 11:18:08,037 - INFO - Loading origination data from data/raw/sample_2000/sample_orig_2000.txt
+2026-01-16 11:18:08,200 - INFO - Loaded 50,000 origination records
+2026-01-16 11:18:08,200 - INFO - Loading performance data from data/raw/sample_2000/sample_svcg_2000.txt
+2026-01-16 11:18:10,831 - INFO - Loaded 1,440,666 performance records
+2026-01-16 11:18:10,832 - INFO - Aggregating performance data...
+2026-01-16 11:18:12,363 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:18:12,408 - INFO - Creating survival variables...
+2026-01-16 11:18:12,419 - INFO - Cleaning origination data...
+2026-01-16 11:18:12,572 - INFO - Merging origination and performance data...
+2026-01-16 11:18:12,597 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:18:12,792 - INFO - Year 2000: 50,000 loans processed
+2026-01-16 11:18:12,842 - INFO - 
+============================================================
+2026-01-16 11:18:12,842 - INFO - Processing year 2001
+2026-01-16 11:18:12,842 - INFO - ============================================================
+2026-01-16 11:18:12,842 - INFO - Loading origination data from data/raw/sample_2001/sample_orig_2001.txt
+2026-01-16 11:18:13,022 - INFO - Loaded 50,000 origination records
+2026-01-16 11:18:13,022 - INFO - Loading performance data from data/raw/sample_2001/sample_svcg_2001.txt
+2026-01-16 11:18:16,865 - INFO - Loaded 1,974,136 performance records
+2026-01-16 11:18:16,866 - INFO - Aggregating performance data...
+2026-01-16 11:18:18,651 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:18:18,708 - INFO - Creating survival variables...
+2026-01-16 11:18:18,721 - INFO - Cleaning origination data...
+2026-01-16 11:18:18,870 - INFO - Merging origination and performance data...
+2026-01-16 11:18:18,895 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:18:19,090 - INFO - Year 2001: 50,000 loans processed
+2026-01-16 11:18:19,159 - INFO - 
+============================================================
+2026-01-16 11:18:19,159 - INFO - Processing year 2002
+2026-01-16 11:18:19,159 - INFO - ============================================================
+2026-01-16 11:18:19,159 - INFO - Loading origination data from data/raw/sample_2002/sample_orig_2002.txt
+2026-01-16 11:18:19,347 - INFO - Loaded 50,000 origination records
+2026-01-16 11:18:19,347 - INFO - Loading performance data from data/raw/sample_2002/sample_svcg_2002.txt
+2026-01-16 11:18:24,422 - INFO - Loaded 2,492,140 performance records
+2026-01-16 11:18:24,423 - INFO - Aggregating performance data...
+2026-01-16 11:18:26,499 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:18:26,582 - INFO - Creating survival variables...
+2026-01-16 11:18:26,594 - INFO - Cleaning origination data...
+2026-01-16 11:18:26,733 - INFO - Merging origination and performance data...
+2026-01-16 11:18:26,758 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:18:26,953 - INFO - Year 2002: 50,000 loans processed
+2026-01-16 11:18:27,044 - INFO - 
+============================================================
+2026-01-16 11:18:27,045 - INFO - Processing year 2003
+2026-01-16 11:18:27,045 - INFO - ============================================================
+2026-01-16 11:18:27,045 - INFO - Loading origination data from data/raw/sample_2003/sample_orig_2003.txt
+2026-01-16 11:18:27,206 - INFO - Loaded 50,000 origination records
+2026-01-16 11:18:27,206 - INFO - Loading performance data from data/raw/sample_2003/sample_svcg_2003.txt
+2026-01-16 11:18:36,246 - INFO - Loaded 4,069,611 performance records
+2026-01-16 11:18:36,246 - INFO - Aggregating performance data...
+2026-01-16 11:18:39,168 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:18:39,300 - INFO - Creating survival variables...
+2026-01-16 11:18:39,312 - INFO - Cleaning origination data...
+2026-01-16 11:18:39,480 - INFO - Merging origination and performance data...
+2026-01-16 11:18:39,505 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:18:39,697 - INFO - Year 2003: 50,000 loans processed
+2026-01-16 11:18:39,831 - INFO - 
+============================================================
+2026-01-16 11:18:39,832 - INFO - Processing year 2004
+2026-01-16 11:18:39,832 - INFO - ============================================================
+2026-01-16 11:18:39,832 - INFO - Loading origination data from data/raw/sample_2004/sample_orig_2004.txt
+2026-01-16 11:18:40,006 - INFO - Loaded 50,000 origination records
+2026-01-16 11:18:40,006 - INFO - Loading performance data from data/raw/sample_2004/sample_svcg_2004.txt
+2026-01-16 11:18:48,258 - INFO - Loaded 3,974,583 performance records
+2026-01-16 11:18:48,259 - INFO - Aggregating performance data...
+2026-01-16 11:18:51,212 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:18:51,337 - INFO - Creating survival variables...
+2026-01-16 11:18:51,349 - INFO - Cleaning origination data...
+2026-01-16 11:18:51,488 - INFO - Merging origination and performance data...
+2026-01-16 11:18:51,514 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:18:51,718 - INFO - Year 2004: 50,000 loans processed
+2026-01-16 11:18:51,846 - INFO - 
+============================================================
+2026-01-16 11:18:51,846 - INFO - Processing year 2005
+2026-01-16 11:18:51,846 - INFO - ============================================================
+2026-01-16 11:18:51,846 - INFO - Loading origination data from data/raw/sample_2005/sample_orig_2005.txt
+2026-01-16 11:18:52,009 - INFO - Loaded 50,000 origination records
+2026-01-16 11:18:52,009 - INFO - Loading performance data from data/raw/sample_2005/sample_svcg_2005.txt
+2026-01-16 11:19:00,050 - INFO - Loaded 3,864,978 performance records
+2026-01-16 11:19:00,050 - INFO - Aggregating performance data...
+2026-01-16 11:19:03,027 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:19:03,148 - INFO - Creating survival variables...
+2026-01-16 11:19:03,160 - INFO - Cleaning origination data...
+2026-01-16 11:19:03,301 - INFO - Merging origination and performance data...
+2026-01-16 11:19:03,325 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:19:03,516 - INFO - Year 2005: 50,000 loans processed
+2026-01-16 11:19:03,640 - INFO - 
+============================================================
+2026-01-16 11:19:03,640 - INFO - Processing year 2006
+2026-01-16 11:19:03,640 - INFO - ============================================================
+2026-01-16 11:19:03,640 - INFO - Loading origination data from data/raw/sample_2006/sample_orig_2006.txt
+2026-01-16 11:19:03,814 - INFO - Loaded 50,000 origination records
+2026-01-16 11:19:03,815 - INFO - Loading performance data from data/raw/sample_2006/sample_svcg_2006.txt
+2026-01-16 11:19:10,571 - INFO - Loaded 3,192,103 performance records
+2026-01-16 11:19:10,572 - INFO - Aggregating performance data...
+2026-01-16 11:19:13,006 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:19:13,101 - INFO - Creating survival variables...
+2026-01-16 11:19:13,115 - INFO - Cleaning origination data...
+2026-01-16 11:19:13,267 - INFO - Merging origination and performance data...
+2026-01-16 11:19:13,293 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:19:13,508 - INFO - Year 2006: 50,000 loans processed
+2026-01-16 11:19:13,611 - INFO - 
+============================================================
+2026-01-16 11:19:13,611 - INFO - Processing year 2007
+2026-01-16 11:19:13,611 - INFO - ============================================================
+2026-01-16 11:19:13,611 - INFO - Loading origination data from data/raw/sample_2007/sample_orig_2007.txt
+2026-01-16 11:19:13,788 - INFO - Loaded 50,000 origination records
+2026-01-16 11:19:13,788 - INFO - Loading performance data from data/raw/sample_2007/sample_svcg_2007.txt
+2026-01-16 11:19:19,823 - INFO - Loaded 2,998,694 performance records
+2026-01-16 11:19:19,823 - INFO - Aggregating performance data...
+2026-01-16 11:19:22,234 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:19:22,337 - INFO - Creating survival variables...
+2026-01-16 11:19:22,350 - INFO - Cleaning origination data...
+2026-01-16 11:19:22,521 - INFO - Merging origination and performance data...
+2026-01-16 11:19:22,548 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:19:22,754 - INFO - Year 2007: 50,000 loans processed
+2026-01-16 11:19:22,851 - INFO - 
+============================================================
+2026-01-16 11:19:22,851 - INFO - Processing year 2008
+2026-01-16 11:19:22,852 - INFO - ============================================================
+2026-01-16 11:19:22,852 - INFO - Loading origination data from data/raw/sample_2008/sample_orig_2008.txt
+2026-01-16 11:19:23,070 - INFO - Loaded 50,000 origination records
+2026-01-16 11:19:23,070 - INFO - Loading performance data from data/raw/sample_2008/sample_svcg_2008.txt
+2026-01-16 11:19:28,049 - INFO - Loaded 2,444,931 performance records
+2026-01-16 11:19:28,049 - INFO - Aggregating performance data...
+2026-01-16 11:19:30,022 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:19:30,092 - INFO - Creating survival variables...
+2026-01-16 11:19:30,104 - INFO - Cleaning origination data...
+2026-01-16 11:19:30,245 - INFO - Merging origination and performance data...
+2026-01-16 11:19:30,269 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:19:30,471 - INFO - Year 2008: 50,000 loans processed
+2026-01-16 11:19:30,547 - INFO - 
+============================================================
+2026-01-16 11:19:30,547 - INFO - Processing year 2009
+2026-01-16 11:19:30,547 - INFO - ============================================================
+2026-01-16 11:19:30,547 - INFO - Loading origination data from data/raw/sample_2009/sample_orig_2009.txt
+2026-01-16 11:19:30,712 - INFO - Loaded 50,000 origination records
+2026-01-16 11:19:30,712 - INFO - Loading performance data from data/raw/sample_2009/sample_svcg_2009.txt
+2026-01-16 11:19:37,844 - INFO - Loaded 3,137,679 performance records
+2026-01-16 11:19:37,845 - INFO - Aggregating performance data...
+2026-01-16 11:19:40,290 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:19:40,401 - INFO - Creating survival variables...
+2026-01-16 11:19:40,414 - INFO - Cleaning origination data...
+2026-01-16 11:19:40,555 - INFO - Merging origination and performance data...
+2026-01-16 11:19:40,580 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:19:40,771 - INFO - Year 2009: 50,000 loans processed
+2026-01-16 11:19:40,866 - INFO - 
+============================================================
+2026-01-16 11:19:40,866 - INFO - Processing year 2010
+2026-01-16 11:19:40,866 - INFO - ============================================================
+2026-01-16 11:19:40,866 - INFO - Loading origination data from data/raw/sample_2010/sample_orig_2010.txt
+2026-01-16 11:19:41,030 - INFO - Loaded 50,000 origination records
+2026-01-16 11:19:41,030 - INFO - Loading performance data from data/raw/sample_2010/sample_svcg_2010.txt
+2026-01-16 11:19:48,647 - INFO - Loaded 3,414,559 performance records
+2026-01-16 11:19:48,648 - INFO - Aggregating performance data...
+2026-01-16 11:19:51,253 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:19:51,358 - INFO - Creating survival variables...
+2026-01-16 11:19:51,369 - INFO - Cleaning origination data...
+2026-01-16 11:19:51,506 - INFO - Merging origination and performance data...
+2026-01-16 11:19:51,530 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:19:51,722 - INFO - Year 2010: 50,000 loans processed
+2026-01-16 11:19:51,829 - INFO - 
+============================================================
+2026-01-16 11:19:51,829 - INFO - Processing year 2011
+2026-01-16 11:19:51,829 - INFO - ============================================================
+2026-01-16 11:19:51,829 - INFO - Loading origination data from data/raw/sample_2011/sample_orig_2011.txt
+2026-01-16 11:19:52,029 - INFO - Loaded 50,000 origination records
+2026-01-16 11:19:52,029 - INFO - Loading performance data from data/raw/sample_2011/sample_svcg_2011.txt
+2026-01-16 11:19:59,840 - INFO - Loaded 3,583,504 performance records
+2026-01-16 11:19:59,840 - INFO - Aggregating performance data...
+2026-01-16 11:20:02,531 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:20:02,641 - INFO - Creating survival variables...
+2026-01-16 11:20:02,653 - INFO - Cleaning origination data...
+2026-01-16 11:20:02,794 - INFO - Merging origination and performance data...
+2026-01-16 11:20:02,819 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:20:03,008 - INFO - Year 2011: 50,000 loans processed
+2026-01-16 11:20:03,119 - INFO - 
+============================================================
+2026-01-16 11:20:03,119 - INFO - Processing year 2012
+2026-01-16 11:20:03,119 - INFO - ============================================================
+2026-01-16 11:20:03,119 - INFO - Loading origination data from data/raw/sample_2012/sample_orig_2012.txt
+2026-01-16 11:20:03,284 - INFO - Loaded 50,000 origination records
+2026-01-16 11:20:03,284 - INFO - Loading performance data from data/raw/sample_2012/sample_svcg_2012.txt
+2026-01-16 11:20:12,634 - INFO - Loaded 4,418,463 performance records
+2026-01-16 11:20:12,635 - INFO - Aggregating performance data...
+2026-01-16 11:20:15,595 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:20:15,727 - INFO - Creating survival variables...
+2026-01-16 11:20:15,739 - INFO - Cleaning origination data...
+2026-01-16 11:20:15,871 - INFO - Merging origination and performance data...
+2026-01-16 11:20:15,894 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:20:16,091 - INFO - Year 2012: 50,000 loans processed
+2026-01-16 11:20:16,222 - INFO - 
+============================================================
+2026-01-16 11:20:16,222 - INFO - Processing year 2013
+2026-01-16 11:20:16,222 - INFO - ============================================================
+2026-01-16 11:20:16,222 - INFO - Loading origination data from data/raw/sample_2013/sample_orig_2013.txt
+2026-01-16 11:20:16,381 - INFO - Loaded 50,000 origination records
+2026-01-16 11:20:16,382 - INFO - Loading performance data from data/raw/sample_2013/sample_svcg_2013.txt
+2026-01-16 11:20:24,619 - INFO - Loaded 4,097,585 performance records
+2026-01-16 11:20:24,620 - INFO - Aggregating performance data...
+2026-01-16 11:20:27,423 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:20:27,550 - INFO - Creating survival variables...
+2026-01-16 11:20:27,561 - INFO - Cleaning origination data...
+2026-01-16 11:20:27,693 - INFO - Merging origination and performance data...
+2026-01-16 11:20:27,719 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:20:27,905 - INFO - Year 2013: 50,000 loans processed
+2026-01-16 11:20:28,027 - INFO - 
+============================================================
+2026-01-16 11:20:28,027 - INFO - Processing year 2014
+2026-01-16 11:20:28,027 - INFO - ============================================================
+2026-01-16 11:20:28,027 - INFO - Loading origination data from data/raw/sample_2014/sample_orig_2014.txt
+2026-01-16 11:20:28,193 - INFO - Loaded 50,000 origination records
+2026-01-16 11:20:28,193 - INFO - Loading performance data from data/raw/sample_2014/sample_svcg_2014.txt
+2026-01-16 11:20:34,236 - INFO - Loaded 3,311,914 performance records
+2026-01-16 11:20:34,237 - INFO - Aggregating performance data...
+2026-01-16 11:20:36,558 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:20:36,647 - INFO - Creating survival variables...
+2026-01-16 11:20:36,658 - INFO - Cleaning origination data...
+2026-01-16 11:20:36,793 - INFO - Merging origination and performance data...
+2026-01-16 11:20:36,815 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:20:37,001 - INFO - Year 2014: 50,000 loans processed
+2026-01-16 11:20:37,096 - INFO - 
+============================================================
+2026-01-16 11:20:37,096 - INFO - Processing year 2015
+2026-01-16 11:20:37,096 - INFO - ============================================================
+2026-01-16 11:20:37,096 - INFO - Loading origination data from data/raw/sample_2015/sample_orig_2015.txt
+2026-01-16 11:20:37,251 - INFO - Loaded 50,000 origination records
+2026-01-16 11:20:37,251 - INFO - Loading performance data from data/raw/sample_2015/sample_svcg_2015.txt
+2026-01-16 11:20:43,297 - INFO - Loaded 3,359,337 performance records
+2026-01-16 11:20:43,298 - INFO - Aggregating performance data...
+2026-01-16 11:20:45,668 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:20:45,763 - INFO - Creating survival variables...
+2026-01-16 11:20:45,776 - INFO - Cleaning origination data...
+2026-01-16 11:20:45,914 - INFO - Merging origination and performance data...
+2026-01-16 11:20:45,938 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:20:46,134 - INFO - Year 2015: 50,000 loans processed
+2026-01-16 11:20:46,230 - INFO - 
+============================================================
+2026-01-16 11:20:46,230 - INFO - Processing year 2016
+2026-01-16 11:20:46,230 - INFO - ============================================================
+2026-01-16 11:20:46,230 - INFO - Loading origination data from data/raw/sample_2016/sample_orig_2016.txt
+2026-01-16 11:20:46,387 - INFO - Loaded 50,000 origination records
+2026-01-16 11:20:46,387 - INFO - Loading performance data from data/raw/sample_2016/sample_svcg_2016.txt
+2026-01-16 11:20:52,233 - INFO - Loaded 3,249,000 performance records
+2026-01-16 11:20:52,233 - INFO - Aggregating performance data...
+2026-01-16 11:20:54,622 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:20:54,718 - INFO - Creating survival variables...
+2026-01-16 11:20:54,729 - INFO - Cleaning origination data...
+2026-01-16 11:20:54,860 - INFO - Merging origination and performance data...
+2026-01-16 11:20:54,883 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:20:55,065 - INFO - Year 2016: 50,000 loans processed
+2026-01-16 11:20:55,156 - INFO - 
+============================================================
+2026-01-16 11:20:55,156 - INFO - Processing year 2017
+2026-01-16 11:20:55,156 - INFO - ============================================================
+2026-01-16 11:20:55,156 - INFO - Loading origination data from data/raw/sample_2017/sample_orig_2017.txt
+2026-01-16 11:20:55,310 - INFO - Loaded 50,000 origination records
+2026-01-16 11:20:55,310 - INFO - Loading performance data from data/raw/sample_2017/sample_svcg_2017.txt
+2026-01-16 11:21:00,092 - INFO - Loaded 2,684,717 performance records
+2026-01-16 11:21:00,094 - INFO - Aggregating performance data...
+2026-01-16 11:21:02,138 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:21:02,213 - INFO - Creating survival variables...
+2026-01-16 11:21:02,225 - INFO - Cleaning origination data...
+2026-01-16 11:21:02,361 - INFO - Merging origination and performance data...
+2026-01-16 11:21:02,385 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:21:02,571 - INFO - Year 2017: 50,000 loans processed
+2026-01-16 11:21:02,650 - INFO - 
+============================================================
+2026-01-16 11:21:02,650 - INFO - Processing year 2018
+2026-01-16 11:21:02,650 - INFO - ============================================================
+2026-01-16 11:21:02,650 - INFO - Loading origination data from data/raw/sample_2018/sample_orig_2018.txt
+2026-01-16 11:21:02,804 - INFO - Loaded 50,000 origination records
+2026-01-16 11:21:02,805 - INFO - Loading performance data from data/raw/sample_2018/sample_svcg_2018.txt
+2026-01-16 11:21:06,246 - INFO - Loaded 1,966,665 performance records
+2026-01-16 11:21:06,246 - INFO - Aggregating performance data...
+2026-01-16 11:21:07,888 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:21:07,946 - INFO - Creating survival variables...
+2026-01-16 11:21:07,957 - INFO - Cleaning origination data...
+2026-01-16 11:21:08,114 - INFO - Merging origination and performance data...
+2026-01-16 11:21:08,136 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:21:08,320 - INFO - Year 2018: 50,000 loans processed
+2026-01-16 11:21:08,380 - INFO - 
+============================================================
+2026-01-16 11:21:08,380 - INFO - Processing year 2019
+2026-01-16 11:21:08,380 - INFO - ============================================================
+2026-01-16 11:21:08,381 - INFO - Loading origination data from data/raw/sample_2019/sample_orig_2019.txt
+2026-01-16 11:21:08,541 - INFO - Loaded 50,000 origination records
+2026-01-16 11:21:08,541 - INFO - Loading performance data from data/raw/sample_2019/sample_svcg_2019.txt
+2026-01-16 11:21:11,713 - INFO - Loaded 1,802,010 performance records
+2026-01-16 11:21:11,714 - INFO - Aggregating performance data...
+2026-01-16 11:21:13,632 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:21:13,684 - INFO - Creating survival variables...
+2026-01-16 11:21:13,696 - INFO - Cleaning origination data...
+2026-01-16 11:21:13,835 - INFO - Merging origination and performance data...
+2026-01-16 11:21:13,859 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:21:14,051 - INFO - Year 2019: 50,000 loans processed
+2026-01-16 11:21:14,106 - INFO - 
+============================================================
+2026-01-16 11:21:14,107 - INFO - Processing year 2020
+2026-01-16 11:21:14,107 - INFO - ============================================================
+2026-01-16 11:21:14,107 - INFO - Loading origination data from data/raw/sample_2020/sample_orig_2020.txt
+2026-01-16 11:21:14,270 - INFO - Loaded 50,000 origination records
+2026-01-16 11:21:14,270 - INFO - Loading performance data from data/raw/sample_2020/sample_svcg_2020.txt
+2026-01-16 11:21:18,295 - INFO - Loaded 2,240,135 performance records
+2026-01-16 11:21:18,295 - INFO - Aggregating performance data...
+2026-01-16 11:21:20,131 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:21:20,190 - INFO - Creating survival variables...
+2026-01-16 11:21:20,202 - INFO - Cleaning origination data...
+2026-01-16 11:21:20,331 - INFO - Merging origination and performance data...
+2026-01-16 11:21:20,354 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:21:20,534 - INFO - Year 2020: 50,000 loans processed
+2026-01-16 11:21:20,599 - INFO - 
+============================================================
+2026-01-16 11:21:20,599 - INFO - Processing year 2021
+2026-01-16 11:21:20,599 - INFO - ============================================================
+2026-01-16 11:21:20,599 - INFO - Loading origination data from data/raw/sample_2021/sample_orig_2021.txt
+2026-01-16 11:21:20,753 - INFO - Loaded 50,000 origination records
+2026-01-16 11:21:20,754 - INFO - Loading performance data from data/raw/sample_2021/sample_svcg_2021.txt
+2026-01-16 11:21:24,638 - INFO - Loaded 2,166,170 performance records
+2026-01-16 11:21:24,638 - INFO - Aggregating performance data...
+2026-01-16 11:21:26,401 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:21:26,462 - INFO - Creating survival variables...
+2026-01-16 11:21:26,473 - INFO - Cleaning origination data...
+2026-01-16 11:21:26,610 - INFO - Merging origination and performance data...
+2026-01-16 11:21:26,632 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:21:26,804 - INFO - Year 2021: 50,000 loans processed
+2026-01-16 11:21:26,871 - INFO - 
+============================================================
+2026-01-16 11:21:26,871 - INFO - Processing year 2022
+2026-01-16 11:21:26,871 - INFO - ============================================================
+2026-01-16 11:21:26,871 - INFO - Loading origination data from data/raw/sample_2022/sample_orig_2022.txt
+2026-01-16 11:21:27,029 - INFO - Loaded 50,000 origination records
+2026-01-16 11:21:27,030 - INFO - Loading performance data from data/raw/sample_2022/sample_svcg_2022.txt
+2026-01-16 11:21:29,960 - INFO - Loaded 1,660,755 performance records
+2026-01-16 11:21:29,960 - INFO - Aggregating performance data...
+2026-01-16 11:21:31,433 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:21:31,480 - INFO - Creating survival variables...
+2026-01-16 11:21:31,491 - INFO - Cleaning origination data...
+2026-01-16 11:21:31,626 - INFO - Merging origination and performance data...
+2026-01-16 11:21:31,648 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:21:31,838 - INFO - Year 2022: 50,000 loans processed
+2026-01-16 11:21:31,887 - INFO - 
+============================================================
+2026-01-16 11:21:31,887 - INFO - Processing year 2023
+2026-01-16 11:21:31,887 - INFO - ============================================================
+2026-01-16 11:21:31,887 - INFO - Loading origination data from data/raw/sample_2023/sample_orig_2023.txt
+2026-01-16 11:21:32,043 - INFO - Loaded 50,000 origination records
+2026-01-16 11:21:32,043 - INFO - Loading performance data from data/raw/sample_2023/sample_svcg_2023.txt
+2026-01-16 11:21:33,907 - INFO - Loaded 1,097,475 performance records
+2026-01-16 11:21:33,907 - INFO - Aggregating performance data...
+2026-01-16 11:21:35,153 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:21:35,184 - INFO - Creating survival variables...
+2026-01-16 11:21:35,195 - INFO - Cleaning origination data...
+2026-01-16 11:21:35,329 - INFO - Merging origination and performance data...
+2026-01-16 11:21:35,352 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:21:35,526 - INFO - Year 2023: 50,000 loans processed
+2026-01-16 11:21:35,559 - INFO - 
+============================================================
+2026-01-16 11:21:35,559 - INFO - Processing year 2024
+2026-01-16 11:21:35,559 - INFO - ============================================================
+2026-01-16 11:21:35,559 - INFO - Loading origination data from data/raw/sample_2024/sample_orig_2024.txt
+2026-01-16 11:21:35,715 - INFO - Loaded 50,000 origination records
+2026-01-16 11:21:35,715 - INFO - Loading performance data from data/raw/sample_2024/sample_svcg_2024.txt
+2026-01-16 11:21:36,676 - INFO - Loaded 553,835 performance records
+2026-01-16 11:21:36,676 - INFO - Aggregating performance data...
+2026-01-16 11:21:37,648 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 11:21:37,664 - INFO - Creating survival variables...
+2026-01-16 11:21:37,675 - INFO - Cleaning origination data...
+2026-01-16 11:21:37,808 - INFO - Merging origination and performance data...
+2026-01-16 11:21:37,830 - INFO - Merged dataset has 50,000 loans
+2026-01-16 11:21:38,000 - INFO - Year 2024: 50,000 loans processed
+2026-01-16 11:21:38,020 - INFO - 
+============================================================
+2026-01-16 11:21:38,020 - INFO - Processing year 2025
+2026-01-16 11:21:38,020 - INFO - ============================================================
+2026-01-16 11:21:38,020 - INFO - Loading origination data from data/raw/sample_2025/sample_orig_2025.txt
+2026-01-16 11:21:38,122 - INFO - Loaded 25,000 origination records
+2026-01-16 11:21:38,122 - INFO - Loading performance data from data/raw/sample_2025/sample_svcg_2025.txt
+2026-01-16 11:21:38,245 - INFO - Loaded 67,173 performance records
+2026-01-16 11:21:38,245 - INFO - Aggregating performance data...
+2026-01-16 11:21:38,623 - INFO - Aggregated to 24,950 unique loans
+2026-01-16 11:21:38,625 - INFO - Creating survival variables...
+2026-01-16 11:21:38,631 - INFO - Cleaning origination data...
+2026-01-16 11:21:38,700 - INFO - Merging origination and performance data...
+2026-01-16 11:21:38,717 - INFO - Merged dataset has 24,950 loans
+2026-01-16 11:21:38,801 - INFO - Year 2025: 24,950 loans processed
+2026-01-16 11:21:38,805 - INFO - 
+Combining all years...
+2026-01-16 11:21:44,165 - INFO - Saved 1,324,950 loans to data/processed/survival_data.csv
+2026-01-16 11:21:45,143 - INFO - Saved parquet to data/processed/survival_data.parquet
+2026-01-16 11:21:46,723 - INFO - Saved default dataset (365,700 loans) to data/processed/survival_data_default.csv
+2026-01-16 11:21:52,308 - INFO - Saved prepayment dataset (1,287,507 loans) to data/processed/survival_data_prepay.csv
+2026-01-16 11:21:52,312 - INFO - 
+Saving datasets by vintage for 27 vintages...
+2026-01-16 11:21:52,519 - INFO - Vintage 1999: saved 50,000 loans to data/processed/by_vintage/vintage_1999
+2026-01-16 11:21:52,994 - INFO - Vintage 2000: saved 50,000 loans to data/processed/by_vintage/vintage_2000
+2026-01-16 11:21:53,483 - INFO - Vintage 2001: saved 50,000 loans to data/processed/by_vintage/vintage_2001
+2026-01-16 11:21:53,978 - INFO - Vintage 2002: saved 50,000 loans to data/processed/by_vintage/vintage_2002
+2026-01-16 11:21:54,431 - INFO - Vintage 2003: saved 50,000 loans to data/processed/by_vintage/vintage_2003
+2026-01-16 11:21:54,885 - INFO - Vintage 2004: saved 50,000 loans to data/processed/by_vintage/vintage_2004
+2026-01-16 11:21:55,333 - INFO - Vintage 2005: saved 50,000 loans to data/processed/by_vintage/vintage_2005
+2026-01-16 11:21:55,805 - INFO - Vintage 2006: saved 50,000 loans to data/processed/by_vintage/vintage_2006
+2026-01-16 11:21:56,258 - INFO - Vintage 2007: saved 50,000 loans to data/processed/by_vintage/vintage_2007
+2026-01-16 11:21:56,734 - INFO - Vintage 2008: saved 49,999 loans to data/processed/by_vintage/vintage_2008
+2026-01-16 11:21:57,199 - INFO - Vintage 2009: saved 50,001 loans to data/processed/by_vintage/vintage_2009
+2026-01-16 11:21:57,664 - INFO - Vintage 2010: saved 50,000 loans to data/processed/by_vintage/vintage_2010
+2026-01-16 11:21:58,161 - INFO - Vintage 2011: saved 50,000 loans to data/processed/by_vintage/vintage_2011
+2026-01-16 11:21:58,655 - INFO - Vintage 2012: saved 50,000 loans to data/processed/by_vintage/vintage_2012
+2026-01-16 11:21:59,167 - INFO - Vintage 2013: saved 50,000 loans to data/processed/by_vintage/vintage_2013
+2026-01-16 11:21:59,674 - INFO - Vintage 2014: saved 50,000 loans to data/processed/by_vintage/vintage_2014
+2026-01-16 11:22:00,198 - INFO - Vintage 2015: saved 50,000 loans to data/processed/by_vintage/vintage_2015
+2026-01-16 11:22:00,734 - INFO - Vintage 2016: saved 50,000 loans to data/processed/by_vintage/vintage_2016
+2026-01-16 11:22:01,255 - INFO - Vintage 2017: saved 50,000 loans to data/processed/by_vintage/vintage_2017
+2026-01-16 11:22:01,774 - INFO - Vintage 2018: saved 50,000 loans to data/processed/by_vintage/vintage_2018
+2026-01-16 11:22:02,267 - INFO - Vintage 2019: saved 50,000 loans to data/processed/by_vintage/vintage_2019
+2026-01-16 11:22:02,786 - INFO - Vintage 2020: saved 50,000 loans to data/processed/by_vintage/vintage_2020
+2026-01-16 11:22:03,363 - INFO - Vintage 2021: saved 50,000 loans to data/processed/by_vintage/vintage_2021
+2026-01-16 11:22:04,024 - INFO - Vintage 2022: saved 50,000 loans to data/processed/by_vintage/vintage_2022
+2026-01-16 11:22:04,672 - INFO - Vintage 2023: saved 50,000 loans to data/processed/by_vintage/vintage_2023
+2026-01-16 11:22:05,299 - INFO - Vintage 2024: saved 50,000 loans to data/processed/by_vintage/vintage_2024
+2026-01-16 11:22:05,867 - INFO - Vintage 2025: saved 24,950 loans to data/processed/by_vintage/vintage_2025
+2026-01-16 11:22:06,091 - INFO - Saved 27 vintage-specific datasets to data/processed/by_vintage
+2026-01-16 15:01:05,358 - INFO - Found 27 year(s) of data
+2026-01-16 15:01:05,359 - INFO - 
+============================================================
+2026-01-16 15:01:05,359 - INFO - Processing year 1999
+2026-01-16 15:01:05,359 - INFO - ============================================================
+2026-01-16 15:01:05,359 - INFO - Loading origination data from data/raw/sample_1999/sample_orig_1999.txt
+2026-01-16 15:01:05,518 - INFO - Loaded 50,000 origination records
+2026-01-16 15:01:05,518 - INFO - Loading performance data from data/raw/sample_1999/sample_svcg_1999.txt
+2026-01-16 15:01:10,351 - INFO - Loaded 2,500,667 performance records
+2026-01-16 15:01:10,351 - INFO - Aggregating performance data...
+2026-01-16 15:01:12,385 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:01:12,456 - INFO - Creating survival variables...
+2026-01-16 15:01:12,458 - INFO - Cleaning origination data...
+2026-01-16 15:01:12,604 - INFO - Merging origination and performance data...
+2026-01-16 15:01:12,625 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:01:12,819 - INFO - Year 1999: 50,000 loans processed
+2026-01-16 15:01:12,896 - INFO - 
+============================================================
+2026-01-16 15:01:12,896 - INFO - Processing year 2000
+2026-01-16 15:01:12,897 - INFO - ============================================================
+2026-01-16 15:01:12,897 - INFO - Loading origination data from data/raw/sample_2000/sample_orig_2000.txt
+2026-01-16 15:01:13,056 - INFO - Loaded 50,000 origination records
+2026-01-16 15:01:13,056 - INFO - Loading performance data from data/raw/sample_2000/sample_svcg_2000.txt
+2026-01-16 15:01:15,632 - INFO - Loaded 1,440,666 performance records
+2026-01-16 15:01:15,632 - INFO - Aggregating performance data...
+2026-01-16 15:01:17,111 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:01:17,156 - INFO - Creating survival variables...
+2026-01-16 15:01:17,157 - INFO - Cleaning origination data...
+2026-01-16 15:01:17,292 - INFO - Merging origination and performance data...
+2026-01-16 15:01:17,314 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:01:17,518 - INFO - Year 2000: 50,000 loans processed
+2026-01-16 15:01:17,576 - INFO - 
+============================================================
+2026-01-16 15:01:17,576 - INFO - Processing year 2001
+2026-01-16 15:01:17,576 - INFO - ============================================================
+2026-01-16 15:01:17,576 - INFO - Loading origination data from data/raw/sample_2001/sample_orig_2001.txt
+2026-01-16 15:01:17,751 - INFO - Loaded 50,000 origination records
+2026-01-16 15:01:17,751 - INFO - Loading performance data from data/raw/sample_2001/sample_svcg_2001.txt
+2026-01-16 15:01:21,393 - INFO - Loaded 1,974,136 performance records
+2026-01-16 15:01:21,393 - INFO - Aggregating performance data...
+2026-01-16 15:01:23,134 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:01:23,202 - INFO - Creating survival variables...
+2026-01-16 15:01:23,203 - INFO - Cleaning origination data...
+2026-01-16 15:01:23,334 - INFO - Merging origination and performance data...
+2026-01-16 15:01:23,355 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:01:23,548 - INFO - Year 2001: 50,000 loans processed
+2026-01-16 15:01:23,611 - INFO - 
+============================================================
+2026-01-16 15:01:23,611 - INFO - Processing year 2002
+2026-01-16 15:01:23,611 - INFO - ============================================================
+2026-01-16 15:01:23,611 - INFO - Loading origination data from data/raw/sample_2002/sample_orig_2002.txt
+2026-01-16 15:01:23,777 - INFO - Loaded 50,000 origination records
+2026-01-16 15:01:23,777 - INFO - Loading performance data from data/raw/sample_2002/sample_svcg_2002.txt
+2026-01-16 15:01:29,085 - INFO - Loaded 2,492,140 performance records
+2026-01-16 15:01:29,085 - INFO - Aggregating performance data...
+2026-01-16 15:01:31,120 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:01:31,189 - INFO - Creating survival variables...
+2026-01-16 15:01:31,190 - INFO - Cleaning origination data...
+2026-01-16 15:01:31,336 - INFO - Merging origination and performance data...
+2026-01-16 15:01:31,357 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:01:31,554 - INFO - Year 2002: 50,000 loans processed
+2026-01-16 15:01:31,632 - INFO - 
+============================================================
+2026-01-16 15:01:31,632 - INFO - Processing year 2003
+2026-01-16 15:01:31,632 - INFO - ============================================================
+2026-01-16 15:01:31,632 - INFO - Loading origination data from data/raw/sample_2003/sample_orig_2003.txt
+2026-01-16 15:01:31,796 - INFO - Loaded 50,000 origination records
+2026-01-16 15:01:31,796 - INFO - Loading performance data from data/raw/sample_2003/sample_svcg_2003.txt
+2026-01-16 15:01:40,185 - INFO - Loaded 4,069,611 performance records
+2026-01-16 15:01:40,186 - INFO - Aggregating performance data...
+2026-01-16 15:01:43,093 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:01:43,215 - INFO - Creating survival variables...
+2026-01-16 15:01:43,216 - INFO - Cleaning origination data...
+2026-01-16 15:01:43,374 - INFO - Merging origination and performance data...
+2026-01-16 15:01:43,398 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:01:43,594 - INFO - Year 2003: 50,000 loans processed
+2026-01-16 15:01:43,738 - INFO - 
+============================================================
+2026-01-16 15:01:43,738 - INFO - Processing year 2004
+2026-01-16 15:01:43,739 - INFO - ============================================================
+2026-01-16 15:01:43,739 - INFO - Loading origination data from data/raw/sample_2004/sample_orig_2004.txt
+2026-01-16 15:01:43,913 - INFO - Loaded 50,000 origination records
+2026-01-16 15:01:43,913 - INFO - Loading performance data from data/raw/sample_2004/sample_svcg_2004.txt
+2026-01-16 15:01:53,154 - INFO - Loaded 3,974,583 performance records
+2026-01-16 15:01:53,155 - INFO - Aggregating performance data...
+2026-01-16 15:01:55,976 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:01:56,089 - INFO - Creating survival variables...
+2026-01-16 15:01:56,090 - INFO - Cleaning origination data...
+2026-01-16 15:01:56,227 - INFO - Merging origination and performance data...
+2026-01-16 15:01:56,252 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:01:56,489 - INFO - Year 2004: 50,000 loans processed
+2026-01-16 15:01:56,616 - INFO - 
+============================================================
+2026-01-16 15:01:56,616 - INFO - Processing year 2005
+2026-01-16 15:01:56,616 - INFO - ============================================================
+2026-01-16 15:01:56,616 - INFO - Loading origination data from data/raw/sample_2005/sample_orig_2005.txt
+2026-01-16 15:01:56,775 - INFO - Loaded 50,000 origination records
+2026-01-16 15:01:56,775 - INFO - Loading performance data from data/raw/sample_2005/sample_svcg_2005.txt
+2026-01-16 15:02:04,639 - INFO - Loaded 3,864,978 performance records
+2026-01-16 15:02:04,640 - INFO - Aggregating performance data...
+2026-01-16 15:02:07,634 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:02:07,756 - INFO - Creating survival variables...
+2026-01-16 15:02:07,757 - INFO - Cleaning origination data...
+2026-01-16 15:02:07,900 - INFO - Merging origination and performance data...
+2026-01-16 15:02:07,924 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:02:08,159 - INFO - Year 2005: 50,000 loans processed
+2026-01-16 15:02:08,298 - INFO - 
+============================================================
+2026-01-16 15:02:08,298 - INFO - Processing year 2006
+2026-01-16 15:02:08,298 - INFO - ============================================================
+2026-01-16 15:02:08,298 - INFO - Loading origination data from data/raw/sample_2006/sample_orig_2006.txt
+2026-01-16 15:02:08,463 - INFO - Loaded 50,000 origination records
+2026-01-16 15:02:08,463 - INFO - Loading performance data from data/raw/sample_2006/sample_svcg_2006.txt
+2026-01-16 15:02:15,048 - INFO - Loaded 3,192,103 performance records
+2026-01-16 15:02:15,048 - INFO - Aggregating performance data...
+2026-01-16 15:02:17,390 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:02:17,481 - INFO - Creating survival variables...
+2026-01-16 15:02:17,482 - INFO - Cleaning origination data...
+2026-01-16 15:02:17,626 - INFO - Merging origination and performance data...
+2026-01-16 15:02:17,659 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:02:17,849 - INFO - Year 2006: 50,000 loans processed
+2026-01-16 15:02:17,944 - INFO - 
+============================================================
+2026-01-16 15:02:17,944 - INFO - Processing year 2007
+2026-01-16 15:02:17,944 - INFO - ============================================================
+2026-01-16 15:02:17,944 - INFO - Loading origination data from data/raw/sample_2007/sample_orig_2007.txt
+2026-01-16 15:02:18,125 - INFO - Loaded 50,000 origination records
+2026-01-16 15:02:18,125 - INFO - Loading performance data from data/raw/sample_2007/sample_svcg_2007.txt
+2026-01-16 15:02:23,871 - INFO - Loaded 2,998,694 performance records
+2026-01-16 15:02:23,872 - INFO - Aggregating performance data...
+2026-01-16 15:02:26,170 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:02:26,261 - INFO - Creating survival variables...
+2026-01-16 15:02:26,262 - INFO - Cleaning origination data...
+2026-01-16 15:02:26,396 - INFO - Merging origination and performance data...
+2026-01-16 15:02:26,419 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:02:26,609 - INFO - Year 2007: 50,000 loans processed
+2026-01-16 15:02:26,701 - INFO - 
+============================================================
+2026-01-16 15:02:26,702 - INFO - Processing year 2008
+2026-01-16 15:02:26,702 - INFO - ============================================================
+2026-01-16 15:02:26,702 - INFO - Loading origination data from data/raw/sample_2008/sample_orig_2008.txt
+2026-01-16 15:02:26,858 - INFO - Loaded 50,000 origination records
+2026-01-16 15:02:26,859 - INFO - Loading performance data from data/raw/sample_2008/sample_svcg_2008.txt
+2026-01-16 15:02:31,424 - INFO - Loaded 2,444,931 performance records
+2026-01-16 15:02:31,424 - INFO - Aggregating performance data...
+2026-01-16 15:02:33,391 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:02:33,459 - INFO - Creating survival variables...
+2026-01-16 15:02:33,460 - INFO - Cleaning origination data...
+2026-01-16 15:02:33,594 - INFO - Merging origination and performance data...
+2026-01-16 15:02:33,616 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:02:33,807 - INFO - Year 2008: 50,000 loans processed
+2026-01-16 15:02:33,882 - INFO - 
+============================================================
+2026-01-16 15:02:33,882 - INFO - Processing year 2009
+2026-01-16 15:02:33,882 - INFO - ============================================================
+2026-01-16 15:02:33,882 - INFO - Loading origination data from data/raw/sample_2009/sample_orig_2009.txt
+2026-01-16 15:02:34,050 - INFO - Loaded 50,000 origination records
+2026-01-16 15:02:34,050 - INFO - Loading performance data from data/raw/sample_2009/sample_svcg_2009.txt
+2026-01-16 15:02:40,803 - INFO - Loaded 3,137,679 performance records
+2026-01-16 15:02:40,804 - INFO - Aggregating performance data...
+2026-01-16 15:02:43,299 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:02:43,394 - INFO - Creating survival variables...
+2026-01-16 15:02:43,395 - INFO - Cleaning origination data...
+2026-01-16 15:02:43,529 - INFO - Merging origination and performance data...
+2026-01-16 15:02:43,552 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:02:43,756 - INFO - Year 2009: 50,000 loans processed
+2026-01-16 15:02:43,868 - INFO - 
+============================================================
+2026-01-16 15:02:43,868 - INFO - Processing year 2010
+2026-01-16 15:02:43,868 - INFO - ============================================================
+2026-01-16 15:02:43,868 - INFO - Loading origination data from data/raw/sample_2010/sample_orig_2010.txt
+2026-01-16 15:02:44,029 - INFO - Loaded 50,000 origination records
+2026-01-16 15:02:44,029 - INFO - Loading performance data from data/raw/sample_2010/sample_svcg_2010.txt
+2026-01-16 15:02:51,690 - INFO - Loaded 3,414,559 performance records
+2026-01-16 15:02:51,692 - INFO - Aggregating performance data...
+2026-01-16 15:02:54,210 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:02:54,311 - INFO - Creating survival variables...
+2026-01-16 15:02:54,312 - INFO - Cleaning origination data...
+2026-01-16 15:02:54,447 - INFO - Merging origination and performance data...
+2026-01-16 15:02:54,471 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:02:54,668 - INFO - Year 2010: 50,000 loans processed
+2026-01-16 15:02:54,773 - INFO - 
+============================================================
+2026-01-16 15:02:54,773 - INFO - Processing year 2011
+2026-01-16 15:02:54,773 - INFO - ============================================================
+2026-01-16 15:02:54,773 - INFO - Loading origination data from data/raw/sample_2011/sample_orig_2011.txt
+2026-01-16 15:02:54,931 - INFO - Loaded 50,000 origination records
+2026-01-16 15:02:54,931 - INFO - Loading performance data from data/raw/sample_2011/sample_svcg_2011.txt
+2026-01-16 15:03:01,723 - INFO - Loaded 3,583,504 performance records
+2026-01-16 15:03:01,724 - INFO - Aggregating performance data...
+2026-01-16 15:03:04,869 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:03:04,985 - INFO - Creating survival variables...
+2026-01-16 15:03:04,988 - INFO - Cleaning origination data...
+2026-01-16 15:03:05,143 - INFO - Merging origination and performance data...
+2026-01-16 15:03:05,168 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:03:05,359 - INFO - Year 2011: 50,000 loans processed
+2026-01-16 15:03:05,486 - INFO - 
+============================================================
+2026-01-16 15:03:05,486 - INFO - Processing year 2012
+2026-01-16 15:03:05,486 - INFO - ============================================================
+2026-01-16 15:03:05,486 - INFO - Loading origination data from data/raw/sample_2012/sample_orig_2012.txt
+2026-01-16 15:03:05,646 - INFO - Loaded 50,000 origination records
+2026-01-16 15:03:05,646 - INFO - Loading performance data from data/raw/sample_2012/sample_svcg_2012.txt
+2026-01-16 15:03:14,311 - INFO - Loaded 4,418,463 performance records
+2026-01-16 15:03:14,311 - INFO - Aggregating performance data...
+2026-01-16 15:03:17,317 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:03:17,439 - INFO - Creating survival variables...
+2026-01-16 15:03:17,440 - INFO - Cleaning origination data...
+2026-01-16 15:03:17,574 - INFO - Merging origination and performance data...
+2026-01-16 15:03:17,595 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:03:17,804 - INFO - Year 2012: 50,000 loans processed
+2026-01-16 15:03:17,932 - INFO - 
+============================================================
+2026-01-16 15:03:17,932 - INFO - Processing year 2013
+2026-01-16 15:03:17,932 - INFO - ============================================================
+2026-01-16 15:03:17,932 - INFO - Loading origination data from data/raw/sample_2013/sample_orig_2013.txt
+2026-01-16 15:03:18,090 - INFO - Loaded 50,000 origination records
+2026-01-16 15:03:18,090 - INFO - Loading performance data from data/raw/sample_2013/sample_svcg_2013.txt
+2026-01-16 15:03:25,821 - INFO - Loaded 4,097,585 performance records
+2026-01-16 15:03:25,822 - INFO - Aggregating performance data...
+2026-01-16 15:03:28,648 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:03:28,771 - INFO - Creating survival variables...
+2026-01-16 15:03:28,773 - INFO - Cleaning origination data...
+2026-01-16 15:03:28,907 - INFO - Merging origination and performance data...
+2026-01-16 15:03:28,932 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:03:29,136 - INFO - Year 2013: 50,000 loans processed
+2026-01-16 15:03:29,262 - INFO - 
+============================================================
+2026-01-16 15:03:29,262 - INFO - Processing year 2014
+2026-01-16 15:03:29,262 - INFO - ============================================================
+2026-01-16 15:03:29,262 - INFO - Loading origination data from data/raw/sample_2014/sample_orig_2014.txt
+2026-01-16 15:03:29,451 - INFO - Loaded 50,000 origination records
+2026-01-16 15:03:29,451 - INFO - Loading performance data from data/raw/sample_2014/sample_svcg_2014.txt
+2026-01-16 15:03:37,031 - INFO - Loaded 3,311,914 performance records
+2026-01-16 15:03:37,031 - INFO - Aggregating performance data...
+2026-01-16 15:03:39,566 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:03:39,681 - INFO - Creating survival variables...
+2026-01-16 15:03:39,683 - INFO - Cleaning origination data...
+2026-01-16 15:03:39,828 - INFO - Merging origination and performance data...
+2026-01-16 15:03:39,851 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:03:40,050 - INFO - Year 2014: 50,000 loans processed
+2026-01-16 15:03:40,153 - INFO - 
+============================================================
+2026-01-16 15:03:40,153 - INFO - Processing year 2015
+2026-01-16 15:03:40,153 - INFO - ============================================================
+2026-01-16 15:03:40,153 - INFO - Loading origination data from data/raw/sample_2015/sample_orig_2015.txt
+2026-01-16 15:03:40,402 - INFO - Loaded 50,000 origination records
+2026-01-16 15:03:40,403 - INFO - Loading performance data from data/raw/sample_2015/sample_svcg_2015.txt
+2026-01-16 15:03:48,028 - INFO - Loaded 3,359,337 performance records
+2026-01-16 15:03:48,029 - INFO - Aggregating performance data...
+2026-01-16 15:03:51,007 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:03:51,154 - INFO - Creating survival variables...
+2026-01-16 15:03:51,156 - INFO - Cleaning origination data...
+2026-01-16 15:03:51,321 - INFO - Merging origination and performance data...
+2026-01-16 15:03:51,348 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:03:51,571 - INFO - Year 2015: 50,000 loans processed
+2026-01-16 15:03:51,703 - INFO - 
+============================================================
+2026-01-16 15:03:51,703 - INFO - Processing year 2016
+2026-01-16 15:03:51,703 - INFO - ============================================================
+2026-01-16 15:03:51,703 - INFO - Loading origination data from data/raw/sample_2016/sample_orig_2016.txt
+2026-01-16 15:03:51,890 - INFO - Loaded 50,000 origination records
+2026-01-16 15:03:51,890 - INFO - Loading performance data from data/raw/sample_2016/sample_svcg_2016.txt
+2026-01-16 15:03:59,708 - INFO - Loaded 3,249,000 performance records
+2026-01-16 15:03:59,708 - INFO - Aggregating performance data...
+2026-01-16 15:04:02,142 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:04:02,262 - INFO - Creating survival variables...
+2026-01-16 15:04:02,263 - INFO - Cleaning origination data...
+2026-01-16 15:04:02,394 - INFO - Merging origination and performance data...
+2026-01-16 15:04:02,418 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:04:02,632 - INFO - Year 2016: 50,000 loans processed
+2026-01-16 15:04:02,741 - INFO - 
+============================================================
+2026-01-16 15:04:02,742 - INFO - Processing year 2017
+2026-01-16 15:04:02,742 - INFO - ============================================================
+2026-01-16 15:04:02,742 - INFO - Loading origination data from data/raw/sample_2017/sample_orig_2017.txt
+2026-01-16 15:04:02,954 - INFO - Loaded 50,000 origination records
+2026-01-16 15:04:02,954 - INFO - Loading performance data from data/raw/sample_2017/sample_svcg_2017.txt
+2026-01-16 15:04:09,010 - INFO - Loaded 2,684,717 performance records
+2026-01-16 15:04:09,011 - INFO - Aggregating performance data...
+2026-01-16 15:04:11,093 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:04:11,173 - INFO - Creating survival variables...
+2026-01-16 15:04:11,174 - INFO - Cleaning origination data...
+2026-01-16 15:04:11,321 - INFO - Merging origination and performance data...
+2026-01-16 15:04:11,344 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:04:11,533 - INFO - Year 2017: 50,000 loans processed
+2026-01-16 15:04:11,612 - INFO - 
+============================================================
+2026-01-16 15:04:11,612 - INFO - Processing year 2018
+2026-01-16 15:04:11,612 - INFO - ============================================================
+2026-01-16 15:04:11,612 - INFO - Loading origination data from data/raw/sample_2018/sample_orig_2018.txt
+2026-01-16 15:04:11,773 - INFO - Loaded 50,000 origination records
+2026-01-16 15:04:11,773 - INFO - Loading performance data from data/raw/sample_2018/sample_svcg_2018.txt
+2026-01-16 15:04:15,339 - INFO - Loaded 1,966,665 performance records
+2026-01-16 15:04:15,339 - INFO - Aggregating performance data...
+2026-01-16 15:04:17,017 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:04:17,073 - INFO - Creating survival variables...
+2026-01-16 15:04:17,074 - INFO - Cleaning origination data...
+2026-01-16 15:04:17,210 - INFO - Merging origination and performance data...
+2026-01-16 15:04:17,231 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:04:17,421 - INFO - Year 2018: 50,000 loans processed
+2026-01-16 15:04:17,482 - INFO - 
+============================================================
+2026-01-16 15:04:17,482 - INFO - Processing year 2019
+2026-01-16 15:04:17,482 - INFO - ============================================================
+2026-01-16 15:04:17,482 - INFO - Loading origination data from data/raw/sample_2019/sample_orig_2019.txt
+2026-01-16 15:04:17,641 - INFO - Loaded 50,000 origination records
+2026-01-16 15:04:17,641 - INFO - Loading performance data from data/raw/sample_2019/sample_svcg_2019.txt
+2026-01-16 15:04:20,862 - INFO - Loaded 1,802,010 performance records
+2026-01-16 15:04:20,862 - INFO - Aggregating performance data...
+2026-01-16 15:04:22,481 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:04:22,532 - INFO - Creating survival variables...
+2026-01-16 15:04:22,532 - INFO - Cleaning origination data...
+2026-01-16 15:04:22,688 - INFO - Merging origination and performance data...
+2026-01-16 15:04:22,709 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:04:22,908 - INFO - Year 2019: 50,000 loans processed
+2026-01-16 15:04:22,965 - INFO - 
+============================================================
+2026-01-16 15:04:22,965 - INFO - Processing year 2020
+2026-01-16 15:04:22,965 - INFO - ============================================================
+2026-01-16 15:04:22,965 - INFO - Loading origination data from data/raw/sample_2020/sample_orig_2020.txt
+2026-01-16 15:04:23,127 - INFO - Loaded 50,000 origination records
+2026-01-16 15:04:23,127 - INFO - Loading performance data from data/raw/sample_2020/sample_svcg_2020.txt
+2026-01-16 15:04:27,178 - INFO - Loaded 2,240,135 performance records
+2026-01-16 15:04:27,178 - INFO - Aggregating performance data...
+2026-01-16 15:04:28,997 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:04:29,058 - INFO - Creating survival variables...
+2026-01-16 15:04:29,058 - INFO - Cleaning origination data...
+2026-01-16 15:04:29,189 - INFO - Merging origination and performance data...
+2026-01-16 15:04:29,219 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:04:29,424 - INFO - Year 2020: 50,000 loans processed
+2026-01-16 15:04:29,493 - INFO - 
+============================================================
+2026-01-16 15:04:29,493 - INFO - Processing year 2021
+2026-01-16 15:04:29,493 - INFO - ============================================================
+2026-01-16 15:04:29,493 - INFO - Loading origination data from data/raw/sample_2021/sample_orig_2021.txt
+2026-01-16 15:04:29,648 - INFO - Loaded 50,000 origination records
+2026-01-16 15:04:29,648 - INFO - Loading performance data from data/raw/sample_2021/sample_svcg_2021.txt
+2026-01-16 15:04:33,583 - INFO - Loaded 2,166,170 performance records
+2026-01-16 15:04:33,583 - INFO - Aggregating performance data...
+2026-01-16 15:04:35,355 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:04:35,416 - INFO - Creating survival variables...
+2026-01-16 15:04:35,416 - INFO - Cleaning origination data...
+2026-01-16 15:04:35,550 - INFO - Merging origination and performance data...
+2026-01-16 15:04:35,571 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:04:35,757 - INFO - Year 2021: 50,000 loans processed
+2026-01-16 15:04:35,826 - INFO - 
+============================================================
+2026-01-16 15:04:35,826 - INFO - Processing year 2022
+2026-01-16 15:04:35,826 - INFO - ============================================================
+2026-01-16 15:04:35,826 - INFO - Loading origination data from data/raw/sample_2022/sample_orig_2022.txt
+2026-01-16 15:04:35,987 - INFO - Loaded 50,000 origination records
+2026-01-16 15:04:35,987 - INFO - Loading performance data from data/raw/sample_2022/sample_svcg_2022.txt
+2026-01-16 15:04:38,886 - INFO - Loaded 1,660,755 performance records
+2026-01-16 15:04:38,887 - INFO - Aggregating performance data...
+2026-01-16 15:04:40,398 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:04:40,443 - INFO - Creating survival variables...
+2026-01-16 15:04:40,444 - INFO - Cleaning origination data...
+2026-01-16 15:04:40,576 - INFO - Merging origination and performance data...
+2026-01-16 15:04:40,597 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:04:40,784 - INFO - Year 2022: 50,000 loans processed
+2026-01-16 15:04:40,834 - INFO - 
+============================================================
+2026-01-16 15:04:40,834 - INFO - Processing year 2023
+2026-01-16 15:04:40,834 - INFO - ============================================================
+2026-01-16 15:04:40,834 - INFO - Loading origination data from data/raw/sample_2023/sample_orig_2023.txt
+2026-01-16 15:04:40,996 - INFO - Loaded 50,000 origination records
+2026-01-16 15:04:40,996 - INFO - Loading performance data from data/raw/sample_2023/sample_svcg_2023.txt
+2026-01-16 15:04:42,961 - INFO - Loaded 1,097,475 performance records
+2026-01-16 15:04:42,961 - INFO - Aggregating performance data...
+2026-01-16 15:04:44,219 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:04:44,257 - INFO - Creating survival variables...
+2026-01-16 15:04:44,259 - INFO - Cleaning origination data...
+2026-01-16 15:04:44,403 - INFO - Merging origination and performance data...
+2026-01-16 15:04:44,424 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:04:44,604 - INFO - Year 2023: 50,000 loans processed
+2026-01-16 15:04:44,638 - INFO - 
+============================================================
+2026-01-16 15:04:44,639 - INFO - Processing year 2024
+2026-01-16 15:04:44,639 - INFO - ============================================================
+2026-01-16 15:04:44,639 - INFO - Loading origination data from data/raw/sample_2024/sample_orig_2024.txt
+2026-01-16 15:04:44,814 - INFO - Loaded 50,000 origination records
+2026-01-16 15:04:44,814 - INFO - Loading performance data from data/raw/sample_2024/sample_svcg_2024.txt
+2026-01-16 15:04:45,799 - INFO - Loaded 553,835 performance records
+2026-01-16 15:04:45,799 - INFO - Aggregating performance data...
+2026-01-16 15:04:46,810 - INFO - Aggregated to 50,000 unique loans
+2026-01-16 15:04:46,828 - INFO - Creating survival variables...
+2026-01-16 15:04:46,829 - INFO - Cleaning origination data...
+2026-01-16 15:04:46,984 - INFO - Merging origination and performance data...
+2026-01-16 15:04:47,006 - INFO - Merged dataset has 50,000 loans
+2026-01-16 15:04:47,180 - INFO - Year 2024: 50,000 loans processed
+2026-01-16 15:04:47,201 - INFO - 
+============================================================
+2026-01-16 15:04:47,201 - INFO - Processing year 2025
+2026-01-16 15:04:47,201 - INFO - ============================================================
+2026-01-16 15:04:47,201 - INFO - Loading origination data from data/raw/sample_2025/sample_orig_2025.txt
+2026-01-16 15:04:47,306 - INFO - Loaded 25,000 origination records
+2026-01-16 15:04:47,306 - INFO - Loading performance data from data/raw/sample_2025/sample_svcg_2025.txt
+2026-01-16 15:04:47,435 - INFO - Loaded 67,173 performance records
+2026-01-16 15:04:47,436 - INFO - Aggregating performance data...
+2026-01-16 15:04:47,875 - INFO - Aggregated to 24,950 unique loans
+2026-01-16 15:04:47,876 - INFO - Creating survival variables...
+2026-01-16 15:04:47,877 - INFO - Cleaning origination data...
+2026-01-16 15:04:47,950 - INFO - Merging origination and performance data...
+2026-01-16 15:04:47,991 - INFO - Merged dataset has 24,950 loans
+2026-01-16 15:04:48,079 - INFO - Year 2025: 24,950 loans processed
+2026-01-16 15:04:48,083 - INFO - 
+Combining all years...
+2026-01-16 15:04:53,762 - INFO - Saved 1,324,950 loans to data/processed/survival_data.csv
+2026-01-16 15:04:54,826 - INFO - Saved parquet to data/processed/survival_data.parquet
+2026-01-16 15:04:56,514 - INFO - Saved default dataset (365,700 loans) to data/processed/survival_data_default.csv
+2026-01-16 15:05:02,523 - INFO - Saved prepayment dataset (1,287,507 loans) to data/processed/survival_data_prepay.csv
+2026-01-16 15:05:02,528 - INFO - 
+Saving datasets by vintage for 27 vintages...
+2026-01-16 15:05:02,763 - INFO - Vintage 1999: saved 50,000 loans to data/processed/by_vintage/vintage_1999
+2026-01-16 15:05:03,271 - INFO - Vintage 2000: saved 50,000 loans to data/processed/by_vintage/vintage_2000
+2026-01-16 15:05:03,746 - INFO - Vintage 2001: saved 50,000 loans to data/processed/by_vintage/vintage_2001
+2026-01-16 15:05:04,272 - INFO - Vintage 2002: saved 50,000 loans to data/processed/by_vintage/vintage_2002
+2026-01-16 15:05:04,797 - INFO - Vintage 2003: saved 50,000 loans to data/processed/by_vintage/vintage_2003
+2026-01-16 15:05:05,296 - INFO - Vintage 2004: saved 50,000 loans to data/processed/by_vintage/vintage_2004
+2026-01-16 15:05:05,755 - INFO - Vintage 2005: saved 50,000 loans to data/processed/by_vintage/vintage_2005
+2026-01-16 15:05:06,221 - INFO - Vintage 2006: saved 50,000 loans to data/processed/by_vintage/vintage_2006
+2026-01-16 15:05:06,708 - INFO - Vintage 2007: saved 50,000 loans to data/processed/by_vintage/vintage_2007
+2026-01-16 15:05:07,166 - INFO - Vintage 2008: saved 49,999 loans to data/processed/by_vintage/vintage_2008
+2026-01-16 15:05:07,631 - INFO - Vintage 2009: saved 50,001 loans to data/processed/by_vintage/vintage_2009
+2026-01-16 15:05:08,194 - INFO - Vintage 2010: saved 50,000 loans to data/processed/by_vintage/vintage_2010
+2026-01-16 15:05:08,703 - INFO - Vintage 2011: saved 50,000 loans to data/processed/by_vintage/vintage_2011
+2026-01-16 15:05:09,216 - INFO - Vintage 2012: saved 50,000 loans to data/processed/by_vintage/vintage_2012
+2026-01-16 15:05:09,776 - INFO - Vintage 2013: saved 50,000 loans to data/processed/by_vintage/vintage_2013
+2026-01-16 15:05:10,321 - INFO - Vintage 2014: saved 50,000 loans to data/processed/by_vintage/vintage_2014
+2026-01-16 15:05:10,834 - INFO - Vintage 2015: saved 50,000 loans to data/processed/by_vintage/vintage_2015
+2026-01-16 15:05:11,383 - INFO - Vintage 2016: saved 50,000 loans to data/processed/by_vintage/vintage_2016
+2026-01-16 15:05:11,939 - INFO - Vintage 2017: saved 50,000 loans to data/processed/by_vintage/vintage_2017
+2026-01-16 15:05:12,497 - INFO - Vintage 2018: saved 50,000 loans to data/processed/by_vintage/vintage_2018
+2026-01-16 15:05:13,062 - INFO - Vintage 2019: saved 50,000 loans to data/processed/by_vintage/vintage_2019
+2026-01-16 15:05:13,598 - INFO - Vintage 2020: saved 50,000 loans to data/processed/by_vintage/vintage_2020
+2026-01-16 15:05:14,275 - INFO - Vintage 2021: saved 50,000 loans to data/processed/by_vintage/vintage_2021
+2026-01-16 15:05:14,919 - INFO - Vintage 2022: saved 50,000 loans to data/processed/by_vintage/vintage_2022
+2026-01-16 15:05:15,585 - INFO - Vintage 2023: saved 50,000 loans to data/processed/by_vintage/vintage_2023
+2026-01-16 15:05:16,213 - INFO - Vintage 2024: saved 50,000 loans to data/processed/by_vintage/vintage_2024
+2026-01-16 15:05:16,764 - INFO - Vintage 2025: saved 24,950 loans to data/processed/by_vintage/vintage_2025
+2026-01-16 15:05:16,986 - INFO - Saved 27 vintage-specific datasets to data/processed/by_vintage

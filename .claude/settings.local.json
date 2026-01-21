@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m src.data.preprocess:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(pip install:*)",
+      "Bash(python -m ipykernel:*)",
+      "Bash(jupyter kernelspec:*)",
+      "Bash(python -m src.data.download_fred:*)",
+      "Bash(ls:*)",
+      "Bash(python:*)",
+      "Bash(pip show:*)",
+      "Bash(survival and competing risk modelling\".\n\nKey additions:\n- Competing risks module \\(src/competing_risks/\\) with:\n  - Cause-specific Cox model wrapper\n  - Discrete-time Fine-Gray implementation\n  - Random Survival Forest for competing risks\n  - Time-dependent concordance index at 24, 48, 72 months\n  - Aalen-Johansen CIF estimation\n\n- Analysis notebooks:\n  - 02: scikit-survival exploration\n  - 03: Data preparation \\(original and Blumenstock-style\\)\n  - 04: Non-parametric CIF estimation\n  - 05: Cause-specific Cox models\n  - 06: Fine-Gray subdistribution hazard model\n  - 07-08: Model comparison experiments \\(4.1, 4.2, 4.3\\)\n\n- FRED macroeconomic data download script\n- Reference papers \\(Blumenstock 2022, Fine & Gray 1999\\)\n\nDataset 2 period: 2010-2025 \\(extended from paper''s 2010-2017\\)\nVariables: 9 loan-level + 13 macroeconomic features\nEvaluation: C-index at 24, 48, 72 months for prepay \\(k=1\\) and default \\(k=2\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git mv:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:nbviewer.jupyter.org)",
+      "WebFetch(domain:nbviewer.org)",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ]
+  }
+}

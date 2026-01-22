@@ -286,15 +286,18 @@ def test_state_unemployment_values(unemp_df: pd.DataFrame, test_dates: List[pd.T
 
         state_passed = 0
         state_failed = 0
+        state_skipped = 0
 
         for date in test_dates:
             if date not in unemp_df.index:
+                state_skipped += 1
                 continue
 
             actual = unemp_df.loc[date, col_name]
             expected = compute_expected_unemployment(source_df, date, series_id)
 
             if expected is None:
+                state_skipped += 1
                 continue
 
             if values_match(actual, expected, tolerance=0.01):
@@ -307,7 +310,7 @@ def test_state_unemployment_values(unemp_df: pd.DataFrame, test_dates: List[pd.T
                 results.add_fail(msg)
 
         status = "PASS" if state_failed == 0 else "FAIL"
-        print(f"  {status}: {state} ({state_passed} passed, {state_failed} failed)")
+        print(f"  {status}: {state} ({state_passed} passed, {state_failed} failed, {state_skipped} skipped)")
 
 
 def test_state_hpi_values(hpi_df: pd.DataFrame, test_dates: List[pd.Timestamp],
@@ -333,15 +336,18 @@ def test_state_hpi_values(hpi_df: pd.DataFrame, test_dates: List[pd.Timestamp],
 
         state_passed = 0
         state_failed = 0
+        state_skipped = 0
 
         for date in test_dates:
             if date not in hpi_df.index:
+                state_skipped += 1
                 continue
 
             actual = hpi_df.loc[date, col_name]
             expected = compute_expected_hpi(source_df, date, series_id)
 
             if expected is None:
+                state_skipped += 1
                 continue
 
             if values_match(actual, expected, tolerance=0.01):
@@ -354,7 +360,7 @@ def test_state_hpi_values(hpi_df: pd.DataFrame, test_dates: List[pd.Timestamp],
                 results.add_fail(msg)
 
         status = "PASS" if state_failed == 0 else "FAIL"
-        print(f"  {status}: {state} ({state_passed} passed, {state_failed} failed)")
+        print(f"  {status}: {state} ({state_passed} passed, {state_failed} failed, {state_skipped} skipped)")
 
 
 def test_hpi_forward_fill(hpi_df: pd.DataFrame, results: TestResult) -> None:

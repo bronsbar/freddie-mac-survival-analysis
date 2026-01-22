@@ -26,7 +26,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 # Configuration
 EXTERNAL_DATA_DIR = Path(__file__).parent.parent / 'data' / 'external'
 TOLERANCE = 1e-6  # Tolerance for floating-point comparisons
-NUM_RANDOM_RECORDS = 10  # Number of random records to test
+NUM_RANDOM_RECORDS = 50  # Number of random records to test
 RANDOM_SEED = 42
 
 # Series metadata (from download_fred.py)
@@ -331,15 +331,18 @@ def test_raw_series(panel_df: pd.DataFrame, test_dates: List[pd.Timestamp],
         frequency = meta['frequency']
         series_passed = 0
         series_failed = 0
+        series_skipped = 0
 
         for date in test_dates:
             if date not in panel_df.index:
+                series_skipped += 1
                 continue
 
             actual = panel_df.loc[date, series_id]
             expected = compute_monthly_value(series_df, date, frequency)
 
             if expected is None:
+                series_skipped += 1
                 continue
 
             # Use larger tolerance for averaged values
@@ -356,7 +359,7 @@ def test_raw_series(panel_df: pd.DataFrame, test_dates: List[pd.Timestamp],
                 results.add_fail(msg)
 
         status = "PASS" if series_failed == 0 else "FAIL"
-        print(f"  {status}: {series_id} ({series_passed} passed, {series_failed} failed)")
+        print(f"  {status}: {series_id} ({series_passed} passed, {series_failed} failed, {series_skipped} skipped)")
 
 
 def test_derived_columns(panel_df: pd.DataFrame, test_dates: List[pd.Timestamp],
@@ -385,15 +388,18 @@ def test_derived_columns(panel_df: pd.DataFrame, test_dates: List[pd.Timestamp],
 
         col_passed = 0
         col_failed = 0
+        col_skipped = 0
 
         for date in test_dates:
             if date not in panel_df.index:
+                col_skipped += 1
                 continue
 
             actual = panel_df.loc[date, column]
             expected = compute_derived_value(panel_df, column, date)
 
             if expected is None:
+                col_skipped += 1
                 continue
 
             # Use larger tolerance for derived values (chained calculations)
@@ -410,7 +416,7 @@ def test_derived_columns(panel_df: pd.DataFrame, test_dates: List[pd.Timestamp],
                 results.add_fail(msg)
 
         status = "PASS" if col_failed == 0 else "FAIL"
-        print(f"  {status}: {column} ({col_passed} passed, {col_failed} failed)")
+        print(f"  {status}: {column} ({col_passed} passed, {col_failed} failed, {col_skipped} skipped)")
 
 
 def test_panel_integrity(panel_df: pd.DataFrame, results: TestResult) -> None:

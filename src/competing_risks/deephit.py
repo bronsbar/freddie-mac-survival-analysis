@@ -26,9 +26,10 @@ try:
 except ImportError:
     PYCOX_AVAILABLE = False
     DeepHit = None
+    LabTransDiscreteTime = object  # Placeholder for class inheritance
 
 
-class LabTransformCompetingRisks(LabTransDiscreteTime):
+class LabTransformCompetingRisks(LabTransDiscreteTime if PYCOX_AVAILABLE else object):
     """
     Label transformer for competing risks that discretizes time
     while preserving event type information.
@@ -56,7 +57,7 @@ class LabTransformCompetingRisks(LabTransDiscreteTime):
         return durations, events.astype('int64')
 
 
-class CauseSpecificNet(nn.Module):
+class CauseSpecificNet(nn.Module if PYCOX_AVAILABLE else object):
     """
     Neural network architecture for DeepHit with competing risks.
 

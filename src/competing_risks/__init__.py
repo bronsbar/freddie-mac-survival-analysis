@@ -19,7 +19,8 @@ fine_gray : Discrete-time Fine-Gray model implementation
 cause_specific : Cause-specific Cox model wrappers
 random_forest : Random Survival Forest for competing risks
 deephit : DeepHit deep learning model (pycox/PyTorch)
-bayesian_phm : Bayesian competing risks PHM (NumPyro)
+bayesian_phm : Bayesian competing risks PHM (Pyro/PyTorch)
+bayesian_evaluation : Evaluation metrics for Bayesian models
 cumulative_incidence : CIF estimation functions
 evaluation : Model comparison and validation metrics
 """
@@ -57,10 +58,28 @@ try:
         lognormal_log_hazard,
         lognormal_cumulative_hazard,
     )
+    from .bayesian_evaluation import (
+        compute_time_dependent_cindex,
+        compute_brier_score,
+        compute_calibration,
+        compute_coverage_probability,
+        compute_posterior_predictive_pvalues,
+        compute_standardized_residuals,
+        evaluate_bayesian_model,
+        format_evaluation_results,
+    )
     _BAYESIAN_AVAILABLE = True
 except ImportError:
     _BAYESIAN_AVAILABLE = False
     BayesianCompetingRisksPHM = None
+    compute_time_dependent_cindex = None
+    compute_brier_score = None
+    compute_calibration = None
+    compute_coverage_probability = None
+    compute_posterior_predictive_pvalues = None
+    compute_standardized_residuals = None
+    evaluate_bayesian_model = None
+    format_evaluation_results = None
 
 from .cumulative_incidence import (
     estimate_cif_aalen_johansen,
@@ -101,6 +120,17 @@ __all__ = [
     'fit_deephit_competing_risks',
     # Bayesian PHM
     'BayesianCompetingRisksPHM',
+    'lognormal_log_hazard',
+    'lognormal_cumulative_hazard',
+    # Bayesian evaluation
+    'compute_time_dependent_cindex',
+    'compute_brier_score',
+    'compute_calibration',
+    'compute_coverage_probability',
+    'compute_posterior_predictive_pvalues',
+    'compute_standardized_residuals',
+    'evaluate_bayesian_model',
+    'format_evaluation_results',
     # Cumulative incidence
     'estimate_cif_aalen_johansen',
     'estimate_cif_from_model',
@@ -119,4 +149,4 @@ __all__ = [
     'EVAL_TIMES',
 ]
 
-__version__ = '0.4.0'
+__version__ = '0.5.0'

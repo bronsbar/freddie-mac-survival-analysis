@@ -10,6 +10,7 @@ Models:
 - Fine-Gray (FGR): Subdistribution hazard model
 - Random Survival Forest (RSF): ML ensemble approach
 - DeepHit: Deep learning approach (Lee et al., 2018)
+- Bayesian PHM: Bayesian competing risks (Bhattacharya et al., 2019)
 
 Modules:
 --------
@@ -18,6 +19,7 @@ fine_gray : Discrete-time Fine-Gray model implementation
 cause_specific : Cause-specific Cox model wrappers
 random_forest : Random Survival Forest for competing risks
 deephit : DeepHit deep learning model (pycox/PyTorch)
+bayesian_phm : Bayesian competing risks PHM (NumPyro)
 cumulative_incidence : CIF estimation functions
 evaluation : Model comparison and validation metrics
 """
@@ -47,6 +49,18 @@ from .deephit import (
     CompetingRisksDeepHit,
     fit_deephit_competing_risks,
 )
+
+# Bayesian model (optional - requires Pyro/PyTorch)
+try:
+    from .bayesian_phm import (
+        BayesianCompetingRisksPHM,
+        lognormal_log_hazard,
+        lognormal_cumulative_hazard,
+    )
+    _BAYESIAN_AVAILABLE = True
+except ImportError:
+    _BAYESIAN_AVAILABLE = False
+    BayesianCompetingRisksPHM = None
 
 from .cumulative_incidence import (
     estimate_cif_aalen_johansen,
@@ -85,6 +99,8 @@ __all__ = [
     # DeepHit
     'CompetingRisksDeepHit',
     'fit_deephit_competing_risks',
+    # Bayesian PHM
+    'BayesianCompetingRisksPHM',
     # Cumulative incidence
     'estimate_cif_aalen_johansen',
     'estimate_cif_from_model',
@@ -103,4 +119,4 @@ __all__ = [
     'EVAL_TIMES',
 ]
 
-__version__ = '0.3.0'
+__version__ = '0.4.0'

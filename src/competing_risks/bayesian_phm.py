@@ -11,6 +11,7 @@ competing risks model with lognormal baseline hazards.
 Uses Pyro (PyTorch-based probabilistic programming) for MCMC inference.
 """
 
+import math
 import numpy as np
 from typing import Dict, Tuple, Optional, List
 import warnings
@@ -29,12 +30,33 @@ except ImportError:
     )
 
 
+_LOG_2PI = math.log(2 * math.pi)
+_SQRT2 = math.sqrt(2)
+
+
+def _log_standard_normal_survival(z: torch.Tensor) -> torch.Tensor:
+    """
+    Compute log(1 - Phi(z)) via erfc for numerical stability.
+
+    1 - Phi(z) = 0.5 * erfc(z / sqrt(2))
+    log(1 - Phi(z)) = log(0.5) + log(erfc(z / sqrt(2)))
+
+    erfc is numerically stable for large z (unlike 1 - erf),
+    and with float64 handles |z| up to ~26 before underflow.
+    """
+    return torch.log(torch.tensor(0.5, dtype=z.dtype, device=z.device)) + \
+           torch.log(torch.erfc(z / _SQRT2).clamp(min=1e-30))
+
+
 def lognormal_log_hazard(t: torch.Tensor, mu: torch.Tensor, sigma: torch.Tensor) -> torch.Tensor:
     """
-    Compute log of lognormal baseline hazard.
+    Compute log of lognormal baseline hazard (numerically stable).
 
     log(r(t)) = log(phi(z)) - log(sigma) - log(t) - log(1 - Phi(z))
     where z = (log(t) - mu) / sigma
+
+    Uses erfc instead of 1-erf to avoid catastrophic cancellation
+    in the normal survival tail.
 
     Parameters
     ----------
@@ -51,20 +73,19 @@ def lognormal_log_hazard(t: torch.Tensor, mu: torch.Tensor, sigma: torch.Tensor)
         Log hazard values
     """
     z = (torch.log(t) - mu) / sigma
-    # Log of standard normal PDF: -0.5*z^2 - 0.5*log(2*pi)
-    log_phi = -0.5 * z**2 - 0.5 * torch.log(torch.tensor(2 * np.pi, device=t.device))
-    # Standard normal CDF
-    Phi_z = 0.5 * (1 + torch.erf(z / np.sqrt(2)))
-    # Log survival of standard normal: log(1 - Phi(z))
-    log_survival = torch.log(1 - Phi_z + 1e-10)
-    return log_phi - torch.log(sigma) - torch.log(t) - log_survival
+    z = torch.clamp(z, -25, 25)
+    log_phi = -0.5 * z**2 - 0.5 * _LOG_2PI
+    log_surv = _log_standard_normal_survival(z)
+    return log_phi - torch.log(sigma) - torch.log(t) - log_surv
 
 
 def lognormal_cumulative_hazard(t: torch.Tensor, mu: torch.Tensor, sigma: torch.Tensor) -> torch.Tensor:
     """
-    Compute cumulative baseline hazard for lognormal.
+    Compute cumulative baseline hazard for lognormal (numerically stable).
 
     H_0(t) = -log(1 - Phi(z)) where z = (log(t) - mu) / sigma
+
+    Uses erfc instead of 1-erf to avoid catastrophic cancellation.
 
     Parameters
     ----------
@@ -81,9 +102,8 @@ def lognormal_cumulative_hazard(t: torch.Tensor, mu: torch.Tensor, sigma: torch.
         Cumulative hazard values
     """
     z = (torch.log(t) - mu) / sigma
-    # Standard normal CDF
-    Phi_z = 0.5 * (1 + torch.erf(z / np.sqrt(2)))
-    return -torch.log(1 - Phi_z + 1e-10)
+    z = torch.clamp(z, -25, 25)
+    return -_log_standard_normal_survival(z)
 
 
 class BayesianCompetingRisksPHM:
@@ -174,25 +194,33 @@ class BayesianCompetingRisksPHM:
         self.n_features_ = None
 
     def _model(self, X, durations, events, n_features):
-        """Pyro model specification."""
+        """Pyro model specification (float64-safe)."""
         N = X.shape[0]
+        device = X.device
+        dtype = X.dtype  # Inherit dtype from input (float64 for stability)
 
         # Priors for baseline hazard parameters
-        mu_D = pyro.sample('mu_D', dist.Normal(3.0, self.prior_mu_sd))
-        sigma_D = pyro.sample('sigma_D', dist.Exponential(self.prior_sigma_rate))
-        mu_P = pyro.sample('mu_P', dist.Normal(3.0, self.prior_mu_sd))
-        sigma_P = pyro.sample('sigma_P', dist.Exponential(self.prior_sigma_rate))
+        mu_D = pyro.sample('mu_D', dist.Normal(
+            torch.tensor(3.0, dtype=dtype, device=device),
+            torch.tensor(self.prior_mu_sd, dtype=dtype, device=device)))
+        sigma_D = pyro.sample('sigma_D', dist.Exponential(
+            torch.tensor(self.prior_sigma_rate, dtype=dtype, device=device)))
+        mu_P = pyro.sample('mu_P', dist.Normal(
+            torch.tensor(3.0, dtype=dtype, device=device),
+            torch.tensor(self.prior_mu_sd, dtype=dtype, device=device)))
+        sigma_P = pyro.sample('sigma_P', dist.Exponential(
+            torch.tensor(self.prior_sigma_rate, dtype=dtype, device=device)))
 
         # Priors for regression coefficients
         theta_D = pyro.sample(
             'theta_D',
-            dist.Normal(torch.zeros(n_features, device=X.device),
-                       self.prior_theta_sd * torch.ones(n_features, device=X.device)).to_event(1)
+            dist.Normal(torch.zeros(n_features, dtype=dtype, device=device),
+                       self.prior_theta_sd * torch.ones(n_features, dtype=dtype, device=device)).to_event(1)
         )
         theta_P = pyro.sample(
             'theta_P',
-            dist.Normal(torch.zeros(n_features, device=X.device),
-                       self.prior_theta_sd * torch.ones(n_features, device=X.device)).to_event(1)
+            dist.Normal(torch.zeros(n_features, dtype=dtype, device=device),
+                       self.prior_theta_sd * torch.ones(n_features, dtype=dtype, device=device)).to_event(1)
         )
 
         # Linear predictors
@@ -212,8 +240,8 @@ class BayesianCompetingRisksPHM:
         H_P = H0_P * torch.exp(eta_P)
 
         # Log-likelihood
-        is_default = (events == 2).float()
-        is_prepay = (events == 1).float()
+        is_default = (events == 2).to(dtype)
+        is_prepay = (events == 1).to(dtype)
 
         log_lik = (
             is_default * log_h_D +
@@ -253,9 +281,10 @@ class BayesianCompetingRisksPHM:
         pyro.set_rng_seed(self.random_seed)
         pyro.clear_param_store()
 
-        # Convert to tensors
-        X = torch.tensor(X, dtype=torch.float32, device=self.device)
-        durations = torch.tensor(durations, dtype=torch.float32, device=self.device)
+        # Convert to float64 tensors for numerical stability in
+        # lognormal survival tail (erfc needs float64 precision)
+        X = torch.tensor(X, dtype=torch.float64, device=self.device)
+        durations = torch.tensor(durations, dtype=torch.float64, device=self.device)
         events = torch.tensor(events, dtype=torch.int64, device=self.device)
 
         # Ensure durations are positive
@@ -319,17 +348,17 @@ class BayesianCompetingRisksPHM:
         if self.posterior_samples_ is None:
             raise ValueError("Model not fitted. Call fit() first.")
 
-        X = torch.tensor(X, dtype=torch.float32, device=self.device)
-        times = torch.tensor(times, dtype=torch.float32, device=self.device)
+        X = torch.tensor(X, dtype=torch.float64, device=self.device)
+        times = torch.tensor(times, dtype=torch.float64, device=self.device)
         N = X.shape[0]
         T = len(times)
 
-        mu_D = torch.tensor(self.posterior_samples_['mu_D'], device=self.device)
-        sigma_D = torch.tensor(self.posterior_samples_['sigma_D'], device=self.device)
-        mu_P = torch.tensor(self.posterior_samples_['mu_P'], device=self.device)
-        sigma_P = torch.tensor(self.posterior_samples_['sigma_P'], device=self.device)
-        theta_D = torch.tensor(self.posterior_samples_['theta_D'], device=self.device)
-        theta_P = torch.tensor(self.posterior_samples_['theta_P'], device=self.device)
+        mu_D = torch.tensor(self.posterior_samples_['mu_D'], dtype=torch.float64, device=self.device)
+        sigma_D = torch.tensor(self.posterior_samples_['sigma_D'], dtype=torch.float64, device=self.device)
+        mu_P = torch.tensor(self.posterior_samples_['mu_P'], dtype=torch.float64, device=self.device)
+        sigma_P = torch.tensor(self.posterior_samples_['sigma_P'], dtype=torch.float64, device=self.device)
+        theta_D = torch.tensor(self.posterior_samples_['theta_D'], dtype=torch.float64, device=self.device)
+        theta_P = torch.tensor(self.posterior_samples_['theta_P'], dtype=torch.float64, device=self.device)
 
         n_samples = len(mu_D)
         cif_samples = np.zeros((n_samples, N, T))
@@ -386,17 +415,17 @@ class BayesianCompetingRisksPHM:
         if self.posterior_samples_ is None:
             raise ValueError("Model not fitted. Call fit() first.")
 
-        X = torch.tensor(X, dtype=torch.float32, device=self.device)
-        times = torch.tensor(times, dtype=torch.float32, device=self.device)
+        X = torch.tensor(X, dtype=torch.float64, device=self.device)
+        times = torch.tensor(times, dtype=torch.float64, device=self.device)
         N = X.shape[0]
         T = len(times)
 
-        mu_D = torch.tensor(self.posterior_samples_['mu_D'], device=self.device)
-        sigma_D = torch.tensor(self.posterior_samples_['sigma_D'], device=self.device)
-        mu_P = torch.tensor(self.posterior_samples_['mu_P'], device=self.device)
-        sigma_P = torch.tensor(self.posterior_samples_['sigma_P'], device=self.device)
-        theta_D = torch.tensor(self.posterior_samples_['theta_D'], device=self.device)
-        theta_P = torch.tensor(self.posterior_samples_['theta_P'], device=self.device)
+        mu_D = torch.tensor(self.posterior_samples_['mu_D'], dtype=torch.float64, device=self.device)
+        sigma_D = torch.tensor(self.posterior_samples_['sigma_D'], dtype=torch.float64, device=self.device)
+        mu_P = torch.tensor(self.posterior_samples_['mu_P'], dtype=torch.float64, device=self.device)
+        sigma_P = torch.tensor(self.posterior_samples_['sigma_P'], dtype=torch.float64, device=self.device)
+        theta_D = torch.tensor(self.posterior_samples_['theta_D'], dtype=torch.float64, device=self.device)
+        theta_P = torch.tensor(self.posterior_samples_['theta_P'], dtype=torch.float64, device=self.device)
 
         n_samples = len(mu_D)
         surv_samples = np.zeros((n_samples, N, T))

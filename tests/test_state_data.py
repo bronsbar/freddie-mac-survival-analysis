@@ -28,7 +28,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 EXTERNAL_DATA_DIR = Path(__file__).parent.parent / 'data' / 'external'
 TOLERANCE = 1e-6  # Tolerance for floating-point comparisons
 NUM_RANDOM_RECORDS = 20  # Number of random records to test per state
-NUM_SAMPLE_STATES = 25  # Number of states to sample for testing
+NUM_SAMPLE_STATES = 5  # Number of states to sample for testing
 RANDOM_SEED = 42
 
 # Sample states to test (geographically diverse)

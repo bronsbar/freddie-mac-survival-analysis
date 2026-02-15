@@ -12,6 +12,7 @@ Models:
 - DeepHit: Deep learning approach (Lee et al., 2018)
 - Dynamic-DeepHit: Dynamic deep learning with longitudinal data (Lee et al., 2020)
 - Bayesian PHM: Bayesian competing risks (Bhattacharya et al., 2019)
+- Breeden-Crook: Multihorizon discrete-time survival (Breeden & Crook, 2022)
 
 Modules:
 --------
@@ -23,6 +24,7 @@ deephit : DeepHit deep learning model (pycox/PyTorch)
 dynamic_deephit : Dynamic-DeepHit with GRU + temporal attention (PyTorch)
 bayesian_phm : Bayesian competing risks PHM (Pyro/PyTorch)
 bayesian_evaluation : Evaluation metrics for Bayesian models
+breeden_crook : Breeden & Crook (2022) multihorizon discrete-time survival
 cumulative_incidence : CIF estimation functions
 evaluation : Model comparison and validation metrics
 """
@@ -91,6 +93,16 @@ except ImportError:
     evaluate_bayesian_model = None
     format_evaluation_results = None
 
+from .breeden_crook import (
+    BreedenCrookMultihorizon,
+    enrich_panel_with_delinquency,
+    create_delinquency_indicators,
+    create_lagged_delinquency,
+    plot_delinquency_coefficients,
+    plot_origination_coefficients,
+    plot_pseudo_r2_by_horizon,
+)
+
 from .cumulative_incidence import (
     estimate_cif_aalen_johansen,
     estimate_cif_from_model,
@@ -147,6 +159,14 @@ __all__ = [
     'compute_standardized_residuals',
     'evaluate_bayesian_model',
     'format_evaluation_results',
+    # Breeden-Crook
+    'BreedenCrookMultihorizon',
+    'enrich_panel_with_delinquency',
+    'create_delinquency_indicators',
+    'create_lagged_delinquency',
+    'plot_delinquency_coefficients',
+    'plot_origination_coefficients',
+    'plot_pseudo_r2_by_horizon',
     # Cumulative incidence
     'estimate_cif_aalen_johansen',
     'estimate_cif_from_model',

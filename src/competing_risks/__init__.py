@@ -10,6 +10,7 @@ Models:
 - Fine-Gray (FGR): Subdistribution hazard model
 - Random Survival Forest (RSF): ML ensemble approach
 - DeepHit: Deep learning approach (Lee et al., 2018)
+- Dynamic-DeepHit: Dynamic deep learning with longitudinal data (Lee et al., 2020)
 - Bayesian PHM: Bayesian competing risks (Bhattacharya et al., 2019)
 
 Modules:
@@ -19,6 +20,7 @@ fine_gray : Discrete-time Fine-Gray model implementation
 cause_specific : Cause-specific Cox model wrappers
 random_forest : Random Survival Forest for competing risks
 deephit : DeepHit deep learning model (pycox/PyTorch)
+dynamic_deephit : Dynamic-DeepHit with GRU + temporal attention (PyTorch)
 bayesian_phm : Bayesian competing risks PHM (Pyro/PyTorch)
 bayesian_evaluation : Evaluation metrics for Bayesian models
 cumulative_incidence : CIF estimation functions
@@ -49,6 +51,14 @@ from .random_forest import (
 from .deephit import (
     CompetingRisksDeepHit,
     fit_deephit_competing_risks,
+)
+
+from .dynamic_deephit import (
+    DynamicDeepHitNetwork,
+    DynamicDeepHitLoss,
+    MortgageSequenceDataset,
+    collate_mortgage_sequences,
+    preprocess_panel_to_sequences,
 )
 
 # Bayesian model (optional - requires Pyro/PyTorch)
@@ -118,6 +128,12 @@ __all__ = [
     # DeepHit
     'CompetingRisksDeepHit',
     'fit_deephit_competing_risks',
+    # Dynamic-DeepHit
+    'DynamicDeepHitNetwork',
+    'DynamicDeepHitLoss',
+    'MortgageSequenceDataset',
+    'collate_mortgage_sequences',
+    'preprocess_panel_to_sequences',
     # Bayesian PHM
     'BayesianCompetingRisksPHM',
     'lognormal_log_hazard',

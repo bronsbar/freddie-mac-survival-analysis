@@ -65,7 +65,7 @@ def enrich_panel_with_delinquency(
     raw_dir : str or Path
         Path to data/raw/ directory containing sample_YYYY/ subdirectories.
     years : list of int, optional
-        Years to process (default: 1999-2025).
+        Years to process (default: derived from panel's vintage_year column).
     cache_path : str or Path, optional
         If provided and exists, load from cache instead of reprocessing.
 
@@ -85,7 +85,10 @@ def enrich_panel_with_delinquency(
             return pd.read_parquet(cache_path)
 
     if years is None:
-        years = list(range(1999, 2026))
+        if 'vintage_year' in panel.columns:
+            years = sorted(panel['vintage_year'].unique().tolist())
+        else:
+            years = list(range(1999, 2026))
 
     # Get the set of loan IDs in our panel
     panel_loans = set(panel['loan_sequence_number'].unique())
@@ -303,7 +306,7 @@ def build_feature_matrix(
     # 3. Macro features H(t)
     available_macro = [c for c in MACRO_FEATURES if c in panel.columns]
     if available_macro:
-        feature_dfs.append(panel[available_macro].reset_index(drop=True))
+        feature_dfs.append(panel[available_macro])
         feature_names.extend(available_macro)
 
     # 4. Static origination features
@@ -320,7 +323,7 @@ def build_feature_matrix(
             static_cols.append(col)
 
     if static_cols:
-        feature_dfs.append(panel[static_cols].reset_index(drop=True))
+        feature_dfs.append(panel[static_cols])
         feature_names.extend(static_cols)
 
     # 5. Behavioral features
@@ -332,7 +335,7 @@ def build_feature_matrix(
             for c in available_behavioral
         ]
     if available_behavioral:
-        feature_dfs.append(panel[available_behavioral].reset_index(drop=True))
+        feature_dfs.append(panel[available_behavioral])
         feature_names.extend(available_behavioral)
 
     # 6. Lagged delinquency indicators (the Breeden-Crook innovation)
@@ -340,13 +343,89 @@ def build_feature_matrix(
         delinq_cols = get_delinq_lag_cols(horizon)
         available_delinq = [c for c in delinq_cols if c in panel.columns]
         if available_delinq:
-            feature_dfs.append(panel[available_delinq].reset_index(drop=True))
+            feature_dfs.append(panel[available_delinq])
             feature_names.extend(available_delinq)
 
     X = pd.concat(feature_dfs, axis=1)
-    X.index = panel.index
 
     return X, age_transformer, vintage_categories, feature_names
+
+
+def build_feature_matrix_apc(
+    panel: pd.DataFrame,
+    horizon: int,
+    include_delinq: bool = True,
+) -> Tuple[pd.DataFrame, List[str]]:
+    """
+    Build feature matrix using pre-computed APC scalar features.
+
+    Replaces the ~34 APC-related columns (age splines + vintage dummies +
+    macro vars) with 3 scalar columns: F_age, G_vintage, H_caltime.
+    Static features, behavioral features, and lagged delinquency remain.
+
+    Parameters
+    ----------
+    panel : pd.DataFrame
+        Panel with F_age, G_vintage, H_caltime columns (from BreedenAPC.transform).
+    horizon : int
+        Forecast horizon L (1-12).
+    include_delinq : bool
+        Whether to include delinquency indicators.
+
+    Returns
+    -------
+    X : pd.DataFrame
+        Feature matrix.
+    feature_names : list of str
+        Feature column names.
+    """
+    feature_dfs = []
+    feature_names = []
+
+    # 1. APC scalar features (replace splines + dummies + macro)
+    apc_cols = ['F_age', 'G_vintage', 'H_caltime']
+    feature_dfs.append(panel[apc_cols])
+    feature_names.extend(apc_cols)
+
+    # 2. Static origination features
+    static_cols = []
+    for col in STATIC_FEATURES:
+        if col == 'log_orig_upb' and col not in panel.columns:
+            if 'orig_upb' in panel.columns:
+                panel = panel.copy()
+                panel['log_orig_upb'] = np.log(
+                    panel['orig_upb'].astype(float).clip(lower=1)
+                )
+                static_cols.append('log_orig_upb')
+        elif col in panel.columns:
+            static_cols.append(col)
+
+    if static_cols:
+        feature_dfs.append(panel[static_cols])
+        feature_names.extend(static_cols)
+
+    # 3. Behavioral features
+    available_behavioral = [c for c in BEHAVIORAL_FEATURES if c in panel.columns]
+    if 'bal_repaid_lag1' not in panel.columns and 'bal_repaid' in panel.columns:
+        available_behavioral = [
+            'bal_repaid' if c == 'bal_repaid_lag1' else c
+            for c in available_behavioral
+        ]
+    if available_behavioral:
+        feature_dfs.append(panel[available_behavioral])
+        feature_names.extend(available_behavioral)
+
+    # 4. Lagged delinquency indicators
+    if include_delinq and horizon > 0:
+        delinq_cols = get_delinq_lag_cols(horizon)
+        available_delinq = [c for c in delinq_cols if c in panel.columns]
+        if available_delinq:
+            feature_dfs.append(panel[available_delinq])
+            feature_names.extend(available_delinq)
+
+    X = pd.concat(feature_dfs, axis=1)
+
+    return X, feature_names
 
 
 # ---------------------------------------------------------------------------
@@ -386,6 +465,9 @@ class BreedenCrookMultihorizon:
         max_iter: int = 1000,
         n_age_knots: int = 5,
         seed: int = 42,
+        apc_default=None,
+        apc_prepay=None,
+        use_apc: bool = False,
     ):
         self.max_horizon = max_horizon
         self.C_values = C_values or [0.01, 0.1, 1.0, 10.0]
@@ -393,14 +475,19 @@ class BreedenCrookMultihorizon:
         self.max_iter = max_iter
         self.n_age_knots = n_age_knots
         self.seed = seed
+        self.apc_default = apc_default
+        self.apc_prepay = apc_prepay
+        self.use_apc = use_apc
 
         # Fitted components
         self.models_default: Dict[int, LogisticRegression] = {}
         self.models_prepay: Dict[int, LogisticRegression] = {}
         self.scalers: Dict[int, StandardScaler] = {}
+        self.scalers_apc: Dict[int, StandardScaler] = {}
         self.age_transformer: Optional[SplineTransformer] = None
         self.vintage_categories: Optional[np.ndarray] = None
         self.feature_names: Dict[int, List[str]] = {}
+        self.feature_names_apc: Dict[int, List[str]] = {}
         self.best_C: Dict[str, Dict[int, float]] = {'default': {}, 'prepay': {}}
         self.training_metrics: Dict[str, Dict[int, dict]] = {
             'default': {}, 'prepay': {}
@@ -499,6 +586,27 @@ class BreedenCrookMultihorizon:
             train_data = panel_train.copy()
             val_data = panel_val.copy()
 
+        if self.use_apc:
+            self._fit_horizon_apc(
+                train_data, val_data, horizon, include_delinq,
+                C_override, log_fn,
+            )
+        else:
+            self._fit_horizon_standard(
+                train_data, val_data, horizon, include_delinq,
+                C_override, log_fn,
+            )
+
+    def _fit_horizon_standard(
+        self,
+        train_data: pd.DataFrame,
+        val_data: pd.DataFrame,
+        horizon: int,
+        include_delinq: bool = True,
+        C_override: Optional[float] = None,
+        log_fn=print,
+    ):
+        """Fit horizon models using standard (non-APC) features."""
         # Build features
         X_train_df, self.age_transformer, self.vintage_categories, feat_names = \
             build_feature_matrix(
@@ -523,9 +631,9 @@ class BreedenCrookMultihorizon:
         valid_train = X_train_df.notna().all(axis=1)
         valid_val = X_val_df.notna().all(axis=1)
         X_train_df = X_train_df[valid_train]
-        train_data = train_data[valid_train]
+        train_data = train_data.loc[valid_train.index[valid_train]]
         X_val_df = X_val_df[valid_val]
-        val_data = val_data[valid_val]
+        val_data = val_data.loc[valid_val.index[valid_val]]
 
         # Scale features
         scaler = StandardScaler()
@@ -536,7 +644,123 @@ class BreedenCrookMultihorizon:
         log_fn(f"  Horizon {horizon}: {len(X_train):,} train, "
                f"{len(X_val):,} val, {len(feat_names)} features")
 
-        # Fit for each risk
+        self._fit_risk_models(
+            X_train, X_val, train_data, val_data, horizon, C_override, log_fn,
+        )
+
+    def _fit_horizon_apc(
+        self,
+        train_data: pd.DataFrame,
+        val_data: pd.DataFrame,
+        horizon: int,
+        include_delinq: bool = True,
+        C_override: Optional[float] = None,
+        log_fn=print,
+    ):
+        """Fit horizon models using APC scalar features."""
+        # Transform panels with both APC objects (use default APC for now;
+        # risk-specific APC is used at prediction time for the features,
+        # but at training time we fit a shared feature set per horizon).
+        # We use the default APC to add F/G/H columns, then fit both risks.
+        # Each risk uses the APC that matches its own decomposition.
+        for risk_name, event_code, model_dict, apc in [
+            ('default', 2, self.models_default, self.apc_default),
+            ('prepay', 1, self.models_prepay, self.apc_prepay),
+        ]:
+            if apc is None:
+                log_fn(f"    Skipping {risk_name}: no APC object provided")
+                continue
+
+            train_apc = apc.transform(train_data)
+            val_apc = apc.transform(val_data)
+
+            X_train_df, feat_names = build_feature_matrix_apc(
+                train_apc, horizon, include_delinq=include_delinq,
+            )
+            X_val_df, _ = build_feature_matrix_apc(
+                val_apc, horizon, include_delinq=include_delinq,
+            )
+
+            # Store feature names (same for both risks at same horizon in APC mode)
+            key = f'{risk_name}_{horizon}'
+            self.feature_names_apc[horizon] = feat_names
+
+            # Drop rows with NaN
+            valid_train = X_train_df.notna().all(axis=1)
+            valid_val = X_val_df.notna().all(axis=1)
+            X_train_df = X_train_df[valid_train]
+            train_subset = train_data.loc[valid_train.index[valid_train]]
+            X_val_df = X_val_df[valid_val]
+            val_subset = val_data.loc[valid_val.index[valid_val]]
+
+            # Scale
+            scaler = StandardScaler()
+            X_train = scaler.fit_transform(X_train_df.values.astype(float))
+            X_val = scaler.transform(X_val_df.values.astype(float))
+            self.scalers_apc[(risk_name, horizon)] = scaler
+
+            log_fn(f"  Horizon {horizon} ({risk_name} APC): "
+                   f"{len(X_train):,} train, {len(X_val):,} val, "
+                   f"{len(feat_names)} features")
+
+            y_train = (train_subset['event_code'] == event_code).astype(int).values
+            y_val = (val_subset['event_code'] == event_code).astype(int).values
+
+            if C_override is not None:
+                best_C = C_override
+            else:
+                best_C = self._select_C(X_train, y_train, X_val, y_val)
+            self.best_C[risk_name][horizon] = best_C
+
+            model = LogisticRegression(
+                C=best_C,
+                class_weight='balanced',
+                solver=self.solver,
+                max_iter=self.max_iter,
+                random_state=self.seed,
+            )
+            model.fit(X_train, y_train)
+            model_dict[horizon] = model
+
+            proba_train = model.predict_proba(X_train)[:, 1]
+            proba_val = model.predict_proba(X_val)[:, 1]
+
+            try:
+                auc_train = roc_auc_score(y_train, proba_train)
+                auc_val = roc_auc_score(y_val, proba_val)
+            except ValueError:
+                auc_train = auc_val = np.nan
+
+            try:
+                ll_train = log_loss(y_train, proba_train)
+                ll_val = log_loss(y_val, proba_val)
+            except ValueError:
+                ll_train = ll_val = np.nan
+
+            self.training_metrics[risk_name][horizon] = {
+                'C': best_C,
+                'auc_train': auc_train,
+                'auc_val': auc_val,
+                'log_loss_train': ll_train,
+                'log_loss_val': ll_val,
+                'n_train': len(y_train),
+                'n_events': int(y_train.sum()),
+            }
+
+            log_fn(f"    {risk_name}: C={best_C}, AUC(val)={auc_val:.4f}, "
+                   f"events={y_train.sum():,}/{len(y_train):,}")
+
+    def _fit_risk_models(
+        self,
+        X_train: np.ndarray,
+        X_val: np.ndarray,
+        train_data: pd.DataFrame,
+        val_data: pd.DataFrame,
+        horizon: int,
+        C_override: Optional[float] = None,
+        log_fn=print,
+    ):
+        """Fit default and prepay logistic regressions for a horizon."""
         for risk_name, event_code, model_dict in [
             ('default', 2, self.models_default),
             ('prepay', 1, self.models_prepay),
@@ -595,6 +819,7 @@ class BreedenCrookMultihorizon:
         self,
         panel_origin: pd.DataFrame,
         max_months: int = 72,
+        future_macro: Optional[pd.DataFrame] = None,
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
         Generate CIF predictions from forecast origin observations.
@@ -697,6 +922,11 @@ class BreedenCrookMultihorizon:
         include_delinq: bool = True,
     ) -> Tuple[np.ndarray, np.ndarray]:
         """Predict default and prepay hazards for a given horizon."""
+        if self.use_apc:
+            return self._predict_hazard_at_horizon_apc(
+                data, horizon, include_delinq,
+            )
+
         X_df, _, _, _ = build_feature_matrix(
             data, horizon,
             age_transformer=self.age_transformer,
@@ -720,6 +950,35 @@ class BreedenCrookMultihorizon:
 
         return h_def, h_pre
 
+    def _predict_hazard_at_horizon_apc(
+        self,
+        data: pd.DataFrame,
+        horizon: int,
+        include_delinq: bool = True,
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        """Predict hazards using APC features for a given horizon."""
+        results = []
+
+        for risk_name, apc, model_dict in [
+            ('default', self.apc_default, self.models_default),
+            ('prepay', self.apc_prepay, self.models_prepay),
+        ]:
+            data_apc = apc.transform(data)
+            X_df, _ = build_feature_matrix_apc(
+                data_apc, horizon, include_delinq=include_delinq,
+            )
+
+            X = X_df.fillna(0).values.astype(float)
+
+            scaler = self.scalers_apc.get((risk_name, horizon))
+            if scaler is not None:
+                X = scaler.transform(X)
+
+            model = model_dict[horizon]
+            results.append(model.predict_proba(X)[:, 1])
+
+        return results[0], results[1]
+
     def get_coefficients(self) -> pd.DataFrame:
         """
         Extract coefficients across all horizons for coefficient analysis.
@@ -736,7 +995,12 @@ class BreedenCrookMultihorizon:
             ('prepay', self.models_prepay),
         ]:
             for horizon, model in model_dict.items():
-                feat_names = self.feature_names[horizon]
+                if self.use_apc:
+                    feat_names = self.feature_names_apc.get(
+                        horizon, self.feature_names.get(horizon, [])
+                    )
+                else:
+                    feat_names = self.feature_names.get(horizon, [])
                 coefs = model.coef_[0]
                 for fname, coef in zip(feat_names, coefs):
                     records.append({

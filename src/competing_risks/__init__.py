@@ -98,9 +98,15 @@ from .breeden_crook import (
     enrich_panel_with_delinquency,
     create_delinquency_indicators,
     create_lagged_delinquency,
+    build_feature_matrix_apc,
     plot_delinquency_coefficients,
     plot_origination_coefficients,
     plot_pseudo_r2_by_horizon,
+)
+
+from .apc_decomposition import (
+    BreedenAPC,
+    aggregate_portfolio_rates,
 )
 
 from .cumulative_incidence import (
@@ -164,9 +170,13 @@ __all__ = [
     'enrich_panel_with_delinquency',
     'create_delinquency_indicators',
     'create_lagged_delinquency',
+    'build_feature_matrix_apc',
     'plot_delinquency_coefficients',
     'plot_origination_coefficients',
     'plot_pseudo_r2_by_horizon',
+    # APC decomposition
+    'BreedenAPC',
+    'aggregate_portfolio_rates',
     # Cumulative incidence
     'estimate_cif_aalen_johansen',
     'estimate_cif_from_model',

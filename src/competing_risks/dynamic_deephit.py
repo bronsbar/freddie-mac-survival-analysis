@@ -16,7 +16,7 @@ Reference:
 Architecture:
     Input (batch, seq_len, 21) + lengths
       -> Input Embedding: Linear(21->64) + ReLU
-      -> GRU (2 layers, hidden=128, dropout=0.2)
+      -> GRU (2 layers, hidden=128, dropout=0.6)
       -> Temporal Attention -> context vector (batch, 128)
       -> Concatenate [context; x_J] -> (batch, 149)
       -> Cause-Specific Heads (K=2): 149->128->64->num_time_bins
@@ -233,7 +233,7 @@ class SharedRNNSubnetwork(nn.Module):
         embed_dim: int = 64,
         hidden_dim: int = 128,
         num_layers: int = 2,
-        dropout: float = 0.2,
+        dropout: float = 0.6,
     ):
         super().__init__()
         self.hidden_dim = hidden_dim
@@ -378,7 +378,7 @@ class CauseSpecificSubnetwork(nn.Module):
         hidden1: int = 128,
         hidden2: int = 64,
         num_time_bins: int = 120,
-        dropout: float = 0.2,
+        dropout: float = 0.6,
     ):
         super().__init__()
         self.net = nn.Sequential(
@@ -437,7 +437,7 @@ class DynamicDeepHitNetwork(nn.Module):
         num_rnn_layers: int = 2,
         head_hidden1: int = 128,
         head_hidden2: int = 64,
-        dropout: float = 0.2,
+        dropout: float = 0.6,
         num_tv_features: int = 16,
     ):
         super().__init__()

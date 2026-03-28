@@ -6,7 +6,7 @@ Implements Bhattacharya, Wilson & Soyer (2019) Bayesian competing risks
 proportional hazards model for mortgage default and prepayment.
 
 Usage:
-    python run_bayesian_phm.py [--num-chains 4] [--num-samples 2000] [--num-warmup 1000]
+    python run_bayesian_phm.py [--num-chains 50] [--num-samples 15000] [--num-warmup 60000] [--thinning 50]
 
 Output:
     - results/bayesian_phm_results.txt (summary report)
@@ -43,9 +43,10 @@ sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Bayesian Competing Risks PHM')
-    parser.add_argument('--num-chains', type=int, default=4, help='Number of MCMC chains')
-    parser.add_argument('--num-samples', type=int, default=2000, help='Number of posterior samples per chain')
-    parser.add_argument('--num-warmup', type=int, default=1000, help='Number of warmup steps')
+    parser.add_argument('--num-chains', type=int, default=50, help='Number of MCMC chains')
+    parser.add_argument('--num-samples', type=int, default=15000, help='Number of post-warmup samples per chain')
+    parser.add_argument('--num-warmup', type=int, default=60000, help='Number of warmup (burn-in) steps')
+    parser.add_argument('--thinning', type=int, default=50, help='Keep every Nth sample')
     parser.add_argument('--target-accept', type=float, default=0.8, help='Target acceptance probability')
     parser.add_argument('--seed', type=int, default=42, help='Random seed')
     parser.add_argument('--data-dir', type=str, default='data/processed', help='Data directory')
@@ -282,12 +283,15 @@ def main():
     torch.manual_seed(args.seed)
     pyro.set_rng_seed(args.seed)
 
-    log(f"\nConfiguration:")
+    log(f"\nConfiguration (Bhattacharya et al. 2019):")
     log(f"  num_chains: {args.num_chains}")
     log(f"  num_samples: {args.num_samples}")
     log(f"  num_warmup: {args.num_warmup}")
+    log(f"  thinning: {args.thinning}")
     log(f"  target_accept: {args.target_accept}")
     log(f"  seed: {args.seed}")
+    log(f"  effective samples per chain: {args.num_samples // args.thinning}")
+    log(f"  total effective samples: {args.num_samples // args.thinning * args.num_chains}")
 
     # Load data
     log("\n" + "-" * 70)
@@ -352,8 +356,10 @@ def main():
     log("Running MCMC inference...")
     log(f"  Device: cpu (multi-chain requires CPU)")
     log(f"  Chains: {args.num_chains}")
-    log(f"  Warmup: {args.num_warmup}")
-    log(f"  Samples: {args.num_samples}")
+    log(f"  Warmup (burn-in): {args.num_warmup}")
+    log(f"  Samples per chain: {args.num_samples}")
+    log(f"  Thinning: every {args.thinning}th sample")
+    log(f"  Iterations per chain: {args.num_warmup + args.num_samples}")
 
     pyro.clear_param_store()
 
@@ -376,11 +382,16 @@ def main():
     mcmc_time = time.time() - mcmc_start
     log(f"  MCMC completed in {mcmc_time/60:.1f} minutes")
 
-    # Get posterior samples
-    posterior_samples = {k: v.cpu().numpy() for k, v in mcmc.get_samples().items()}
+    # Get posterior samples and apply thinning (Bhattacharya: every 50th draw)
+    raw_samples = {k: v.cpu().numpy() for k, v in mcmc.get_samples().items()}
+    posterior_samples = {k: v[::args.thinning] for k, v in raw_samples.items()}
     inference_data = az.from_pyro(mcmc)
 
-    log("\n  Posterior sample shapes:")
+    n_raw = next(iter(raw_samples.values())).shape[0]
+    n_thinned = next(iter(posterior_samples.values())).shape[0]
+    log(f"\n  Raw samples: {n_raw}")
+    log(f"  After thinning (every {args.thinning}th): {n_thinned}")
+    log("\n  Posterior sample shapes (thinned):")
     for k, v in posterior_samples.items():
         log(f"    {k}: {v.shape}")
 
@@ -456,7 +467,8 @@ def main():
     # Summary statistics
     log("\n" + "-" * 70)
     log("Summary:")
-    log(f"  Total samples: {args.num_chains * args.num_samples}")
+    log(f"  Total raw samples: {n_raw}")
+    log(f"  Total thinned samples: {n_thinned}")
     log(f"  Effective samples (min): {summary['ess_bulk'].min():.0f}")
     log(f"  Max R-hat: {summary['r_hat'].max():.3f}")
 

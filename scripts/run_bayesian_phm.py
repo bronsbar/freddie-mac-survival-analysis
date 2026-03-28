@@ -6,7 +6,7 @@ Implements Bhattacharya, Wilson & Soyer (2019) Bayesian competing risks
 proportional hazards model for mortgage default and prepayment.
 
 Usage:
-    python run_bayesian_phm.py [--num-chains 50] [--num-samples 15000] [--num-warmup 60000] [--thinning 50]
+    python run_bayesian_phm.py [--num-chains 4] [--num-samples 4000] [--num-warmup 1000]
 
 Output:
     - results/bayesian_phm_results.txt (summary report)
@@ -43,11 +43,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Bayesian Competing Risks PHM')
-    parser.add_argument('--num-chains', type=int, default=50, help='Number of MCMC chains')
-    parser.add_argument('--num-samples', type=int, default=15000, help='Number of post-warmup samples per chain')
-    parser.add_argument('--num-warmup', type=int, default=60000, help='Number of warmup (burn-in) steps')
-    parser.add_argument('--thinning', type=int, default=50, help='Keep every Nth sample')
+    parser.add_argument('--num-chains', type=int, default=4, help='Number of MCMC chains')
+    parser.add_argument('--num-samples', type=int, default=4000, help='Number of post-warmup samples per chain')
+    parser.add_argument('--num-warmup', type=int, default=1000, help='Number of NUTS warmup steps')
     parser.add_argument('--target-accept', type=float, default=0.8, help='Target acceptance probability')
+    parser.add_argument('--min-ess-per-chain', type=int, default=400, help='Minimum ESS per chain for convergence')
+    parser.add_argument('--max-rhat', type=float, default=1.01, help='Maximum R-hat for convergence')
     parser.add_argument('--seed', type=int, default=42, help='Random seed')
     parser.add_argument('--data-dir', type=str, default='data/processed', help='Data directory')
     parser.add_argument('--output-dir', type=str, default='results', help='Output directory')
@@ -283,15 +284,16 @@ def main():
     torch.manual_seed(args.seed)
     pyro.set_rng_seed(args.seed)
 
-    log(f"\nConfiguration (Bhattacharya et al. 2019):")
+    log(f"\nConfiguration (NUTS — no thinning needed):")
     log(f"  num_chains: {args.num_chains}")
     log(f"  num_samples: {args.num_samples}")
     log(f"  num_warmup: {args.num_warmup}")
-    log(f"  thinning: {args.thinning}")
     log(f"  target_accept: {args.target_accept}")
     log(f"  seed: {args.seed}")
-    log(f"  effective samples per chain: {args.num_samples // args.thinning}")
-    log(f"  total effective samples: {args.num_samples // args.thinning * args.num_chains}")
+    log(f"  total posterior samples: {args.num_samples * args.num_chains}")
+    log(f"\nConvergence thresholds:")
+    log(f"  min_ess_per_chain: {args.min_ess_per_chain}")
+    log(f"  max_rhat: {args.max_rhat}")
 
     # Load data
     log("\n" + "-" * 70)
@@ -356,10 +358,9 @@ def main():
     log("Running MCMC inference...")
     log(f"  Device: cpu (multi-chain requires CPU)")
     log(f"  Chains: {args.num_chains}")
-    log(f"  Warmup (burn-in): {args.num_warmup}")
+    log(f"  Warmup: {args.num_warmup}")
     log(f"  Samples per chain: {args.num_samples}")
-    log(f"  Thinning: every {args.thinning}th sample")
-    log(f"  Iterations per chain: {args.num_warmup + args.num_samples}")
+    log(f"  Total posterior samples: {args.num_samples * args.num_chains}")
 
     pyro.clear_param_store()
 
@@ -382,27 +383,45 @@ def main():
     mcmc_time = time.time() - mcmc_start
     log(f"  MCMC completed in {mcmc_time/60:.1f} minutes")
 
-    # Get posterior samples and apply thinning (Bhattacharya: every 50th draw)
-    raw_samples = {k: v.cpu().numpy() for k, v in mcmc.get_samples().items()}
-    posterior_samples = {k: v[::args.thinning] for k, v in raw_samples.items()}
+    # Get posterior samples (no thinning — NUTS produces near-independent draws)
+    posterior_samples = {k: v.cpu().numpy() for k, v in mcmc.get_samples().items()}
     inference_data = az.from_pyro(mcmc)
 
-    n_raw = next(iter(raw_samples.values())).shape[0]
-    n_thinned = next(iter(posterior_samples.values())).shape[0]
-    log(f"\n  Raw samples: {n_raw}")
-    log(f"  After thinning (every {args.thinning}th): {n_thinned}")
-    log("\n  Posterior sample shapes (thinned):")
+    n_samples = next(iter(posterior_samples.values())).shape[0]
+    log(f"\n  Total posterior samples: {n_samples}")
+    log("\n  Posterior sample shapes:")
     for k, v in posterior_samples.items():
         log(f"    {k}: {v.shape}")
 
-    # MCMC diagnostics
-    log("\n  MCMC diagnostics:")
-    summary = az.summary(inference_data, var_names=['mu_D', 'sigma_D', 'mu_P', 'sigma_P'])
+    # Convergence diagnostics
+    log("\n  Convergence diagnostics:")
+    summary = az.summary(inference_data,
+                         var_names=['mu_D', 'sigma_D', 'mu_P', 'sigma_P', 'theta_D', 'theta_P'])
+    min_ess = summary['ess_bulk'].min()
+    max_rhat = summary['r_hat'].max()
+    min_ess_threshold = args.min_ess_per_chain * args.num_chains
+
     for param in ['mu_D', 'sigma_D', 'mu_P', 'sigma_P']:
         if param in summary.index:
             rhat = summary.loc[param, 'r_hat']
             ess = summary.loc[param, 'ess_bulk']
-            log(f"    {param}: R-hat={rhat:.3f}, ESS={ess:.0f}")
+            log(f"    {param}: R-hat={rhat:.4f}, ESS={ess:.0f}")
+
+    log(f"\n    Min bulk ESS:  {min_ess:.0f}  (threshold: {min_ess_threshold})")
+    log(f"    Max R-hat:     {max_rhat:.4f}  (threshold: {args.max_rhat})")
+
+    ess_ok = min_ess >= min_ess_threshold
+    rhat_ok = max_rhat <= args.max_rhat
+    if ess_ok and rhat_ok:
+        log("    CONVERGED")
+    else:
+        if not ess_ok:
+            worst = summary['ess_bulk'].idxmin()
+            log(f"    WARNING: Low ESS — worst: {worst} (ESS={summary.loc[worst, 'ess_bulk']:.0f})")
+        if not rhat_ok:
+            worst = summary['r_hat'].idxmax()
+            log(f"    WARNING: High R-hat — worst: {worst} (R-hat={summary.loc[worst, 'r_hat']:.4f})")
+        log("    Consider increasing --num-samples or --num-warmup.")
 
     # Baseline parameter summary
     log("\n" + "-" * 70)
@@ -467,8 +486,8 @@ def main():
     # Summary statistics
     log("\n" + "-" * 70)
     log("Summary:")
-    log(f"  Total raw samples: {n_raw}")
-    log(f"  Total thinned samples: {n_thinned}")
+    log(f"  Total posterior samples: {n_samples}")
+    log(f"  Converged: {'Yes' if ess_ok and rhat_ok else 'No'}")
     log(f"  Effective samples (min): {summary['ess_bulk'].min():.0f}")
     log(f"  Max R-hat: {summary['r_hat'].max():.3f}")
 

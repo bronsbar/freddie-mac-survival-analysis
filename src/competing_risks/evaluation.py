@@ -511,6 +511,103 @@ def calibration_plot(
     return ax
 
 
+def auc_cure(
+    event_codes: np.ndarray,
+    durations: np.ndarray,
+    predicted_cure_prob: np.ndarray,
+    min_followup: float = 120,
+) -> float:
+    """
+    AUC for cure-fraction discrimination.
+
+    Compares the predicted cure probability against observed outcome:
+    - "Cured" (label 0): censored with duration >= min_followup
+    - "Uncured" (label 1): experienced any event (event_code > 0)
+
+    Subjects censored with short follow-up are excluded (ambiguous).
+
+    Parameters
+    ----------
+    event_codes : np.ndarray
+        Event codes (0=censored, >0 = event).
+    durations : np.ndarray
+        Observed durations.
+    predicted_cure_prob : np.ndarray
+        Predicted probability of being cured (higher = more likely cured).
+    min_followup : float
+        Minimum follow-up to consider a censored subject as "cured".
+
+    Returns
+    -------
+    float
+        AUC score.
+    """
+    event_codes = np.asarray(event_codes)
+    durations = np.asarray(durations)
+    predicted_cure_prob = np.asarray(predicted_cure_prob)
+
+    cured_mask = (event_codes == 0) & (durations >= min_followup)
+    uncured_mask = event_codes > 0
+    keep = cured_mask | uncured_mask
+
+    if keep.sum() == 0 or cured_mask.sum() == 0 or uncured_mask.sum() == 0:
+        return np.nan
+
+    y_true = uncured_mask[keep].astype(int)   # 1 = uncured
+    y_score = 1.0 - predicted_cure_prob[keep]  # higher = more uncured
+
+    return roc_auc_score(y_true, y_score)
+
+
+def integrated_brier_score(
+    event_times: np.ndarray,
+    event_codes: np.ndarray,
+    predicted_cif_at_times: np.ndarray,
+    eval_grid: np.ndarray,
+    event_of_interest: int = 1,
+) -> float:
+    """
+    Integrated Brier Score: IBS = (1/t_max) * integral_0^{t_max} BS(t) dt.
+
+    Parameters
+    ----------
+    event_times : np.ndarray of shape (n_samples,)
+        Observed times.
+    event_codes : np.ndarray of shape (n_samples,)
+        Event codes.
+    predicted_cif_at_times : np.ndarray of shape (n_samples, n_times)
+        Predicted CIF values at each time point in eval_grid.
+    eval_grid : np.ndarray of shape (n_times,)
+        Time points at which CIF was evaluated.
+    event_of_interest : int
+        Event code to evaluate.
+
+    Returns
+    -------
+    float
+        Integrated Brier score (lower is better).
+    """
+    event_times = np.asarray(event_times)
+    event_codes = np.asarray(event_codes)
+    eval_grid = np.asarray(eval_grid)
+
+    n_times = len(eval_grid)
+    bs_values = np.zeros(n_times)
+
+    for i, t in enumerate(eval_grid):
+        observed = (
+            (event_times <= t) & (event_codes == event_of_interest)
+        ).astype(float)
+        bs_values[i] = np.mean((observed - predicted_cif_at_times[:, i]) ** 2)
+
+    # Trapezoidal integration
+    t_max = eval_grid[-1] - eval_grid[0]
+    if t_max <= 0:
+        return np.nan
+    ibs = np.trapz(bs_values, eval_grid) / t_max
+    return ibs
+
+
 def plot_concordance_comparison(
     results_df: pd.DataFrame,
     ax: Optional[plt.Axes] = None,

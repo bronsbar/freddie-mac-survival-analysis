@@ -13,6 +13,7 @@ Models:
 - Dynamic-DeepHit: Dynamic deep learning with longitudinal data (Lee et al., 2020)
 - Bayesian PHM: Bayesian competing risks (Bhattacharya et al., 2019)
 - Breeden-Crook: Multihorizon discrete-time survival (Breeden & Crook, 2022)
+- Deep-PTCM: Deep Promotion Time Cure Model (Medina-Olivares et al., 2024)
 
 Modules:
 --------
@@ -109,6 +110,27 @@ from .apc_decomposition import (
     aggregate_portfolio_rates,
 )
 
+from .nn_dtsm import (
+    VintageNNDTSM,
+    APCDecomposition,
+    extract_vintage_quarter,
+    prepare_panel_features,
+    get_device as nn_dtsm_get_device,
+    STATIC_FEATURES as NN_DTSM_STATIC_FEATURES,
+    BEHAVIORAL_FEATURES as NN_DTSM_BEHAVIORAL_FEATURES,
+    MACRO_FEATURES as NN_DTSM_MACRO_FEATURES,
+    DEFAULT_INPUT_FEATURES as NN_DTSM_INPUT_FEATURES,
+)
+
+from .deep_ptcm import (
+    CompetingRisksDeepPTCM,
+    fit_deep_ptcm_competing_risks,
+    DeepPTCMNetwork,
+    PiecewiseExponentialBaseline,
+    PTCMLoss,
+    STATIC_FEATURES as PTCM_STATIC_FEATURES,
+)
+
 from .cumulative_incidence import (
     estimate_cif_aalen_johansen,
     estimate_cif_from_model,
@@ -126,6 +148,8 @@ from .evaluation import (
     compare_model_coefficients,
     calibration_plot,
     plot_concordance_comparison,
+    auc_cure,
+    integrated_brier_score,
     EVAL_TIMES,
 )
 
@@ -177,10 +201,21 @@ __all__ = [
     # APC decomposition
     'BreedenAPC',
     'aggregate_portfolio_rates',
+    # NN-DTSM + APC (Wang et al. 2024)
+    'VintageNNDTSM',
+    'APCDecomposition',
+    'extract_vintage_quarter',
+    'prepare_panel_features',
     # Cumulative incidence
     'estimate_cif_aalen_johansen',
     'estimate_cif_from_model',
     'plot_cumulative_incidence',
+    # Deep-PTCM (Medina-Olivares et al. 2024)
+    'CompetingRisksDeepPTCM',
+    'fit_deep_ptcm_competing_risks',
+    'DeepPTCMNetwork',
+    'PiecewiseExponentialBaseline',
+    'PTCMLoss',
     # Evaluation
     'concordance_index_competing_risks',
     'time_dependent_concordance_index',
@@ -192,6 +227,8 @@ __all__ = [
     'compare_model_coefficients',
     'calibration_plot',
     'plot_concordance_comparison',
+    'auc_cure',
+    'integrated_brier_score',
     'EVAL_TIMES',
 ]
 

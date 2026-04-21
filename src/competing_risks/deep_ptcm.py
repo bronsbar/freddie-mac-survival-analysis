@@ -167,15 +167,15 @@ class DeepPTCMNetwork(nn.Module):
         num_causes: int = 2,
         shared_layers: Optional[List[int]] = None,
         head_layers: Optional[List[int]] = None,
-        dropout: float = 0.3,
-        batch_norm: bool = True,
+        dropout: float = 0.2,
+        batch_norm: bool = False,
         orthogonalize: bool = False,
     ):
         super().__init__()
         if shared_layers is None:
-            shared_layers = [128, 64]
+            shared_layers = [512, 512]
         if head_layers is None:
-            head_layers = [32]
+            head_layers = []
 
         self.in_features = in_features
         self.num_causes = num_causes
@@ -250,7 +250,7 @@ class DeepPTCMNetwork(nn.Module):
             g_list.append(g_k)
 
         g = torch.stack(g_list, dim=1)               # (B, K)
-        theta = torch.exp(g)                          # positive
+        theta = torch.exp(g.clamp(max=10.0))          # positive, capped to avoid overflow
         return theta
 
 
@@ -308,17 +308,24 @@ class CompetingRisksDeepPTCM(BaseEstimator):
     num_intervals : int
         Number of piecewise-exponential intervals for each F_k.
     shared_layers, head_layers : list[int]
-        DNN architecture.
+        DNN architecture.  Paper defaults: shared=[512, 512], head=[].
     dropout : float
+        Paper uses 0.2.
     batch_norm : bool
+        Paper does not use batch norm.
     orthogonalize : bool
         Decompose into linear + orthogonal nonlinear component.
     lr : float
+        Initial learning rate.  Paper uses 0.01 with SGD.
     weight_decay : float
     batch_size : int
     epochs : int
     patience : int
         Early-stopping patience (epochs without validation improvement).
+    lr_decay_rate : float
+        Decay rate for inverse time decay schedule.  Paper uses 0.75.
+    lr_decay_steps : int
+        Decay steps for inverse time decay schedule.  Paper uses 100.
     verbose : bool
     random_state : int
     """
@@ -328,20 +335,22 @@ class CompetingRisksDeepPTCM(BaseEstimator):
         num_intervals: int = 15,
         shared_layers: Optional[List[int]] = None,
         head_layers: Optional[List[int]] = None,
-        dropout: float = 0.3,
-        batch_norm: bool = True,
+        dropout: float = 0.2,
+        batch_norm: bool = False,
         orthogonalize: bool = False,
-        lr: float = 1e-3,
-        weight_decay: float = 1e-4,
+        lr: float = 0.01,
+        weight_decay: float = 0.0,
         batch_size: int = 256,
         epochs: int = 200,
         patience: int = 15,
+        lr_decay_rate: float = 0.75,
+        lr_decay_steps: int = 100,
         verbose: bool = True,
         random_state: int = 42,
     ):
         self.num_intervals = num_intervals
-        self.shared_layers = shared_layers or [128, 64]
-        self.head_layers = head_layers or [32]
+        self.shared_layers = shared_layers or [512, 512]
+        self.head_layers = head_layers or []
         self.dropout = dropout
         self.batch_norm = batch_norm
         self.orthogonalize = orthogonalize
@@ -350,6 +359,8 @@ class CompetingRisksDeepPTCM(BaseEstimator):
         self.batch_size = batch_size
         self.epochs = epochs
         self.patience = patience
+        self.lr_decay_rate = lr_decay_rate
+        self.lr_decay_steps = lr_decay_steps
         self.verbose = verbose
         self.random_state = random_state
 
@@ -464,16 +475,20 @@ class CompetingRisksDeepPTCM(BaseEstimator):
                 val_ds, batch_size=self.batch_size * 2, shuffle=False,
             )
 
-        # --- optimiser ---
+        # --- optimiser (SGD + inverse time decay, following the paper) ---
         params = (
             list(self.network_.parameters())
             + list(self.baselines_.parameters())
         )
-        optimizer = torch.optim.Adam(
+        optimizer = torch.optim.SGD(
             params, lr=self.lr, weight_decay=self.weight_decay,
         )
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-            optimizer, mode='min', factor=0.5, patience=5, min_lr=1e-6,
+        # Inverse time decay: lr = lr_0 / (1 + decay_rate * step / decay_steps)
+        decay_rate = self.lr_decay_rate
+        decay_steps = self.lr_decay_steps
+        scheduler = torch.optim.lr_scheduler.LambdaLR(
+            optimizer,
+            lr_lambda=lambda step: 1.0 / (1.0 + decay_rate * step / decay_steps),
         )
 
         criterion = PTCMLoss()
@@ -509,6 +524,7 @@ class CompetingRisksDeepPTCM(BaseEstimator):
 
                 optimizer.zero_grad()
                 loss.backward()
+                torch.nn.utils.clip_grad_norm_(params, max_norm=1.0)
                 optimizer.step()
 
                 epoch_loss += loss.item() * len(X_b)
@@ -523,7 +539,7 @@ class CompetingRisksDeepPTCM(BaseEstimator):
             else:
                 val_loss = train_loss
             history['val_loss'].append(val_loss)
-            scheduler.step(val_loss)
+            scheduler.step()
 
             # -- early stopping --
             if val_loss < best_val_loss - 1e-6:

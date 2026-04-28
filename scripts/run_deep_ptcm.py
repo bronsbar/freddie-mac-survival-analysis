@@ -5,27 +5,42 @@ Deep-PTCM Competing Risks - Supercomputer Script
 Implements the Deep Promotion Time Cure Model (Medina-Olivares et al., 2024)
 extended to competing risks (prepayment + default).
 
-Trains four variants:
+Trains four variants by default:
   1. Deep-PTCM            (head_layers=[], paper architecture)
   2. Deep-PTCM-Ort        (orthogonalized, head_layers=[])
   3. Deep-PTCM-H32        (head_layers=[32], deeper cause-specific heads)
   4. Deep-PTCM-Ort-H32    (orthogonalized, head_layers=[32])
 
+Optional opt-in modes:
+  --with-expanded-features
+      Trains an additional Deep-PTCM-Expanded variant whose inputs include
+      one-hot property_state and vintage_year (paper-aligned input set), and
+      reports a side-by-side delta against the base variant evaluated on the
+      same test rows.
+  --cashflow
+      After training, runs DeepPTCMCashFlowEngine on the base model to project
+      monthly cash flows for the fold-10 test loans, saving a portfolio CSV
+      and a 4-panel figure.
+
 Usage:
     python run_deep_ptcm.py [--epochs 200] [--batch-size 512] [--lr 0.01]
+                            [--with-expanded-features] [--cashflow]
 
 Output:
     - results/deep_ptcm_results.txt              (summary report)
-    - models/deep_ptcm.pt                         (model checkpoint)
+    - models/deep_ptcm.pt                         (model checkpoints)
     - models/deep_ptcm_ort.pt
     - models/deep_ptcm_h32.pt
     - models/deep_ptcm_ort_h32.pt
+    - models/deep_ptcm_expanded.pt                (if --with-expanded-features)
+    - models/deep_ptcm_portfolio_cashflow.csv     (if --cashflow)
     - reports/figures/deep_ptcm_training_curves.png
     - reports/figures/deep_ptcm_cure_fractions.png
     - reports/figures/deep_ptcm_cindex_comparison.png
     - reports/figures/deep_ptcm_survival_curves.png
     - reports/figures/deep_ptcm_feature_importance.png
     - reports/figures/deep_ptcm_ort_coefficients.png
+    - reports/figures/deep_ptcm_cash_flow_projection.png  (if --cashflow)
 """
 
 import argparse
@@ -105,6 +120,18 @@ def parse_args():
                         help='Skip orthogonalized variants')
     parser.add_argument('--skip-h32', action='store_true',
                         help='Skip head_layers=[32] variants')
+
+    # Opt-in variants / extras
+    parser.add_argument('--with-expanded-features', action='store_true',
+                        help='Train an additional Deep-PTCM-Expanded variant with '
+                             'one-hot property_state and vintage_year inputs')
+    parser.add_argument('--cashflow', action='store_true',
+                        help='Run a Deep-PTCM cash-flow projection on fold-10 '
+                             'test loans (uses the base Deep-PTCM)')
+    parser.add_argument('--cashflow-horizon', type=int, default=360,
+                        help='Cash-flow projection horizon in months')
+    parser.add_argument('--cashflow-lgd', type=float, default=0.25,
+                        help='Loss-given-default for the cash-flow engine')
 
     # General
     parser.add_argument('--seed', type=int, default=42,
@@ -204,6 +231,127 @@ def permutation_importance(model, X_df, durations, events, feature_cols,
         {'feature': f, 'importance': v[0], 'std': v[1]}
         for f, v in importances.items()
     ]).sort_values('importance', ascending=False)
+
+
+CATEGORICAL_FEATURES = ['property_state', 'vintage_year']
+
+
+def build_expanded_inputs(df, train_folds, val_folds, test_fold, log_fn=print):
+    """
+    Build train/val/test frames for the expanded-input variant.
+
+    Drops rows with missing values in the numeric features OR the categorical
+    features, then fits a OneHotEncoder on training data only with
+    handle_unknown='ignore' and attaches the one-hot columns to each frame.
+
+    Returns
+    -------
+    train_ext, val_ext, test_ext : pd.DataFrame
+        Frames with original columns plus one-hot columns.
+    expanded_cols : list[str]
+        Final feature column list (numeric + one-hot).
+    ohe : OneHotEncoder
+    """
+    from sklearn.preprocessing import OneHotEncoder
+
+    extra_cols = FEATURE_COLS + CATEGORICAL_FEATURES
+    missing = [c for c in CATEGORICAL_FEATURES if c not in df.columns]
+    if missing:
+        raise RuntimeError(
+            f'Expanded features unavailable; missing columns: {missing}'
+        )
+
+    df_ext = df.dropna(subset=extra_cols).copy()
+    log_fn(f'  Expanded set after NaN drop: {len(df_ext):,} loans '
+           f'(dropped {len(df) - len(df_ext):,})')
+
+    train_ext = df_ext[df_ext['fold'].isin(train_folds)].copy()
+    val_ext = df_ext[df_ext['fold'].isin(val_folds)].copy()
+    test_ext = df_ext[df_ext['fold'] == test_fold].copy()
+
+    ohe = OneHotEncoder(handle_unknown='ignore', sparse_output=False, dtype=np.float32)
+    ohe.fit(train_ext[CATEGORICAL_FEATURES].astype(str))
+    ohe_cols = list(ohe.get_feature_names_out(CATEGORICAL_FEATURES))
+
+    for frame in (train_ext, val_ext, test_ext):
+        cat_arr = ohe.transform(frame[CATEGORICAL_FEATURES].astype(str))
+        for j, col in enumerate(ohe_cols):
+            frame[col] = cat_arr[:, j]
+
+    expanded_cols = FEATURE_COLS + ohe_cols
+    log_fn(f'  Expanded feature dim: {len(expanded_cols)} '
+           f'(numeric={len(FEATURE_COLS)}, '
+           f'state levels={len(ohe.categories_[0])}, '
+           f'vintage levels={len(ohe.categories_[1])})')
+
+    train_v = set(train_ext['vintage_year'].unique())
+    test_v = set(test_ext['vintage_year'].unique())
+    unseen = sorted(test_v - train_v)
+    if unseen:
+        log_fn(f'  Test vintages not in train (one-hot will be all zero): {unseen}')
+
+    return train_ext, val_ext, test_ext, expanded_cols, ohe
+
+
+def run_cashflow_projection(
+    base_model,
+    test_df_proj,
+    feature_cols,
+    horizon,
+    lgd,
+    models_dir,
+    figures_dir,
+    log_fn=print,
+):
+    """Project Deep-PTCM cash flows for the fold-10 test loans and save artefacts."""
+    from src.alm.deep_ptcm_cash_flow_engine import (
+        DeepPTCMCashFlowEngine,
+        DeepPTCMCashFlowConfig,
+    )
+
+    log_fn(f'  Loans in projection set: {len(test_df_proj):,}')
+    log_fn(f'  Horizon: {horizon} months  |  LGD: {lgd}')
+
+    loans_df = test_df_proj[
+        ['loan_sequence_number', 'int_rate', 'orig_upb']
+    ].copy().reset_index(drop=True)
+    loans_df['orig_loan_term'] = 360
+    loans_df['current_loan_age'] = 0
+
+    X_cf = test_df_proj[feature_cols].reset_index(drop=True)
+
+    engine = DeepPTCMCashFlowEngine(
+        ptcm_model=base_model,
+        prepay_event=1,
+        default_event=2,
+        config=DeepPTCMCashFlowConfig(
+            lgd=lgd, projection_horizon=horizon, batch_size=2000,
+        ),
+    )
+    cf_results = engine.project_cash_flows(loans_df, X_cf)
+    portfolio_cf = engine.aggregate_portfolio(cf_results)
+
+    orig_upb_total = float(loans_df['orig_upb'].sum())
+    log_fn(f'  Total interest:            ${cf_results["interest"].sum():>15,.0f}')
+    log_fn(f'  Total scheduled principal: ${cf_results["scheduled_principal"].sum():>15,.0f}')
+    log_fn(f'  Total prepayment:          ${cf_results["prepayment"].sum():>15,.0f}')
+    log_fn(f'  Total recovery:            ${cf_results["recovery"].sum():>15,.0f}')
+    log_fn(f'  Total expected loss:       ${cf_results["loss"].sum():>15,.0f}')
+    log_fn(f'  Aggregate cash flow:       ${cf_results["total_cf"].sum():>15,.0f}')
+    log_fn(f'  Total UPB at origination:  ${orig_upb_total:>15,.0f}')
+    log_fn(f'  Loss / orig UPB:           {cf_results["loss"].sum() / orig_upb_total:>15.4%}')
+
+    csv_path = models_dir / 'deep_ptcm_portfolio_cashflow.csv'
+    portfolio_cf.to_csv(csv_path, index=False)
+    log_fn(f'  Saved portfolio CSV: {csv_path}')
+
+    fig_path = figures_dir / 'deep_ptcm_cash_flow_projection.png'
+    plot_cash_flow_projection(
+        cf_results, portfolio_cf, test_df_proj, fig_path,
+    )
+    log_fn(f'  Saved figure: {fig_path}')
+
+    return cf_results, portfolio_cf
 
 
 # ==============================================================================
@@ -344,6 +492,63 @@ def plot_importance(imp_prepay_df, imp_default_df, figures_dir):
 
     plt.tight_layout()
     plt.savefig(figures_dir / 'deep_ptcm_feature_importance.png', dpi=150, bbox_inches='tight')
+    plt.close()
+
+
+def plot_cash_flow_projection(cf_results, portfolio_cf, test_df_proj, fig_path):
+    """4-panel cash-flow projection figure (stacked / survival / loss / single loan)."""
+    months = portfolio_cf['month'].values
+
+    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+
+    ax = axes[0, 0]
+    ax.stackplot(
+        months,
+        portfolio_cf['interest'],
+        portfolio_cf['scheduled_principal'],
+        portfolio_cf['prepayment'],
+        portfolio_cf['recovery'],
+        labels=['Interest', 'Sched. principal', 'Prepay', 'Recovery'],
+        alpha=0.85,
+    )
+    ax.set_xlabel('Month')
+    ax.set_ylabel('Portfolio cash flow ($)')
+    ax.set_title('Deep-PTCM expected cash flows (stacked)')
+    ax.legend(loc='upper right', fontsize=9)
+    ax.grid(True, alpha=0.3)
+
+    ax = axes[0, 1]
+    ax.plot(months, portfolio_cf['avg_survival'], color='steelblue')
+    ax.set_xlabel('Month')
+    ax.set_ylabel('Avg S(t)')
+    ax.set_title('Average overall survival across portfolio')
+    ax.grid(True, alpha=0.3)
+
+    ax = axes[1, 0]
+    ax.plot(months, portfolio_cf['loss'].cumsum(), color='firebrick')
+    ax.set_xlabel('Month')
+    ax.set_ylabel('Cumulative loss ($)')
+    ax.set_title('Cumulative expected default loss')
+    ax.grid(True, alpha=0.3)
+
+    ax = axes[1, 1]
+    fico_arr = test_df_proj['fico_score'].values
+    i_demo = int(np.argsort(fico_arr)[len(test_df_proj) // 2])
+    ax.plot(months, cf_results['survival'][i_demo], label='S(t)')
+    ax.plot(months, np.cumsum(cf_results['f_prepay'][i_demo]),
+            label='Cum. prepay prob')
+    ax.plot(months, np.cumsum(cf_results['f_default'][i_demo]),
+            label='Cum. default prob')
+    fico_demo = test_df_proj['fico_score'].iloc[i_demo]
+    upb_demo = test_df_proj['orig_upb'].iloc[i_demo]
+    ax.set_xlabel('Month')
+    ax.set_ylabel('Probability')
+    ax.set_title(f'Single loan: FICO={fico_demo:.0f}, UPB=${upb_demo:,.0f}')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.savefig(fig_path, dpi=150, bbox_inches='tight')
     plt.close()
 
 
@@ -521,6 +726,85 @@ def main():
         )
         all_results[variant_name] = (res_df, auc_val, cure)
 
+    # ==================== Expanded-Input Variant (opt-in) ====================
+    expanded_results = None  # filled in if --with-expanded-features
+    if args.with_expanded_features:
+        log("\n" + "-" * 70)
+        log("Building expanded-input dataset (one-hot property_state + vintage_year)...")
+
+        try:
+            train_ext, val_ext, test_ext, expanded_cols, _ = build_expanded_inputs(
+                df_clean, TRAIN_FOLDS, VAL_FOLDS, TEST_FOLD, log_fn=log,
+            )
+        except RuntimeError as e:
+            log(f"  Skipping expanded variant: {e}")
+        else:
+            log("\nTraining Deep-PTCM-Expanded...")
+            ext_params = {
+                **base_params, 'head_layers': [], 'batch_norm': False,
+                'orthogonalize': False,
+            }
+            t0 = time.time()
+            model_ext = fit_deep_ptcm_competing_risks(
+                df=train_ext,
+                feature_cols=expanded_cols,
+                duration_col='duration',
+                event_col='event_code',
+                event_types=[1, 2],
+                val_df=val_ext,
+                **ext_params,
+            )
+            elapsed = time.time() - t0
+            n_params = sum(p.numel() for p in model_ext.network_.parameters())
+            n_params += sum(p.numel() for p in model_ext.baselines_.parameters())
+            log(f"  Training time: {elapsed / 60:.1f} minutes")
+            log(f"  Epochs: {len(model_ext.history_['train_loss'])}")
+            log(f"  Best val loss: {min(model_ext.history_['val_loss']):.4f}")
+            log(f"  Parameters: {n_params:,}")
+
+            trained_models['Deep-PTCM-Expanded'] = model_ext
+            all_histories['Deep-PTCM-Expanded'] = model_ext.history_
+
+            # Evaluate both base and expanded on the SAME (extended) test set.
+            test_durations_ext = test_ext['duration'].values
+            test_events_ext = test_ext['event_code'].values
+            X_test_base_on_ext = test_ext[FEATURE_COLS]
+            X_test_expanded = test_ext[expanded_cols]
+
+            log("\n  Evaluation on extended test set (base for delta):")
+            base_ext_res, base_ext_auc, _ = evaluate_model(
+                trained_models['Deep-PTCM'],
+                X_test_base_on_ext, test_durations_ext, test_events_ext,
+                log_fn=log,
+            )
+            log("\n  Evaluation (Deep-PTCM-Expanded):")
+            ext_res, ext_auc, ext_cure = evaluate_model(
+                model_ext,
+                X_test_expanded, test_durations_ext, test_events_ext,
+                log_fn=log,
+            )
+            all_results['Deep-PTCM-Expanded'] = (ext_res, ext_auc, ext_cure)
+            expanded_results = {
+                'base_on_ext': (base_ext_res, base_ext_auc),
+                'ext': (ext_res, ext_auc),
+                'n_test_ext': len(test_ext),
+            }
+
+            log("\n  --- Mean C-index (base vs expanded, evaluated on extended test) ---")
+            for event_name in ['Prepay', 'Default']:
+                base_c = base_ext_res[
+                    (base_ext_res['Event'] == event_name) &
+                    (base_ext_res['Horizon'] != 'IBS')
+                ]['C-index'].mean()
+                ext_c = ext_res[
+                    (ext_res['Event'] == event_name) &
+                    (ext_res['Horizon'] != 'IBS')
+                ]['C-index'].mean()
+                log(f"    {event_name:8s}: base={base_c:.4f}  "
+                    f"expanded={ext_c:.4f}  delta={ext_c - base_c:+.4f}")
+            log(f"    AUC_cure: base={base_ext_auc:.4f}  "
+                f"expanded={ext_auc:.4f}  delta={ext_auc - base_ext_auc:+.4f}")
+
     # ==================== Orthogonalized Coefficients ====================
     if not args.skip_ort:
         log("\n" + "-" * 70)
@@ -576,6 +860,24 @@ def main():
         plot_ort_coefficients(trained_models['Deep-PTCM-Ort'], figures_dir)
         log(f"  {figures_dir / 'deep_ptcm_ort_coefficients.png'}")
 
+    # ==================== Cash-Flow Projection (opt-in) ====================
+    if args.cashflow:
+        log("\n" + "-" * 70)
+        log("Projecting Deep-PTCM cash flows (base model)...")
+        cf_start = time.time()
+        run_cashflow_projection(
+            base_model=trained_models['Deep-PTCM'],
+            test_df_proj=test_df,
+            feature_cols=FEATURE_COLS,
+            horizon=args.cashflow_horizon,
+            lgd=args.cashflow_lgd,
+            models_dir=models_dir,
+            figures_dir=figures_dir,
+            log_fn=log,
+        )
+        log(f"  Cash-flow projection completed in "
+            f"{(time.time() - cf_start) / 60:.1f} minutes")
+
     # ==================== Summary ====================
     log("\n" + "=" * 70)
     log("SUMMARY")
@@ -602,6 +904,13 @@ def main():
         c_default = c_df[c_df['Event'] == 'Default']['C-index'].mean()
         log(f"{model_name:<25s} | {c_prepay:>9.4f} | {c_default:>9.4f} | {auc_val:>9.4f}")
 
+    if expanded_results is not None:
+        log("")
+        log(f"  Note: Deep-PTCM-Expanded is evaluated on the {expanded_results['n_test_ext']:,} "
+            f"fold-10 loans with non-null property_state and vintage_year;")
+        log(f"  the other rows use the full {len(test_df):,}-loan fold-10 test set. "
+            f"For a like-for-like delta, see the Expanded section above.")
+
     total_time = time.time() - start_time
     log(f"\nTotal runtime: {total_time / 60:.1f} minutes")
     log(f"End time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -616,6 +925,7 @@ def main():
         'Deep-PTCM-Ort': 'deep_ptcm_ort.pt',
         'Deep-PTCM-H32': 'deep_ptcm_h32.pt',
         'Deep-PTCM-Ort-H32': 'deep_ptcm_ort_h32.pt',
+        'Deep-PTCM-Expanded': 'deep_ptcm_expanded.pt',
     }
     for model_name, model_obj in trained_models.items():
         fname = save_names.get(model_name, f'deep_ptcm_{model_name}.pt')

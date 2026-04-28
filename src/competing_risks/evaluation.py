@@ -516,46 +516,70 @@ def auc_cure(
     durations: np.ndarray,
     predicted_cure_prob: np.ndarray,
     min_followup: float = 120,
+    event_of_interest=None,
 ) -> float:
     """
     AUC for cure-fraction discrimination.
 
-    Compares the predicted cure probability against observed outcome:
-    - "Cured" (label 0): censored with duration >= min_followup
-    - "Uncured" (label 1): experienced any event (event_code > 0)
+    Two modes, controlled by ``event_of_interest``:
 
-    Subjects censored with short follow-up are excluded (ambiguous).
+    1. ``event_of_interest is None`` (overall mode):
+       - "Uncured" (y=1): experienced any event (event_code > 0)
+       - "Cured"   (y=0): censored with duration >= min_followup
+       - Excluded:        censored with duration < min_followup
+       Use ``predicted_cure_prob = pi_overall(x) = exp(-sum_k theta_k(x))``.
+
+    2. ``event_of_interest = k`` (cause-specific mode):
+       - "Uncured" (y=1): experienced cause k
+       - "Cured"   (y=0): experienced a competing event (>0 and != k), OR
+                          censored with duration >= min_followup
+       - Excluded:        censored with duration < min_followup
+       Use ``predicted_cure_prob = pi_k(x) = exp(-theta_k(x))``.
+
+       The "competing event counts as cured of cause k" convention follows
+       the standard competing-risks framing: a subject who experienced a
+       different event has exited the risk set for k without ever having
+       experienced k (Wolbers et al. 2014; Blanche et al. 2013).
 
     Parameters
     ----------
     event_codes : np.ndarray
-        Event codes (0=censored, >0 = event).
+        Event codes (0 = censored, >0 = event of that code).
     durations : np.ndarray
         Observed durations.
     predicted_cure_prob : np.ndarray
-        Predicted probability of being cured (higher = more likely cured).
+        Higher = more likely cured. For overall pass pi_overall; for a
+        cause-specific call pass pi_k for the matching event_of_interest.
     min_followup : float
-        Minimum follow-up to consider a censored subject as "cured".
+        Minimum follow-up to consider a censored subject as cured.
+    event_of_interest : int or None
+        If None, evaluates the overall cure fraction. If an integer, the
+        AUC is computed against that cause.
 
     Returns
     -------
     float
-        AUC score.
+        ROC-AUC, or NaN if either class is empty after filtering.
     """
     event_codes = np.asarray(event_codes)
     durations = np.asarray(durations)
     predicted_cure_prob = np.asarray(predicted_cure_prob)
 
-    cured_mask = (event_codes == 0) & (durations >= min_followup)
-    uncured_mask = event_codes > 0
-    keep = cured_mask | uncured_mask
+    if event_of_interest is None:
+        uncured_mask = event_codes > 0
+        cured_mask = (event_codes == 0) & (durations >= min_followup)
+    else:
+        uncured_mask = event_codes == event_of_interest
+        competing_mask = (event_codes > 0) & (event_codes != event_of_interest)
+        long_censored_mask = (event_codes == 0) & (durations >= min_followup)
+        cured_mask = competing_mask | long_censored_mask
 
+    keep = cured_mask | uncured_mask
     if keep.sum() == 0 or cured_mask.sum() == 0 or uncured_mask.sum() == 0:
         return np.nan
 
-    y_true = uncured_mask[keep].astype(int)   # 1 = uncured
-    y_score = 1.0 - predicted_cure_prob[keep]  # higher = more uncured
-
+    y_true = uncured_mask[keep].astype(int)
+    y_score = 1.0 - predicted_cure_prob[keep]
     return roc_auc_score(y_true, y_score)
 
 

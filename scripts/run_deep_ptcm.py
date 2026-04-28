@@ -194,14 +194,27 @@ def evaluate_model(model, X_test, test_durations, test_events, log_fn=print):
             'C-index': np.nan, 'Brier Score': ibs,
         })
 
-    # AUC_cure
+    # AUC_cure: overall + cause-specific
     cure = model.predict_cure_fraction(X_test)
-    auc_val = auc_cure(
-        test_events, test_durations, cure['overall'], min_followup=120
-    )
-    log_fn(f"    AUC_cure (overall): {auc_val:.4f}")
+    auc_dict = {
+        'overall': auc_cure(
+            test_events, test_durations, cure['overall'],
+            min_followup=120,
+        ),
+        'prepay': auc_cure(
+            test_events, test_durations, cure['prepay'],
+            min_followup=120, event_of_interest=1,
+        ),
+        'default': auc_cure(
+            test_events, test_durations, cure['default'],
+            min_followup=120, event_of_interest=2,
+        ),
+    }
+    log_fn(f"    AUC_cure (overall): {auc_dict['overall']:.4f}")
+    log_fn(f"    AUC_cure (prepay):  {auc_dict['prepay']:.4f}")
+    log_fn(f"    AUC_cure (default): {auc_dict['default']:.4f}")
 
-    return pd.DataFrame(results_rows), auc_val, cure
+    return pd.DataFrame(results_rows), auc_dict, cure
 
 
 def permutation_importance(model, X_df, durations, events, feature_cols,
@@ -721,10 +734,10 @@ def main():
 
         # Evaluate
         log(f"\n  Evaluation ({variant_name}):")
-        res_df, auc_val, cure = evaluate_model(
+        res_df, auc_dict, cure = evaluate_model(
             model, X_test, test_durations, test_events, log_fn=log
         )
-        all_results[variant_name] = (res_df, auc_val, cure)
+        all_results[variant_name] = (res_df, auc_dict, cure)
 
     # ==================== Expanded-Input Variant (opt-in) ====================
     expanded_results = None  # filled in if --with-expanded-features
@@ -802,8 +815,11 @@ def main():
                 ]['C-index'].mean()
                 log(f"    {event_name:8s}: base={base_c:.4f}  "
                     f"expanded={ext_c:.4f}  delta={ext_c - base_c:+.4f}")
-            log(f"    AUC_cure: base={base_ext_auc:.4f}  "
-                f"expanded={ext_auc:.4f}  delta={ext_auc - base_ext_auc:+.4f}")
+            for k in ('overall', 'prepay', 'default'):
+                b = base_ext_auc[k]
+                e = ext_auc[k]
+                log(f"    AUC_cure[{k:7s}]: base={b:.4f}  "
+                    f"expanded={e:.4f}  delta={e - b:+.4f}")
 
     # ==================== Orthogonalized Coefficients ====================
     if not args.skip_ort:
@@ -895,14 +911,17 @@ def main():
     log(f"  Features: {FEATURE_COLS}")
 
     log(f"\nResults (Test Set):")
-    log(f"{'Model':<25s} | {'Prepay C':>9s} | {'Default C':>9s} | {'AUC_cure':>9s}")
-    log("-" * 60)
-    for model_name, (res_df, auc_val, _) in all_results.items():
+    log(f"{'Model':<25s} | {'Prepay C':>9s} | {'Default C':>9s} | "
+        f"{'AUC_overall':>11s} | {'AUC_prepay':>10s} | {'AUC_default':>11s}")
+    log("-" * 92)
+    for model_name, (res_df, auc_dict, _) in all_results.items():
         # Mean C-index across horizons
         c_df = res_df[res_df['Horizon'] != 'IBS']
         c_prepay = c_df[c_df['Event'] == 'Prepay']['C-index'].mean()
         c_default = c_df[c_df['Event'] == 'Default']['C-index'].mean()
-        log(f"{model_name:<25s} | {c_prepay:>9.4f} | {c_default:>9.4f} | {auc_val:>9.4f}")
+        log(f"{model_name:<25s} | {c_prepay:>9.4f} | {c_default:>9.4f} | "
+            f"{auc_dict['overall']:>11.4f} | {auc_dict['prepay']:>10.4f} | "
+            f"{auc_dict['default']:>11.4f}")
 
     if expanded_results is not None:
         log("")
@@ -940,10 +959,12 @@ def main():
 
     # Combined results CSV
     all_rows = []
-    for model_name, (res_df, auc_val, _) in all_results.items():
+    for model_name, (res_df, auc_dict, _) in all_results.items():
         res_copy = res_df.copy()
         res_copy['Model'] = model_name
-        res_copy['AUC_cure'] = auc_val
+        res_copy['AUC_cure_overall'] = auc_dict['overall']
+        res_copy['AUC_cure_prepay'] = auc_dict['prepay']
+        res_copy['AUC_cure_default'] = auc_dict['default']
         all_rows.append(res_copy)
     combined_df = pd.concat(all_rows, ignore_index=True)
     combined_df.to_csv(models_dir / 'deep_ptcm_all_results.csv', index=False)

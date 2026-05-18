@@ -1,0 +1,110 @@
+======================================================================
+BAYESIAN SINGLE-RISK PHM (PREPAYMENT)
+Lognormal baseline, proportional hazards
+======================================================================
+
+Start time: 2026-03-31 10:29:52
+PyTorch version: 2.3.1
+Pyro version: 1.9.1
+
+Configuration (NUTS — no thinning needed):
+  num_chains: 4
+  num_samples: 3000
+  num_warmup: 3000
+  target_accept: 0.8
+  seed: 42
+  total posterior samples: 12000
+
+Convergence thresholds:
+  min_ess_per_chain: 400
+  max_rhat: 1.01
+
+----------------------------------------------------------------------
+Loading data...
+  Loaded 5,462,536 loan-months
+  Unique loans: 109,111
+  Available features: 13/13
+  Terminal observations: 109,067
+  Train: 89,240, Val: 9,916, Test: 9,911
+
+  Event recoding: prepay=1 (event), default+censored=0 (censored)
+    train: 50,227 prepay events, 39,013 censored
+    val: 5,523 prepay events, 4,393 censored
+    test: 5,606 prepay events, 4,305 censored
+
+----------------------------------------------------------------------
+Running MCMC inference...
+  Device: cpu (multi-chain requires CPU)
+  Chains: 4
+  Warmup: 3000
+  Samples per chain: 3000
+  Total posterior samples: 12000
+  Parameters: 2 baseline + 13 coefficients = 15
+  MCMC completed in 69.3 minutes
+
+  Total posterior samples: 12000
+
+  Posterior sample shapes:
+    mu: (12000,)
+    sigma: (12000,)
+    theta: (12000, 13)
+
+  Convergence diagnostics:
+    mu: R-hat=2.1300, ESS=5
+    sigma: R-hat=2.2500, ESS=5
+
+    Min bulk ESS:  5  (threshold: 1600)
+    Max R-hat:     2.4100  (threshold: 1.01)
+    WARNING: Low ESS — worst: mu (ESS=5)
+    WARNING: High R-hat — worst: theta[2] (R-hat=2.4100)
+    Consider increasing --num-samples or --num-warmup.
+
+----------------------------------------------------------------------
+Posterior summaries:
+
+  Baseline hazard parameters:
+  Parameter          Mean         SD     Median    CI 2.5%   CI 97.5%
+  ----------------------------------------------------------------
+  mu               3.3315     0.5845     3.6138     2.3340     3.7636
+  sigma            0.5174     0.1553     0.5835     0.2573     0.6419
+
+  Prepayment coefficients (theta):
+  Feature                    Mean         SD    CI 2.5%   CI 97.5%  Significant
+  ----------------------------------------------------------------------------
+  int_rate                -0.5480     0.0331    -0.6141    -0.5119          Yes
+  log_upb                  0.0876     0.0297     0.0305     0.1177          Yes
+  fico_score               0.1919     0.1192     0.0077     0.3605          Yes
+  dti_r                    1.9119     3.4339    -0.0805     7.8922           No
+  ltv_r                   -0.1081     0.0119    -0.1264    -0.0840          Yes
+  bal_repaid_lag1         -0.1600     0.0616    -0.2070    -0.0457          Yes
+  t_act_12m               -2.4484     0.2036    -2.6768    -2.2227          Yes
+  t_del_30d_12m           -0.5968     0.0537    -0.6648    -0.5303          Yes
+  t_del_60d_12m            1.3619     2.7095    -1.3695     4.3631           No
+  hpi_st_d_t_o            -1.0066     0.0901    -1.0869    -0.8418          Yes
+  ppi_c_FRMA               1.1781     0.0517     1.1117     1.2845          Yes
+  TB10Y_d_t_o              0.1985     0.0566     0.0828     0.2624          Yes
+  FRMA30Y_d_t_o            0.2939     0.0782     0.1978     0.4551          Yes
+
+----------------------------------------------------------------------
+Model evaluation...
+
+  Time-dependent C-index (IPCW):
+  τ=24     τ=48     τ=72    
+  ------------------------------
+  0.8226  0.7928  0.7771 
+
+----------------------------------------------------------------------
+Summary:
+  Total posterior samples: 12000
+  Converged: No
+  Effective samples (min): 5
+  Max R-hat: 2.410
+
+  Significant covariates:
+    Prepay: int_rate, log_upb, fico_score, ltv_r, bal_repaid_lag1, t_act_12m, t_del_30d_12m, hpi_st_d_t_o, ppi_c_FRMA, TB10Y_d_t_o, FRMA30Y_d_t_o
+
+Total runtime: 69.5 minutes
+End time: 2026-03-31 11:39:19
+======================================================================
+
+Saving results...

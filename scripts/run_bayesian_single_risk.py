@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-Bayesian Competing Risks PHM - Supercomputer Script
+Bayesian Single-Risk PHM - Prepayment Only
 
-Implements Bhattacharya, Wilson & Soyer (2019) Bayesian competing risks
-proportional hazards model for mortgage default and prepayment.
+Lognormal baseline proportional hazards model for mortgage prepayment.
+Defaults and censored observations are both treated as right-censored.
 
 Usage:
-    python run_bayesian_phm.py [--num-chains 4] [--num-samples 4000] [--num-warmup 1000]
+    python run_bayesian_single_risk.py [--num-chains 4] [--num-samples 1000] [--num-warmup 1000]
 
 Output:
-    - results/bayesian_phm_results.txt (summary report)
-    - models/bayesian_phm_posterior.npz (posterior samples)
-    - models/bayesian_phm_inference.nc (ArviZ inference data)
+    - results/bayesian_single_risk_results.txt (summary report)
+    - models/bayesian_single_risk_posterior.npz (posterior samples)
+    - models/bayesian_single_risk_inference.nc (ArviZ inference data)
 """
 
 import argparse
@@ -42,7 +42,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 # ==============================================================================
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Bayesian Competing Risks PHM')
+    parser = argparse.ArgumentParser(description='Bayesian Single-Risk PHM (Prepayment)')
     parser.add_argument('--num-chains', type=int, default=4, help='Number of MCMC chains')
     parser.add_argument('--num-samples', type=int, default=1000, help='Number of post-warmup samples per chain')
     parser.add_argument('--num-warmup', type=int, default=1000, help='Number of NUTS warmup steps')
@@ -56,7 +56,7 @@ def parse_args():
     return parser.parse_args()
 
 
-# Prior hyperparameters (Bhattacharya et al. 2019)
+# Prior hyperparameters
 PRIOR_PARAMS = {
     'theta_sd': 100.0,
     'mu_sd': 10.0,
@@ -116,52 +116,36 @@ def lognormal_cumulative_hazard(t, mu, sigma):
     return -_log_standard_normal_survival(z)
 
 
-def bayesian_competing_risks_model(X, durations, events, n_features):
-    """Pyro model for Bayesian competing risks PHM (float64-safe)."""
+def bayesian_single_risk_model(X, durations, events, n_features):
+    """Pyro model for Bayesian single-risk PHM (prepayment).
+
+    events: 1 = prepay (event), 0 = censored (includes original censored + defaults)
+    """
     device = X.device
-    dtype = X.dtype  # Inherit dtype from input (float64 for stability)
+    dtype = X.dtype
 
     # Baseline hazard parameters
-    mu_D = pyro.sample('mu_D', dist.Normal(
+    mu = pyro.sample('mu', dist.Normal(
         torch.tensor(3.0, dtype=dtype, device=device),
         torch.tensor(PRIOR_PARAMS['mu_sd'], dtype=dtype, device=device)))
-    sigma_D = pyro.sample('sigma_D', dist.Exponential(
-        torch.tensor(PRIOR_PARAMS['sigma_rate'], dtype=dtype, device=device)))
-    mu_P = pyro.sample('mu_P', dist.Normal(
-        torch.tensor(3.0, dtype=dtype, device=device),
-        torch.tensor(PRIOR_PARAMS['mu_sd'], dtype=dtype, device=device)))
-    sigma_P = pyro.sample('sigma_P', dist.Exponential(
+    sigma = pyro.sample('sigma', dist.Exponential(
         torch.tensor(PRIOR_PARAMS['sigma_rate'], dtype=dtype, device=device)))
 
     # Regression coefficients
-    theta_D = pyro.sample('theta_D', dist.Normal(
-        torch.zeros(n_features, dtype=dtype, device=device),
-        PRIOR_PARAMS['theta_sd'] * torch.ones(n_features, dtype=dtype, device=device)).to_event(1))
-    theta_P = pyro.sample('theta_P', dist.Normal(
+    theta = pyro.sample('theta', dist.Normal(
         torch.zeros(n_features, dtype=dtype, device=device),
         PRIOR_PARAMS['theta_sd'] * torch.ones(n_features, dtype=dtype, device=device)).to_event(1))
 
-    # Linear predictors
-    eta_D = torch.matmul(X, theta_D)
-    eta_P = torch.matmul(X, theta_P)
+    # Linear predictor
+    eta = torch.clamp(torch.matmul(X, theta), -20, 20)
 
-    # Hazards and cumulative hazards
-    # Clamp eta to prevent exp() overflow during NUTS warmup exploration
-    eta_D = torch.clamp(eta_D, -20, 20)
-    eta_P = torch.clamp(eta_P, -20, 20)
+    # Hazard and cumulative hazard
+    log_h = lognormal_log_hazard(durations, mu, sigma) + eta
+    H = lognormal_cumulative_hazard(durations, mu, sigma) * torch.exp(eta)
+    H = torch.clamp(H, max=30.0)
 
-    log_h_D = lognormal_log_hazard(durations, mu_D, sigma_D) + eta_D
-    log_h_P = lognormal_log_hazard(durations, mu_P, sigma_P) + eta_P
-    H_D = lognormal_cumulative_hazard(durations, mu_D, sigma_D) * torch.exp(eta_D)
-    H_P = lognormal_cumulative_hazard(durations, mu_P, sigma_P) * torch.exp(eta_P)
-
-    # Clamp cumulative hazards to avoid inf (exp(-30) ≈ 1e-13, effectively zero survival)
-    H_D = torch.clamp(H_D, max=30.0)
-    H_P = torch.clamp(H_P, max=30.0)
-
-    # Log-likelihood (competing risks)
-    log_lik = (events == 2).to(dtype) * log_h_D + (events == 1).to(dtype) * log_h_P - H_D - H_P
-    # Guard against NaN from extreme proposals — NUTS will reject these
+    # Log-likelihood: event * log_h - H
+    log_lik = events.to(dtype) * log_h - H
     log_lik = torch.where(torch.isfinite(log_lik), log_lik, torch.tensor(-1e10, dtype=dtype, device=device))
     pyro.factor('log_likelihood', torch.sum(log_lik))
 
@@ -171,51 +155,27 @@ def bayesian_competing_risks_model(X, durations, events, n_features):
 # ==============================================================================
 
 class BayesianModelWrapper:
-    """Wrapper for posterior predictions."""
+    """Wrapper for posterior survival predictions."""
 
     def __init__(self, posterior_samples, device='cpu'):
         self.posterior_samples_ = posterior_samples
         self.device = device
 
-    def predict_cif(self, X, times, cause='default'):
-        """Predict cumulative incidence function."""
-        X = torch.tensor(X, dtype=torch.float64, device=self.device)
-        times = torch.tensor(times, dtype=torch.float64, device=self.device)
-        N, T = X.shape[0], len(times)
-
-        ps = {k: torch.tensor(v, device=self.device) for k, v in self.posterior_samples_.items()}
-        n_samples = len(ps['mu_D'])
-        cif_samples = np.zeros((n_samples, N, T))
-
-        for s in range(n_samples):
-            eta_D = torch.matmul(X, ps['theta_D'][s])
-            eta_P = torch.matmul(X, ps['theta_P'][s])
-            for t_idx, t in enumerate(times):
-                H_D = lognormal_cumulative_hazard(t, ps['mu_D'][s], ps['sigma_D'][s]) * torch.exp(eta_D)
-                H_P = lognormal_cumulative_hazard(t, ps['mu_P'][s], ps['sigma_P'][s]) * torch.exp(eta_P)
-                S_t = torch.exp(-H_D - H_P)
-                cif = (H_D if cause == 'default' else H_P) / (H_D + H_P + 1e-10) * (1 - S_t)
-                cif_samples[s, :, t_idx] = cif.cpu().numpy()
-
-        return np.mean(cif_samples, 0), np.percentile(cif_samples, 2.5, 0), np.percentile(cif_samples, 97.5, 0)
-
     def predict_survival(self, X, times):
-        """Predict survival function."""
+        """Predict survival function S(t) = exp(-H(t))."""
         X = torch.tensor(X, dtype=torch.float64, device=self.device)
         times = torch.tensor(times, dtype=torch.float64, device=self.device)
         N, T = X.shape[0], len(times)
 
         ps = {k: torch.tensor(v, device=self.device) for k, v in self.posterior_samples_.items()}
-        n_samples = len(ps['mu_D'])
+        n_samples = len(ps['mu'])
         surv_samples = np.zeros((n_samples, N, T))
 
         for s in range(n_samples):
-            eta_D = torch.matmul(X, ps['theta_D'][s])
-            eta_P = torch.matmul(X, ps['theta_P'][s])
+            eta = torch.matmul(X, ps['theta'][s])
             for t_idx, t in enumerate(times):
-                H_D = lognormal_cumulative_hazard(t, ps['mu_D'][s], ps['sigma_D'][s]) * torch.exp(eta_D)
-                H_P = lognormal_cumulative_hazard(t, ps['mu_P'][s], ps['sigma_P'][s]) * torch.exp(eta_P)
-                surv_samples[s, :, t_idx] = torch.exp(-H_D - H_P).cpu().numpy()
+                H = lognormal_cumulative_hazard(t, ps['mu'][s], ps['sigma'][s]) * torch.exp(eta)
+                surv_samples[s, :, t_idx] = torch.exp(-H).cpu().numpy()
 
         return np.mean(surv_samples, 0), np.percentile(surv_samples, 2.5, 0), np.percentile(surv_samples, 97.5, 0)
 
@@ -225,27 +185,18 @@ class BayesianModelWrapper:
 # ==============================================================================
 
 def compute_time_dependent_cindex(posterior_samples, X_train, durations_train, events_train,
-                                   X_test, durations_test, events_test,
-                                   times, cause='default'):
+                                   X_test, durations_test, events_test, times):
     """Compute IPCW C-index at specified time horizons.
 
     Uses the posterior mean of the regression coefficients as a linear
     risk score (eta = X @ theta_mean).  This is a monotone function of
-    the cause-specific hazard, so it preserves concordance ranking and
-    avoids the expensive CIF integration over all posterior draws.
+    the hazard, so it preserves concordance ranking.
     """
-    cause_code = 2 if cause == 'default' else 1
-    coef_key = 'theta_D' if cause == 'default' else 'theta_P'
-
-    # Create survival objects
-    train_event = (events_train == cause_code)
-    test_event = (events_test == cause_code)
-
-    y_train = Surv.from_arrays(train_event, durations_train)
-    y_test = Surv.from_arrays(test_event, durations_test)
+    y_train = Surv.from_arrays(events_train.astype(bool), durations_train)
+    y_test = Surv.from_arrays(events_test.astype(bool), durations_test)
 
     # Posterior mean linear predictor as risk score
-    theta_mean = posterior_samples[coef_key].mean(axis=0)
+    theta_mean = posterior_samples['theta'].mean(axis=0)
     risk_scores = X_test @ theta_mean
 
     results = {}
@@ -278,7 +229,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     models_dir.mkdir(parents=True, exist_ok=True)
 
-    results_file = output_dir / 'bayesian_phm_results.txt'
+    results_file = output_dir / 'bayesian_single_risk_results.txt'
 
     # Start logging
     start_time = time.time()
@@ -289,8 +240,8 @@ def main():
         log_lines.append(msg)
 
     log("=" * 70)
-    log("BAYESIAN COMPETING RISKS PHM")
-    log("Bhattacharya, Wilson & Soyer (2019)")
+    log("BAYESIAN SINGLE-RISK PHM (PREPAYMENT)")
+    log("Lognormal baseline, proportional hazards")
     log("=" * 70)
     log(f"\nStart time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     log(f"PyTorch version: {torch.__version__}")
@@ -349,14 +300,14 @@ def main():
 
     log(f"  Train: {len(train_df):,}, Val: {len(val_df):,}, Test: {len(test_df):,}")
 
-    # Event distribution
-    log("\n  Event distribution (train):")
-    event_names = {0: 'Censored', 1: 'Prepay', 2: 'Default'}
-    for code, count in train_df[event_col].value_counts().sort_index().items():
-        log(f"    {event_names.get(code, 'Other')} (k={code}): {count:,}")
+    # Recode events: prepay (1) -> 1, everything else -> 0 (censored)
+    log("\n  Event recoding: prepay=1 (event), default+censored=0 (censored)")
+    for split_name, split_df in [('train', train_df), ('val', val_df), ('test', test_df)]:
+        n_prepay = (split_df[event_col] == 1).sum()
+        n_cens = (split_df[event_col] != 1).sum()
+        log(f"    {split_name}: {n_prepay:,} prepay events, {n_cens:,} censored")
 
-    # Standardize (float64 for MCMC numerical stability; float32 caused
-    # lognormal survival tail underflow and stuck NUTS chains)
+    # Standardize (float64 for MCMC numerical stability)
     scaler = StandardScaler()
     X_train = scaler.fit_transform(train_df[feature_cols]).astype('float64')
     X_val = scaler.transform(val_df[feature_cols]).astype('float64')
@@ -366,9 +317,10 @@ def main():
     duration_val = np.maximum(val_df[time_col].values.astype('float64'), 0.5)
     duration_test = np.maximum(test_df[time_col].values.astype('float64'), 0.5)
 
-    event_train = train_df[event_col].values.astype('int64')
-    event_val = val_df[event_col].values.astype('int64')
-    event_test = test_df[event_col].values.astype('int64')
+    # Binary event indicator: prepay = 1, else = 0
+    event_train = (train_df[event_col].values == 1).astype('int64')
+    event_val = (val_df[event_col].values == 1).astype('int64')
+    event_test = (test_df[event_col].values == 1).astype('int64')
 
     # MCMC Inference
     log("\n" + "-" * 70)
@@ -378,6 +330,7 @@ def main():
     log(f"  Warmup: {args.num_warmup}")
     log(f"  Samples per chain: {args.num_samples}")
     log(f"  Total posterior samples: {args.num_samples * args.num_chains}")
+    log(f"  Parameters: 2 baseline + {len(feature_cols)} coefficients = {2 + len(feature_cols)}")
 
     pyro.clear_param_store()
 
@@ -388,7 +341,7 @@ def main():
     mcmc_start = time.time()
 
     mcmc = MCMC(
-        NUTS(bayesian_competing_risks_model, target_accept_prob=args.target_accept, jit_compile=False),
+        NUTS(bayesian_single_risk_model, target_accept_prob=args.target_accept, jit_compile=False),
         num_samples=args.num_samples,
         warmup_steps=args.num_warmup,
         num_chains=args.num_chains,
@@ -412,13 +365,12 @@ def main():
 
     # Convergence diagnostics
     log("\n  Convergence diagnostics:")
-    summary = az.summary(inference_data,
-                         var_names=['mu_D', 'sigma_D', 'mu_P', 'sigma_P', 'theta_D', 'theta_P'])
+    summary = az.summary(inference_data, var_names=['mu', 'sigma', 'theta'])
     min_ess = summary['ess_bulk'].min()
     max_rhat = summary['r_hat'].max()
     min_ess_threshold = args.min_ess_per_chain * args.num_chains
 
-    for param in ['mu_D', 'sigma_D', 'mu_P', 'sigma_P']:
+    for param in ['mu', 'sigma']:
         if param in summary.index:
             rhat = summary.loc[param, 'r_hat']
             ess = summary.loc[param, 'ess_bulk']
@@ -446,36 +398,22 @@ def main():
     log("\n  Baseline hazard parameters:")
     log(f"  {'Parameter':<12} {'Mean':>10} {'SD':>10} {'Median':>10} {'CI 2.5%':>10} {'CI 97.5%':>10}")
     log("  " + "-" * 64)
-    for param in ['mu_D', 'sigma_D', 'mu_P', 'sigma_P']:
+    for param in ['mu', 'sigma']:
         samples = posterior_samples[param]
         log(f"  {param:<12} {np.mean(samples):>10.4f} {np.std(samples):>10.4f} {np.median(samples):>10.4f} "
             f"{np.percentile(samples, 2.5):>10.4f} {np.percentile(samples, 97.5):>10.4f}")
 
     # Coefficient summaries
-    log("\n  Default coefficients (theta_D):")
+    log("\n  Prepayment coefficients (theta):")
     log(f"  {'Feature':<20} {'Mean':>10} {'SD':>10} {'CI 2.5%':>10} {'CI 97.5%':>10} {'Significant':>12}")
     log("  " + "-" * 76)
-    coef_summary_D = []
+    coef_summary = []
     for i, f in enumerate(feature_cols):
-        samples = posterior_samples['theta_D'][:, i]
+        samples = posterior_samples['theta'][:, i]
         ci_low, ci_high = np.percentile(samples, 2.5), np.percentile(samples, 97.5)
         sig = "Yes" if not (ci_low < 0 < ci_high) else "No"
         log(f"  {f:<20} {np.mean(samples):>10.4f} {np.std(samples):>10.4f} {ci_low:>10.4f} {ci_high:>10.4f} {sig:>12}")
-        coef_summary_D.append({
-            'Feature': f, 'Mean': np.mean(samples), 'SD': np.std(samples),
-            'CI_2.5%': ci_low, 'CI_97.5%': ci_high, 'Significant': sig == "Yes"
-        })
-
-    log("\n  Prepayment coefficients (theta_P):")
-    log(f"  {'Feature':<20} {'Mean':>10} {'SD':>10} {'CI 2.5%':>10} {'CI 97.5%':>10} {'Significant':>12}")
-    log("  " + "-" * 76)
-    coef_summary_P = []
-    for i, f in enumerate(feature_cols):
-        samples = posterior_samples['theta_P'][:, i]
-        ci_low, ci_high = np.percentile(samples, 2.5), np.percentile(samples, 97.5)
-        sig = "Yes" if not (ci_low < 0 < ci_high) else "No"
-        log(f"  {f:<20} {np.mean(samples):>10.4f} {np.std(samples):>10.4f} {ci_low:>10.4f} {ci_high:>10.4f} {sig:>12}")
-        coef_summary_P.append({
+        coef_summary.append({
             'Feature': f, 'Mean': np.mean(samples), 'SD': np.std(samples),
             'CI_2.5%': ci_low, 'CI_97.5%': ci_high, 'Significant': sig == "Yes"
         })
@@ -484,23 +422,17 @@ def main():
     log("\n" + "-" * 70)
     log("Model evaluation...")
 
-    model = BayesianModelWrapper(posterior_samples, device='cpu')
-
     # C-index evaluation
     log("\n  Time-dependent C-index (IPCW):")
-    log(f"  {'Cause':<12} " + " ".join([f"τ={t:<6}" for t in TIME_HORIZONS]))
-    log("  " + "-" * 40)
+    log(f"  " + " ".join([f"τ={t:<6}" for t in TIME_HORIZONS]))
+    log("  " + "-" * 30)
 
-    cindex_results = {}
-    for cause in ['default', 'prepay']:
-        cindex = compute_time_dependent_cindex(
-            posterior_samples, X_train, duration_train, event_train,
-            X_test, duration_test, event_test,
-            TIME_HORIZONS, cause
-        )
-        cindex_results[cause] = cindex
-        vals = " ".join([f"{cindex.get(t, np.nan):.4f} " for t in TIME_HORIZONS])
-        log(f"  {cause.capitalize():<12} {vals}")
+    cindex_results = compute_time_dependent_cindex(
+        posterior_samples, X_train, duration_train, event_train,
+        X_test, duration_test, event_test, TIME_HORIZONS
+    )
+    vals = " ".join([f"{cindex_results.get(t, np.nan):.4f} " for t in TIME_HORIZONS])
+    log(f"  {vals}")
 
     # Summary statistics
     log("\n" + "-" * 70)
@@ -510,11 +442,9 @@ def main():
     log(f"  Effective samples (min): {summary['ess_bulk'].min():.0f}")
     log(f"  Max R-hat: {summary['r_hat'].max():.3f}")
 
-    sig_D = [c['Feature'] for c in coef_summary_D if c['Significant']]
-    sig_P = [c['Feature'] for c in coef_summary_P if c['Significant']]
+    sig_feats = [c['Feature'] for c in coef_summary if c['Significant']]
     log(f"\n  Significant covariates:")
-    log(f"    Default: {', '.join(sig_D) if sig_D else 'None'}")
-    log(f"    Prepay: {', '.join(sig_P) if sig_P else 'None'}")
+    log(f"    Prepay: {', '.join(sig_feats) if sig_feats else 'None'}")
 
     # Timing
     total_time = time.time() - start_time
@@ -531,28 +461,28 @@ def main():
     log(f"  Report: {results_file}")
 
     # Save posterior samples
-    np.savez(models_dir / 'bayesian_phm_posterior.npz', **posterior_samples)
-    log(f"  Posterior: {models_dir / 'bayesian_phm_posterior.npz'}")
+    np.savez(models_dir / 'bayesian_single_risk_posterior.npz', **posterior_samples)
+    log(f"  Posterior: {models_dir / 'bayesian_single_risk_posterior.npz'}")
 
     # Save inference data
-    inference_data.to_netcdf(models_dir / 'bayesian_phm_inference.nc')
-    log(f"  Inference: {models_dir / 'bayesian_phm_inference.nc'}")
+    inference_data.to_netcdf(models_dir / 'bayesian_single_risk_inference.nc')
+    log(f"  Inference: {models_dir / 'bayesian_single_risk_inference.nc'}")
 
     # Save coefficients
-    pd.DataFrame(coef_summary_D).to_csv(models_dir / 'bayesian_phm_coef_default.csv', index=False)
-    pd.DataFrame(coef_summary_P).to_csv(models_dir / 'bayesian_phm_coef_prepay.csv', index=False)
-    log(f"  Coefficients: {models_dir / 'bayesian_phm_coef_*.csv'}")
+    pd.DataFrame(coef_summary).to_csv(models_dir / 'bayesian_single_risk_coef.csv', index=False)
+    log(f"  Coefficients: {models_dir / 'bayesian_single_risk_coef.csv'}")
 
     # Save C-index results
-    pd.DataFrame(cindex_results).to_csv(models_dir / 'bayesian_phm_cindex.csv')
-    log(f"  C-index: {models_dir / 'bayesian_phm_cindex.csv'}")
+    pd.DataFrame({'prepay': cindex_results}, index=cindex_results.keys()).to_csv(
+        models_dir / 'bayesian_single_risk_cindex.csv')
+    log(f"  C-index: {models_dir / 'bayesian_single_risk_cindex.csv'}")
 
     # Save scaler and features
-    with open(models_dir / 'bayesian_phm_scaler.pkl', 'wb') as f:
+    with open(models_dir / 'bayesian_single_risk_scaler.pkl', 'wb') as f:
         pickle.dump(scaler, f)
-    with open(models_dir / 'bayesian_phm_features.pkl', 'wb') as f:
+    with open(models_dir / 'bayesian_single_risk_features.pkl', 'wb') as f:
         pickle.dump(feature_cols, f)
-    log(f"  Scaler/features: {models_dir / 'bayesian_phm_*.pkl'}")
+    log(f"  Scaler/features: {models_dir / 'bayesian_single_risk_*.pkl'}")
 
     print("\nDone!")
 

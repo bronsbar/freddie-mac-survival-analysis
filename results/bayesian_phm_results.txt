@@ -1,0 +1,135 @@
+======================================================================
+BAYESIAN COMPETING RISKS PHM
+Bhattacharya, Wilson & Soyer (2019)
+======================================================================
+
+Start time: 2026-03-29 16:03:45
+PyTorch version: 2.3.1
+Pyro version: 1.9.1
+
+Configuration (NUTS — no thinning needed):
+  num_chains: 4
+  num_samples: 2000
+  num_warmup: 1000
+  target_accept: 0.8
+  seed: 42
+  total posterior samples: 8000
+
+Convergence thresholds:
+  min_ess_per_chain: 400
+  max_rhat: 1.01
+
+----------------------------------------------------------------------
+Loading data...
+  Loaded 5,462,536 loan-months
+  Unique loans: 109,111
+  Available features: 13/13
+  Terminal observations: 109,067
+  Train: 89,240, Val: 9,916, Test: 9,911
+
+  Event distribution (train):
+    Censored (k=0): 38,979
+    Prepay (k=1): 50,227
+    Default (k=2): 34
+
+----------------------------------------------------------------------
+Running MCMC inference...
+  Device: cpu (multi-chain requires CPU)
+  Chains: 4
+  Warmup: 1000
+  Samples per chain: 2000
+  Total posterior samples: 8000
+  MCMC completed in 760.0 minutes
+
+  Total posterior samples: 8000
+
+  Posterior sample shapes:
+    mu_D: (8000,)
+    mu_P: (8000,)
+    sigma_D: (8000,)
+    sigma_P: (8000,)
+    theta_D: (8000, 13)
+    theta_P: (8000, 13)
+
+  Convergence diagnostics:
+    mu_D: R-hat=3.4200, ESS=4
+    sigma_D: R-hat=3.4200, ESS=5
+    mu_P: R-hat=1.7400, ESS=6
+    sigma_P: R-hat=1.7400, ESS=6
+
+    Min bulk ESS:  4  (threshold: 1600)
+    Max R-hat:     3.4200  (threshold: 1.01)
+    WARNING: Low ESS — worst: mu_D (ESS=4)
+    WARNING: High R-hat — worst: mu_D (R-hat=3.4200)
+    Consider increasing --num-samples or --num-warmup.
+
+----------------------------------------------------------------------
+Posterior summaries:
+
+  Baseline hazard parameters:
+  Parameter          Mean         SD     Median    CI 2.5%   CI 97.5%
+  ----------------------------------------------------------------
+  mu_D            59.0607    69.4018    19.1102     9.8048   180.0260
+  sigma_D          1.5956     1.8897     0.5817     0.0000     5.2734
+  mu_P             3.6152     0.1405     3.6139     3.4686     3.7625
+  sigma_P          0.5863     0.0517     0.5853     0.5313     0.6417
+
+  Default coefficients (theta_D):
+  Feature                    Mean         SD    CI 2.5%   CI 97.5%  Significant
+  ----------------------------------------------------------------------------
+  int_rate                -1.6328     3.7082   -12.9378     3.9751           No
+  log_upb                  0.1143     1.7099    -4.1428     4.0965           No
+  fico_score               1.8111     7.3358    -6.2838    25.1778           No
+  dti_r                   26.7767    49.9899   -18.6320   114.0340           No
+  ltv_r                   -0.7268     1.6393    -4.4891     3.4677           No
+  bal_repaid_lag1         -3.5604     5.4463   -20.2990     0.7051           No
+  t_act_12m               -0.7321     2.8075    -4.9948     6.0875           No
+  t_del_30d_12m           49.4663    84.1624    -0.6444   195.5919           No
+  t_del_60d_12m           69.7430   113.8374   -22.7605   350.2079           No
+  hpi_st_d_t_o            -2.3078     4.1004   -14.8463     1.6576           No
+  ppi_c_FRMA               1.4696     6.6418    -9.9607    21.7105           No
+  TB10Y_d_t_o             -1.9698     7.1652   -21.2406    10.9453           No
+  FRMA30Y_d_t_o            2.6851    10.3639    -6.4271    34.7186           No
+
+  Prepayment coefficients (theta_P):
+  Feature                    Mean         SD    CI 2.5%   CI 97.5%  Significant
+  ----------------------------------------------------------------------------
+  int_rate                -0.5307     0.0097    -0.5503    -0.5118          Yes
+  log_upb                  0.1021     0.0077     0.0871     0.1162          Yes
+  fico_score               0.1083     0.0958     0.0060     0.2302          Yes
+  dti_r                   -0.0705     0.0042    -0.0788    -0.0623          Yes
+  ltv_r                   -0.1128     0.0055    -0.1235    -0.1019          Yes
+  bal_repaid_lag1         -0.1949     0.0068    -0.2086    -0.1824          Yes
+  t_act_12m               -2.4487     0.2048    -2.6747    -2.2229          Yes
+  t_del_30d_12m           -0.6008     0.0610    -0.6752    -0.5280          Yes
+  t_del_60d_12m            1.2394     2.5767    -1.3609     3.8865           No
+  hpi_st_d_t_o            -1.0507     0.0211    -1.0850    -1.0174          Yes
+  ppi_c_FRMA               1.1453     0.0246     1.0991     1.1931          Yes
+  TB10Y_d_t_o              0.2301     0.0181     0.1952     0.2662          Yes
+  FRMA30Y_d_t_o            0.2448     0.0334     0.1805     0.3096          Yes
+
+----------------------------------------------------------------------
+Model evaluation...
+
+  Time-dependent C-index (IPCW):
+  Cause        τ=24     τ=48     τ=72    
+  ----------------------------------------
+  Default      nan  nan  nan 
+  Prepay       nan  nan  nan 
+
+----------------------------------------------------------------------
+Summary:
+  Total posterior samples: 8000
+  Converged: No
+  Effective samples (min): 4
+  Max R-hat: 3.420
+
+  Significant covariates:
+    Default: None
+    Prepay: int_rate, log_upb, fico_score, dti_r, ltv_r, bal_repaid_lag1, t_act_12m, t_del_30d_12m, hpi_st_d_t_o, ppi_c_FRMA, TB10Y_d_t_o, FRMA30Y_d_t_o
+
+Total runtime: 760.2 minutes
+End time: 2026-03-30 04:43:57
+======================================================================
+
+Saving results...

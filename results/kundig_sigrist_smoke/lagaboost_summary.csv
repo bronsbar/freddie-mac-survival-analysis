@@ -1,0 +1,5 @@
+variant,cause,AUC,log_loss,Brier,ECE
+linear_independent,default,0.8756,0.0064,0.001,0.0006
+linear_independent,prepay,0.5819,0.3433,0.096,0.0405
+linear_spatial,default,0.9052,0.0062,0.001,0.0008
+linear_spatial,prepay,0.61,0.3345,0.0936,0.0277

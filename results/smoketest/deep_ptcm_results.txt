@@ -1,0 +1,181 @@
+======================================================================
+DEEP-PTCM COMPETING RISKS
+Medina-Olivares et al. (2024) extended to competing risks
+======================================================================
+
+Start time: 2026-04-28 14:21:21
+PyTorch version: 2.3.1
+Device: mps
+
+Configuration:
+  num_intervals: 15
+  shared_layers: [512, 512]
+  dropout: 0.2
+  lr: 0.01
+  weight_decay: 0.0
+  lr_decay_rate: 0.75
+  lr_decay_steps: 100
+  batch_size: 512
+  epochs: 1
+  patience: 5
+  verbose: True
+  random_state: 42
+  skip_ort: True
+  skip_h32: True
+
+----------------------------------------------------------------------
+Loading data...
+  Loaded 110,000 loans
+  Vintages: 2010 - 2025
+  Duration range: 0 - 184 months
+
+  Event distribution:
+    Censored (k=0): 47,386 (43.1%)
+    Prepay (k=1): 61,514 (55.9%)
+    Default (k=2): 1,100 (1.0%)
+
+  After dropping NaN: 110,000 (dropped 0)
+  Train (folds [0, 1, 2, 3, 4, 5, 6, 7, 8]): 90,000
+  Val (fold [9]): 10,000
+  Test (fold 10): 10,000
+
+----------------------------------------------------------------------
+Training Deep-PTCM...
+  head_layers=[], orthogonalize=False
+  Training time: 0.0 minutes
+  Epochs: 1
+  Best val loss: 8.1843
+  Parameters: 266,784
+
+  Evaluation (Deep-PTCM):
+    Prepay t= 24: C=0.3775  BS=0.212734  (n=13,088,079)
+    Prepay t= 48: C=0.3562  BS=0.228304  (n=14,053,014)
+    Prepay t= 72: C=0.3582  BS=0.236581  (n=10,375,300)
+    Default t= 24: C=0.4790  BS=0.004684  (n=247,197)
+    Default t= 48: C=0.4979  BS=0.007401  (n=264,924)
+    Default t= 72: C=0.5053  BS=0.009096  (n=193,200)
+    IBS (Prepay, t=1..72): 0.208080
+    IBS (Default, t=1..72): 0.005847
+    AUC_cure (overall): 0.3851
+    AUC_cure (prepay):  0.3783
+    AUC_cure (default): 0.4059
+
+----------------------------------------------------------------------
+Building expanded-input dataset (one-hot property_state + vintage_year)...
+  Expanded set after NaN drop: 110,000 loans (dropped 0)
+  Expanded feature dim: 72 (numeric=5, state levels=51, vintage levels=16)
+
+Training Deep-PTCM-Expanded...
+  Training time: 0.0 minutes
+  Epochs: 1
+  Best val loss: 8.1994
+  Parameters: 301,088
+
+  Evaluation on extended test set (base for delta):
+    Prepay t= 24: C=0.3775  BS=0.212734  (n=13,088,079)
+    Prepay t= 48: C=0.3562  BS=0.228304  (n=14,053,014)
+    Prepay t= 72: C=0.3582  BS=0.236581  (n=10,375,300)
+    Default t= 24: C=0.4790  BS=0.004684  (n=247,197)
+    Default t= 48: C=0.4979  BS=0.007401  (n=264,924)
+    Default t= 72: C=0.5053  BS=0.009096  (n=193,200)
+    IBS (Prepay, t=1..72): 0.208080
+    IBS (Default, t=1..72): 0.005847
+    AUC_cure (overall): 0.3851
+    AUC_cure (prepay):  0.3783
+    AUC_cure (default): 0.4059
+
+  Evaluation (Deep-PTCM-Expanded):
+    Prepay t= 24: C=0.4856  BS=0.217777  (n=13,088,079)
+    Prepay t= 48: C=0.4497  BS=0.229974  (n=14,053,014)
+    Prepay t= 72: C=0.4302  BS=0.235959  (n=10,375,300)
+    Default t= 24: C=0.5422  BS=0.005466  (n=247,197)
+    Default t= 48: C=0.5205  BS=0.008144  (n=264,924)
+    Default t= 72: C=0.5563  BS=0.009781  (n=193,200)
+    IBS (Prepay, t=1..72): 0.211788
+    IBS (Default, t=1..72): 0.006603
+    AUC_cure (overall): 0.4695
+    AUC_cure (prepay):  0.4619
+    AUC_cure (default): 0.5057
+
+  --- Mean C-index (base vs expanded, evaluated on extended test) ---
+    Prepay  : base=0.3640  expanded=0.4552  delta=+0.0912
+    Default : base=0.4941  expanded=0.5396  delta=+0.0456
+    AUC_cure[overall]: base=0.3851  expanded=0.4695  delta=+0.0844
+    AUC_cure[prepay ]: base=0.3783  expanded=0.4619  delta=+0.0836
+    AUC_cure[default]: base=0.4059  expanded=0.5057  delta=+0.0999
+
+----------------------------------------------------------------------
+Computing permutation importance (base Deep-PTCM)...
+
+  Prepay:
+              ltv_r: +0.0101 +/- 0.0000
+         fico_score: -0.0030 +/- 0.0000
+            log_upb: -0.0483 +/- 0.0000
+           int_rate: -0.0532 +/- 0.0000
+              dti_r: -0.0642 +/- 0.0000
+
+  Default:
+              dti_r: +0.0348 +/- 0.0000
+            log_upb: +0.0172 +/- 0.0000
+              ltv_r: +0.0000 +/- 0.0000
+           int_rate: -0.0022 +/- 0.0000
+         fico_score: -0.0145 +/- 0.0000
+  Importance computed in 0.2 minutes
+
+----------------------------------------------------------------------
+Generating plots...
+  /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/reports/figures/smoketest/deep_ptcm_training_curves.png
+  /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/reports/figures/smoketest/deep_ptcm_cure_fractions.png
+  /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/reports/figures/smoketest/deep_ptcm_cindex_comparison.png
+  /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/reports/figures/smoketest/deep_ptcm_survival_curves.png
+  /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/reports/figures/smoketest/deep_ptcm_feature_importance.png
+
+----------------------------------------------------------------------
+Projecting Deep-PTCM cash flows (base model)...
+  Loans in projection set: 10,000
+  Horizon: 360 months  |  LGD: 0.25
+  Total interest:            $  1,313,403,346
+  Total scheduled principal: $  1,446,162,425
+  Total prepayment:          $  1,002,986,514
+  Total recovery:            $     56,532,828
+  Total expected loss:       $     18,844,276
+  Aggregate cash flow:       $  3,819,085,113
+  Total UPB at origination:  $  2,524,526,000
+  Loss / orig UPB:                   0.7464%
+  Saved portfolio CSV: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/models/smoketest/deep_ptcm_portfolio_cashflow.csv
+  Saved figure: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/reports/figures/smoketest/deep_ptcm_cash_flow_projection.png
+  Cash-flow projection completed in 0.1 minutes
+
+======================================================================
+SUMMARY
+======================================================================
+
+Architecture (paper defaults):
+  Shared: [512, 512]
+  Dropout: 0.2
+  Optimizer: SGD (lr=0.01, inverse time decay rate=0.75, steps=100)
+  Intervals: 15
+
+Data:
+  Train: 90,000, Val: 10,000, Test: 10,000
+  Features: ['int_rate', 'log_upb', 'fico_score', 'dti_r', 'ltv_r']
+
+Results (Test Set):
+Model                     |  Prepay C | Default C | AUC_overall | AUC_prepay | AUC_default
+--------------------------------------------------------------------------------------------
+Deep-PTCM                 |    0.3640 |    0.4941 |      0.3851 |     0.3783 |      0.4059
+Deep-PTCM-Expanded        |    0.4552 |    0.5396 |      0.4695 |     0.4619 |      0.5057
+
+  Note: Deep-PTCM-Expanded is evaluated on the 10,000 fold-10 loans with non-null property_state and vintage_year;
+  the other rows use the full 10,000-loan fold-10 test set. For a like-for-like delta, see the Expanded section above.
+
+Total runtime: 0.8 minutes
+End time: 2026-04-28 14:22:10
+======================================================================
+
+Saving artifacts...
+  Model: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/models/smoketest/deep_ptcm.pt
+  Model: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/models/smoketest/deep_ptcm_expanded.pt
+  Importance: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/models/smoketest/deep_ptcm_importance_prepay.csv
+  Importance: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/models/smoketest/deep_ptcm_importance_default.csv
+  Results: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/models/smoketest/deep_ptcm_all_results.csv

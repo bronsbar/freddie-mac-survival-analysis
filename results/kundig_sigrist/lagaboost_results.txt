@@ -1,0 +1,121 @@
+==============================================================================
+KUNDIG-SIGRIST COMPETING RISKS
+  start: 2026-05-01 05:34:21
+  variants: ['linear_independent', 'linear_spatial', 'linear_spatio_temporal', 'lagaboost_spatial', 'lagaboost_spatio_temporal']
+  test years: 2015..2024
+  hyperparams: lr=0.1, depth=5, min_leaf=100, l2=1.0, rounds=200, neighbors=20
+
+Loading panel...
+  rows: 397,548, loans: 93,650, years: 2011..2024
+
+--- Test year 2015 ---
+  train: n=53,569, prepay=6,607, default=62
+  test : n=25,735, prepay=2,944, default=26
+    linear_independent              fit=   0.2s  AUC_p=0.6494  AUC_d=0.8207  logloss_d=0.00703
+    linear_spatial                  fit=  12.3s  AUC_p=0.6604  AUC_d=0.8419  logloss_d=0.00685
+    linear_spatio_temporal          fit=  56.5s  AUC_p=0.6604  AUC_d=0.8438  logloss_d=0.00682
+    lagaboost_spatial               fit= 106.9s  AUC_p=0.6601  AUC_d=0.7268  logloss_d=0.00762
+    lagaboost_spatio_temporal       fit=1582.7s  AUC_p=0.6706  AUC_d=0.7358  logloss_d=0.00778
+
+--- Test year 2016 ---
+  train: n=79,304, prepay=9,551, default=88
+  test : n=29,761, prepay=4,171, default=38
+    linear_independent              fit=   0.3s  AUC_p=0.6342  AUC_d=0.8304  logloss_d=0.00877
+    linear_spatial                  fit=  77.3s  AUC_p=0.6501  AUC_d=0.8658  logloss_d=0.00837
+    linear_spatio_temporal          fit= 707.9s  AUC_p=0.6438  AUC_d=0.8642  logloss_d=0.00837
+    lagaboost_spatial               fit= 141.5s  AUC_p=0.6602  AUC_d=0.7026  logloss_d=0.00877
+    lagaboost_spatio_temporal       fit=1672.8s  AUC_p=0.6634  AUC_d=0.7782  logloss_d=0.00880
+
+--- Test year 2017 ---
+  train: n=109,065, prepay=13,722, default=126
+  test : n=32,031, prepay=3,414, default=38
+    linear_independent              fit=   0.4s  AUC_p=0.6193  AUC_d=0.8418  logloss_d=0.00780
+    linear_spatial                  fit=  12.0s  AUC_p=0.6268  AUC_d=0.8304  logloss_d=0.00801
+    linear_spatio_temporal          fit= 120.0s  AUC_p=0.6253  AUC_d=0.8303  logloss_d=0.00802
+    lagaboost_spatial               fit=  63.8s  AUC_p=0.6489  AUC_d=0.6942  logloss_d=0.00815
+    lagaboost_spatio_temporal       fit=1605.1s  AUC_p=0.6475  AUC_d=0.6582  logloss_d=0.00825
+
+--- Test year 2018 ---
+  train: n=141,096, prepay=17,136, default=164
+  test : n=35,382, prepay=3,199, default=39
+    linear_independent              fit=   0.5s  AUC_p=0.5912  AUC_d=0.8870  logloss_d=0.00698
+    linear_spatial                  fit=  12.6s  AUC_p=0.5987  AUC_d=0.9060  logloss_d=0.00677
+    linear_spatio_temporal          fit= 153.5s  AUC_p=0.6003  AUC_d=0.9083  logloss_d=0.00673
+    lagaboost_spatial               fit= 189.3s  AUC_p=0.6244  AUC_d=0.7806  logloss_d=0.00721
+    lagaboost_spatio_temporal       fit=1670.1s  AUC_p=0.6321  AUC_d=0.8514  logloss_d=0.00739
+
+--- Test year 2019 ---
+  train: n=176,478, prepay=20,335, default=203
+  test : n=38,885, prepay=5,174, default=33
+    linear_independent              fit=   0.7s  AUC_p=0.6026  AUC_d=0.8894  logloss_d=0.00577
+    linear_spatial                  fit=  15.5s  AUC_p=0.6214  AUC_d=0.9021  logloss_d=0.00566
+    linear_spatio_temporal          fit= 174.0s  AUC_p=0.6168  AUC_d=0.8985  logloss_d=0.00568
+    lagaboost_spatial               fit= 128.6s  AUC_p=0.6281  AUC_d=0.7108  logloss_d=0.00627
+    lagaboost_spatio_temporal       fit=1954.0s  AUC_p=0.6343  AUC_d=0.8674  logloss_d=0.00638
+
+--- Test year 2020 ---
+  train: n=215,363, prepay=25,509, default=236
+  test : n=40,356, prepay=11,569, default=460
+    linear_independent              fit=   0.7s  AUC_p=0.6036  AUC_d=0.6867  logloss_d=0.07627
+    linear_spatial                  fit=  18.1s  AUC_p=0.6415  AUC_d=0.7066  logloss_d=0.07675
+    linear_spatio_temporal          fit= 175.8s  AUC_p=0.6391  AUC_d=0.7021  logloss_d=0.07566
+    lagaboost_spatial               fit= 163.6s  AUC_p=0.6528  AUC_d=0.5661  logloss_d=0.07744
+    lagaboost_spatio_temporal       fit=2212.7s  AUC_p=0.6437  AUC_d=0.6543  logloss_d=0.07416
+
+--- Test year 2021 ---
+  train: n=255,719, prepay=37,078, default=696
+  test : n=34,948, prepay=9,972, default=87
+    linear_independent              fit=   1.0s  AUC_p=0.6411  AUC_d=0.7647  logloss_d=0.04868
+    linear_spatial                  fit=  17.0s  AUC_p=0.6546  AUC_d=0.7524  logloss_d=0.04648
+    linear_spatio_temporal          fit= 254.0s  AUC_p=0.6651  AUC_d=0.8249  logloss_d=0.03858
+    lagaboost_spatial               fit= 241.1s  AUC_p=0.6854  AUC_d=0.7927  logloss_d=0.01423
+    lagaboost_spatio_temporal       fit=5161.9s  AUC_p=0.6905  AUC_d=0.8619  logloss_d=0.01428
+
+--- Test year 2022 ---
+  train: n=290,667, prepay=47,050, default=783
+  test : n=31,738, prepay=3,499, default=38
+    linear_independent              fit=   1.3s  AUC_p=0.6497  AUC_d=0.7929  logloss_d=0.01084
+    linear_spatial                  fit=  20.2s  AUC_p=0.6587  AUC_d=0.7785  logloss_d=0.01007
+    linear_spatio_temporal          fit= 318.4s  AUC_p=0.6602  AUC_d=0.8266  logloss_d=0.01281
+    lagaboost_spatial               fit= 196.8s  AUC_p=0.6910  AUC_d=0.7271  logloss_d=0.00899
+    lagaboost_spatio_temporal       fit=7717.0s  AUC_p=0.6739  AUC_d=0.8802  logloss_d=0.00859
+
+--- Test year 2023 ---
+  train: n=322,405, prepay=50,549, default=821
+  test : n=35,193, prepay=2,166, default=51
+    linear_independent              fit=   1.5s  AUC_p=0.6256  AUC_d=0.7515  logloss_d=0.01037
+    linear_spatial                  fit=  19.9s  AUC_p=0.6306  AUC_d=0.7428  logloss_d=0.00997
+    linear_spatio_temporal          fit= 336.8s  AUC_p=0.6258  AUC_d=0.8988  logloss_d=0.00982
+    lagaboost_spatial               fit= 271.1s  AUC_p=0.6497  AUC_d=0.7732  logloss_d=0.00969
+    lagaboost_spatio_temporal       fit=5981.8s  AUC_p=0.6563  AUC_d=0.8332  logloss_d=0.00954
+
+--- Test year 2024 ---
+  train: n=357,598, prepay=52,715, default=872
+  test : n=39,950, prepay=2,748, default=73
+    linear_independent              fit=   1.6s  AUC_p=0.6366  AUC_d=0.8021  logloss_d=0.01196
+    linear_spatial                  fit=  19.9s  AUC_p=0.6436  AUC_d=0.7772  logloss_d=0.01241
+    linear_spatio_temporal          fit= 327.0s  AUC_p=0.6414  AUC_d=0.8229  logloss_d=0.01647
+    lagaboost_spatial               fit= 303.7s  AUC_p=0.6728  AUC_d=0.7268  logloss_d=0.01160
+    lagaboost_spatio_temporal       fit=8833.5s  AUC_p=0.6657  AUC_d=0.7644  logloss_d=0.01144
+
+Saved metrics: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/results/kundig_sigrist/lagaboost_metrics.csv
+Saved cov pars: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/results/kundig_sigrist/lagaboost_cov_pars.csv
+
+Plotting...
+  /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/reports/figures/kundig_sigrist/lagaboost_auc_by_year.png
+
+=== Mean metrics across test years ===
+                                      AUC  log_loss   Brier     ECE
+variant                   cause                                    
+lagaboost_spatial         default  0.7201    0.0160  0.0023  0.0022
+                          prepay   0.6573    0.3612  0.1061  0.0436
+lagaboost_spatio_temporal default  0.7885    0.0157  0.0023  0.0024
+                          prepay   0.6578    0.3634  0.1068  0.0455
+linear_independent        default  0.8067    0.0194  0.0029  0.0055
+                          prepay   0.6253    0.3765  0.1112  0.0474
+linear_spatial            default  0.8104    0.0191  0.0028  0.0053
+                          prepay   0.6386    0.3709  0.1094  0.0420
+linear_spatio_temporal    default  0.8420    0.0189  0.0026  0.0058
+                          prepay   0.6378    0.3692  0.1088  0.0389
+
+Total runtime: 717.6 min

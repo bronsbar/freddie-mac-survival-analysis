@@ -1,0 +1,11 @@
+variant,cause,AUC,log_loss,Brier,ECE
+lagaboost_spatial,default,0.7201,0.016,0.0023,0.0022
+lagaboost_spatial,prepay,0.6573,0.3612,0.1061,0.0436
+lagaboost_spatio_temporal,default,0.7885,0.0157,0.0023,0.0024
+lagaboost_spatio_temporal,prepay,0.6578,0.3634,0.1068,0.0455
+linear_independent,default,0.8067,0.0194,0.0029,0.0055
+linear_independent,prepay,0.6253,0.3765,0.1112,0.0474
+linear_spatial,default,0.8104,0.0191,0.0028,0.0053
+linear_spatial,prepay,0.6386,0.3709,0.1094,0.042
+linear_spatio_temporal,default,0.842,0.0189,0.0026,0.0058
+linear_spatio_temporal,prepay,0.6378,0.3692,0.1088,0.0389

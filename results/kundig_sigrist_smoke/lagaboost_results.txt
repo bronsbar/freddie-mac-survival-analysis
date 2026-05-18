@@ -1,0 +1,37 @@
+==============================================================================
+KUNDIG-SIGRIST COMPETING RISKS
+  start: 2026-04-30 15:13:50
+  variants: ['linear_independent', 'linear_spatial']
+  test years: 2018..2019
+  hyperparams: lr=0.1, depth=5, min_leaf=100, l2=1.0, rounds=30, neighbors=20
+
+Loading panel...
+  rows: 397,548, loans: 93,650, years: 2011..2024
+
+--- Test year 2018 ---
+  train: n=141,096, prepay=17,136, default=164
+  test : n=35,382, prepay=3,199, default=39
+    linear_independent              fit=   0.2s  AUC_p=0.5934  AUC_d=0.8763  logloss_d=0.00707
+    linear_spatial                  fit=  10.9s  AUC_p=0.5989  AUC_d=0.9049  logloss_d=0.00678
+
+--- Test year 2019 ---
+  train: n=176,478, prepay=20,335, default=203
+  test : n=38,885, prepay=5,174, default=33
+    linear_independent              fit=   0.3s  AUC_p=0.5705  AUC_d=0.8749  logloss_d=0.00578
+    linear_spatial                  fit=  11.7s  AUC_p=0.6212  AUC_d=0.9054  logloss_d=0.00568
+
+Saved metrics: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/results/kundig_sigrist_smoke/lagaboost_metrics.csv
+Saved cov pars: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/results/kundig_sigrist_smoke/lagaboost_cov_pars.csv
+
+Plotting...
+  /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/reports/figures/kundig_sigrist_smoke/lagaboost_auc_by_year.png
+
+=== Mean metrics across test years ===
+                               AUC  log_loss   Brier     ECE
+variant            cause                                    
+linear_independent default  0.8756    0.0064  0.0010  0.0006
+                   prepay   0.5819    0.3433  0.0960  0.0405
+linear_spatial     default  0.9052    0.0062  0.0010  0.0008
+                   prepay   0.6100    0.3345  0.0936  0.0277
+
+Total runtime: 0.4 min

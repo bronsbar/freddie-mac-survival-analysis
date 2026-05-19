@@ -21,7 +21,16 @@
       "mcp__ide__executeCode",
       "Bash(conda list:*)",
       "Bash(wc:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(tr '|' '\\\\n')",
+      "Bash(awk -F'|' '{print NF}')",
+      "Bash(jupyter nbconvert *)",
+      "Bash(otool -L /opt/anaconda3/lib/python3.12/site-packages/gpboost/lib_gpboost.so)",
+      "Bash(install_name_tool -change /opt/anaconda3/lib/libomp.dylib /opt/anaconda3/pkgs/llvm-openmp-20.1.8-he822017_0/lib/libomp.dylib /opt/anaconda3/lib/python3.12/site-packages/gpboost/lib_gpboost.so)",
+      "Bash(KMP_DUPLICATE_LIB_OK=TRUE python3 *)",
+      "Bash(conda install *)",
+      "Bash(grep -v grep echo --- check if results files exist yet --- ls -la results/kundig_sigrist/)",
+      "Bash(grep -v grep echo --- output file size --- ls -la /private/tmp/claude-501/-Users-bartbronselaer-Developer-freddie-mac-survival-analysis/560d92e2-4a8b-4ca5-bd88-8cc3d4917816/tasks/bbde5gzo2.output echo --- results dir --- ls -la results/kundig_sigrist/)"
     ]
   }
 }

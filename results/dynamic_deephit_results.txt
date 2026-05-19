@@ -1,0 +1,136 @@
+======================================================================
+DYNAMIC-DEEPHIT COMPETING RISKS
+Lee et al. (2020) — GRU + Temporal Attention
+======================================================================
+
+Start time: 2026-02-13 16:30:55
+PyTorch version: 2.3.1
+Device: MPS (Apple Silicon)
+
+Configuration:
+  epochs: 3
+  batch_size: 32
+  learning_rate: 0.001
+  patience: 5
+  grad_accum_steps: 4
+  alpha_prepay: 0.2
+  alpha_default: 1.0
+  sigma: 0.1
+  beta (L3): 0.1
+  default_event_weight: 50.0
+  architecture: GRU(64->128, layers=2) + Attention + Heads(128,64)
+  dropout: 0.2
+  max_seq_len: 50
+  num_time_bins: 120
+  seed: 42
+
+----------------------------------------------------------------------
+Loading data...
+  Loaded 5,462,536 loan-months
+  Unique loans: 109,111
+  Available features: 21/21
+
+----------------------------------------------------------------------
+Preprocessing sequences...
+  Train panel: 4,466,909 loan-months
+  Val panel: 499,769 loan-months
+  Test panel: 495,858 loan-months
+  Train sequences: 89,240
+  Val sequences: 9,916
+  Test sequences: 9,911
+  Sequence lengths: mean=34.3, median=39, max=50, min=1
+
+  Event distribution (train):
+    Censored (k=0): 38,979
+    Prepay (k=1): 50,227
+    Default (k=2): 34
+
+  Time bins: 120, width=1.52 months
+  Time-varying features for L3: 16
+
+----------------------------------------------------------------------
+Building model...
+  Parameters: 267,649
+  Input features: 21
+
+----------------------------------------------------------------------
+Training Dynamic-DeepHit...
+Training on mps
+ Epoch |      Train |        Val |       L1 |       L2 |       L3 |         LR
+---------------------------------------------------------------------------
+     0 |     8.2556 |     5.4051 |   1.8430 |   3.5312 |   0.0308 |   0.001000
+     2 |     5.2510 |     6.0974 |   3.0634 |   3.0126 |   0.0214 |   0.001000
+Best epoch: 1 (val_loss=4.6260)
+
+Training completed in 20.1 minutes
+
+----------------------------------------------------------------------
+Static evaluation (C-index at 24/48/72 months)...
+
+  PREPAY C-index:
+    tau= 24 months: C-index (IPCW) = 0.9547
+    tau= 48 months: C-index (IPCW) = 0.9184
+    tau= 72 months: C-index (IPCW) = 0.9007
+    Overall (Harrell): 0.9753
+
+  DEFAULT C-index:
+    tau= 24 months: C-index (IPCW) = 0.9939
+    tau= 48 months: C-index (IPCW) = 0.9961
+    tau= 72 months: C-index (IPCW) = 0.9957
+    Overall (Harrell): 0.9777
+
+----------------------------------------------------------------------
+Dynamic evaluation (landmark analysis)...
+
+  Dynamic C-index (landmark x horizon):
+    t_L= 12: Prepay=[0.562, 0.563, 0.553] Default=[NaN, 0.704, 0.701]
+    t_L= 24: Prepay=[0.498, 0.530, 0.513] Default=[NaN, NaN, 0.888]
+    t_L= 36: Prepay=[0.489, 0.480, 0.504] Default=[NaN, NaN, 0.452]
+    t_L= 48: Prepay=[0.502, 0.500, 0.504] Default=[NaN, 0.633, 0.618]
+    t_L= 60: Prepay=[0.506, 0.529, 0.524] Default=[NaN, NaN, NaN]
+
+----------------------------------------------------------------------
+Generating plots...
+  /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/reports/figures/dynamic_deephit_training_curves.png
+  /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/reports/figures/dynamic_deephit_time_dependent_cindex.png
+  /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/reports/figures/dynamic_deephit_dynamic_cindex_heatmap.png
+  /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/reports/figures/dynamic_deephit_attention.png
+  /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/reports/figures/dynamic_deephit_survival_curves.png
+
+======================================================================
+SUMMARY
+======================================================================
+
+Architecture:
+  Input Embedding: 21 -> 64
+  GRU: 2 layers x 128 hidden
+  Temporal Attention: score(128+21) -> 1
+  Cause heads: 128 -> 64 -> 120
+  Parameters: 267,649
+
+Data:
+  Train: 89,240 sequences
+  Val: 9,916 sequences
+  Test: 9,911 sequences
+  Features: 21
+
+Static Performance (Test Set):
+  Prepay:
+    Harrell C-index: 0.9753
+    IPCW C-index (tau=24): 0.9547
+    IPCW C-index (tau=48): 0.9184
+    IPCW C-index (tau=72): 0.9007
+  Default:
+    Harrell C-index: 0.9777
+    IPCW C-index (tau=24): 0.9939
+    IPCW C-index (tau=48): 0.9961
+    IPCW C-index (tau=72): 0.9957
+
+Total runtime: 25.6 minutes
+End time: 2026-02-13 16:56:31
+======================================================================
+
+Saving artifacts...
+  Model: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/models/dynamic_deephit_joint.pt
+  Static C-index: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/models/dynamic_deephit_cindex_static.csv
+  Dynamic C-index: /Users/bartbronselaer/Developer/freddie-mac-survival-analysis/models/dynamic_deephit_cindex_dynamic.csv

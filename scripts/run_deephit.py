@@ -252,6 +252,7 @@ class DeepHitLoss(nn.Module):
         return nll_loss + self.alpha * ranking_loss, nll_loss, ranking_loss
 
     def _ranking_loss(self, cif, bin_indices, events, num_causes):
+        """Vectorized ranking loss over all valid pairs in mini-batch (Lee et al., 2018)."""
         device = cif.device
         ranking_loss = torch.tensor(0.0, device=device)
         n_pairs = 0
@@ -259,29 +260,28 @@ class DeepHitLoss(nn.Module):
         for k in range(num_causes):
             event_code = k + 1
             cause_mask = (events == event_code)
-            cause_idx = torch.where(cause_mask)[0]
+            idx_i = torch.where(cause_mask)[0]
 
-            if len(cause_idx) < 1:
+            if len(idx_i) == 0:
                 continue
 
-            sample_size = min(100, len(cause_idx))
-            if len(cause_idx) > sample_size:
-                perm = torch.randperm(len(cause_idx), device=device)[:sample_size]
-                cause_idx = cause_idx[perm]
+            t_i = bin_indices[idx_i]
+            t_j = bin_indices
 
-            for idx in cause_idx:
-                t_i = bin_indices[idx]
-                later_idx = torch.where(bin_indices > t_i)[0]
+            # Pairwise comparison: valid_pairs[a, b] = True if t_j[b] > t_i[a]
+            valid_pairs = t_j.unsqueeze(0) > t_i.unsqueeze(1)
 
-                if len(later_idx) == 0:
-                    continue
-                if len(later_idx) > 10:
-                    perm = torch.randperm(len(later_idx), device=device)[:10]
-                    later_idx = later_idx[perm]
+            if not valid_pairs.any():
+                continue
 
-                diff = cif[later_idx, k, t_i] - cif[idx, k, t_i]
-                ranking_loss = ranking_loss + torch.exp(diff / self.sigma).sum()
-                n_pairs += len(later_idx)
+            cif_i = cif[idx_i, k, t_i]
+            cif_j = cif[:, k, :][:, t_i].T
+
+            diff = cif_j - cif_i.unsqueeze(1)
+            pair_loss = torch.exp(diff / self.sigma) * valid_pairs.float()
+
+            ranking_loss = ranking_loss + pair_loss.sum()
+            n_pairs += valid_pairs.sum().item()
 
         if n_pairs > 0:
             ranking_loss = ranking_loss / n_pairs

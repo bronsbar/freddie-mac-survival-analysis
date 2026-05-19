@@ -111,10 +111,11 @@ class CauseSpecificNet(nn.Module if PYCOX_AVAILABLE else object):
         self.shared = nn.Sequential(*shared_layers)
 
         # Cause-specific sub-networks
+        # Input to each head is concat(x, shared_out) per Lee et al. (2018)
         self.risk_nets = nn.ModuleList()
         for _ in range(num_risks):
             risk_layers = []
-            prev_size_risk = prev_size
+            prev_size_risk = prev_size + in_features
             for nodes in num_nodes_indiv:
                 risk_layers.append(nn.Linear(prev_size_risk, nodes))
                 if batch_norm:
@@ -142,10 +143,13 @@ class CauseSpecificNet(nn.Module if PYCOX_AVAILABLE else object):
         """
         shared_repr = self.shared(x)
 
+        # Concatenate raw input with shared output (Lee et al., 2018)
+        combined = torch.cat([x, shared_repr], dim=1)
+
         # Stack outputs from each cause-specific network
         outputs = []
         for risk_net in self.risk_nets:
-            outputs.append(risk_net(shared_repr))
+            outputs.append(risk_net(combined))
 
         # Shape: (batch_size, num_risks, out_features)
         return torch.stack(outputs, dim=1)

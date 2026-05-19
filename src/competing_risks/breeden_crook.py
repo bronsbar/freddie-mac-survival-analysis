@@ -21,6 +21,8 @@ from typing import Dict, List, Optional, Tuple, Union
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler, SplineTransformer
 from sklearn.metrics import roc_auc_score, log_loss
+import statsmodels.api as sm
+from scipy.special import expit
 
 
 # ---------------------------------------------------------------------------
@@ -355,13 +357,13 @@ def build_feature_matrix_apc(
     panel: pd.DataFrame,
     horizon: int,
     include_delinq: bool = True,
-) -> Tuple[pd.DataFrame, List[str]]:
+) -> Tuple[pd.DataFrame, List[str], np.ndarray]:
     """
     Build feature matrix using pre-computed APC scalar features.
 
-    Replaces the ~34 APC-related columns (age splines + vintage dummies +
-    macro vars) with 3 scalar columns: F_age, G_vintage, H_caltime.
-    Static features, behavioral features, and lagged delinquency remain.
+    Per Breeden & Crook (2022) Equation 12, F(a) and H(t) are fixed
+    offsets from the Stage 1 APC decomposition.  Only c_j (origination),
+    d_k (delinquency), and beta'_v (vintage) have learnable coefficients.
 
     Parameters
     ----------
@@ -375,19 +377,23 @@ def build_feature_matrix_apc(
     Returns
     -------
     X : pd.DataFrame
-        Feature matrix.
+        Feature matrix (learnable features only).
     feature_names : list of str
         Feature column names.
+    offset : np.ndarray
+        Fixed offset F(a) + H(t) for each observation.
     """
     feature_dfs = []
     feature_names = []
 
-    # 1. APC scalar features (replace splines + dummies + macro)
-    apc_cols = ['F_age', 'G_vintage', 'H_caltime']
-    feature_dfs.append(panel[apc_cols])
-    feature_names.extend(apc_cols)
+    # 1. F(a) + H(t) as FIXED OFFSET (Eq. 12: not learnable)
+    offset = (panel['F_age'].values + panel['H_caltime'].values).astype(float)
 
-    # 2. Static origination features
+    # 2. G(vintage) as learnable feature (β'_v in Eq. 12)
+    feature_dfs.append(panel[['G_vintage']])
+    feature_names.append('G_vintage')
+
+    # 3. Static origination features (c_j in Eq. 12)
     static_cols = []
     for col in STATIC_FEATURES:
         if col == 'log_orig_upb' and col not in panel.columns:
@@ -404,7 +410,7 @@ def build_feature_matrix_apc(
         feature_dfs.append(panel[static_cols])
         feature_names.extend(static_cols)
 
-    # 3. Behavioral features
+    # 4. Behavioral features
     available_behavioral = [c for c in BEHAVIORAL_FEATURES if c in panel.columns]
     if 'bal_repaid_lag1' not in panel.columns and 'bal_repaid' in panel.columns:
         available_behavioral = [
@@ -415,7 +421,7 @@ def build_feature_matrix_apc(
         feature_dfs.append(panel[available_behavioral])
         feature_names.extend(available_behavioral)
 
-    # 4. Lagged delinquency indicators
+    # 5. Lagged delinquency indicators (d_k in Eq. 12)
     if include_delinq and horizon > 0:
         delinq_cols = get_delinq_lag_cols(horizon)
         available_delinq = [c for c in delinq_cols if c in panel.columns]
@@ -425,7 +431,7 @@ def build_feature_matrix_apc(
 
     X = pd.concat(feature_dfs, axis=1)
 
-    return X, feature_names
+    return X, feature_names, offset
 
 
 # ---------------------------------------------------------------------------
@@ -517,6 +523,44 @@ class BreedenCrookMultihorizon:
             try:
                 auc = roc_auc_score(y_val, proba_val)
             except ValueError:
+                auc = 0.5
+            if auc > best_auc:
+                best_auc = auc
+                best_C = C
+
+        return best_C
+
+    def _select_C_glm(
+        self,
+        X_train: np.ndarray,
+        y_train: np.ndarray,
+        X_val: np.ndarray,
+        y_val: np.ndarray,
+        offset_train: np.ndarray,
+        offset_val: np.ndarray,
+        freq_weights: np.ndarray,
+    ) -> float:
+        """Select best regularization C by validation AUC (GLM with offset)."""
+        best_C = self.C_values[0]
+        best_auc = 0.0
+        X_train_c = sm.add_constant(X_train)
+        X_val_c = sm.add_constant(X_val)
+
+        for C in self.C_values:
+            alpha = 1.0 / C
+            glm = sm.GLM(
+                y_train, X_train_c,
+                family=sm.families.Binomial(),
+                offset=offset_train,
+                freq_weights=freq_weights,
+            )
+            try:
+                result = glm.fit_regularized(
+                    method='elastic_net', alpha=alpha, L1_wt=0.0,
+                )
+                proba_val = result.predict(X_val_c, offset=offset_val)
+                auc = roc_auc_score(y_val, proba_val)
+            except (ValueError, np.linalg.LinAlgError):
                 auc = 0.5
             if auc > best_auc:
                 best_auc = auc
@@ -657,12 +701,13 @@ class BreedenCrookMultihorizon:
         C_override: Optional[float] = None,
         log_fn=print,
     ):
-        """Fit horizon models using APC scalar features."""
-        # Transform panels with both APC objects (use default APC for now;
-        # risk-specific APC is used at prediction time for the features,
-        # but at training time we fit a shared feature set per horizon).
-        # We use the default APC to add F/G/H columns, then fit both risks.
-        # Each risk uses the APC that matches its own decomposition.
+        """Fit horizon models using APC features with F(a)+H(t) as offset.
+
+        Per Breeden & Crook (2022) Eq. 12, F(a) and H(t) from the Stage 1
+        APC decomposition enter the log-odds as a fixed offset.  Only c_j
+        (origination), d_k (delinquency), and beta'_v (vintage) are estimated.
+        Uses statsmodels GLM(Binomial) with ``offset`` parameter.
+        """
         for risk_name, event_code, model_dict, apc in [
             ('default', 2, self.models_default, self.apc_default),
             ('prepay', 1, self.models_prepay, self.apc_prepay),
@@ -674,56 +719,72 @@ class BreedenCrookMultihorizon:
             train_apc = apc.transform(train_data)
             val_apc = apc.transform(val_data)
 
-            X_train_df, feat_names = build_feature_matrix_apc(
+            X_train_df, feat_names, offset_train = build_feature_matrix_apc(
                 train_apc, horizon, include_delinq=include_delinq,
             )
-            X_val_df, _ = build_feature_matrix_apc(
+            X_val_df, _, offset_val = build_feature_matrix_apc(
                 val_apc, horizon, include_delinq=include_delinq,
             )
 
-            # Store feature names (same for both risks at same horizon in APC mode)
-            key = f'{risk_name}_{horizon}'
             self.feature_names_apc[horizon] = feat_names
 
-            # Drop rows with NaN
+            # Drop rows with NaN (keep offset aligned)
             valid_train = X_train_df.notna().all(axis=1)
             valid_val = X_val_df.notna().all(axis=1)
             X_train_df = X_train_df[valid_train]
+            offset_train = offset_train[valid_train.values]
             train_subset = train_data.loc[valid_train.index[valid_train]]
             X_val_df = X_val_df[valid_val]
+            offset_val = offset_val[valid_val.values]
             val_subset = val_data.loc[valid_val.index[valid_val]]
 
-            # Scale
+            # Scale features (offset is NOT scaled — it enters the GLM directly)
             scaler = StandardScaler()
             X_train = scaler.fit_transform(X_train_df.values.astype(float))
             X_val = scaler.transform(X_val_df.values.astype(float))
             self.scalers_apc[(risk_name, horizon)] = scaler
 
-            log_fn(f"  Horizon {horizon} ({risk_name} APC): "
+            log_fn(f"  Horizon {horizon} ({risk_name} APC+offset): "
                    f"{len(X_train):,} train, {len(X_val):,} val, "
-                   f"{len(feat_names)} features")
+                   f"{len(feat_names)} features + F(a)+H(t) offset")
 
             y_train = (train_subset['event_code'] == event_code).astype(int).values
             y_val = (val_subset['event_code'] == event_code).astype(int).values
 
+            # Balanced class weights (replicate sklearn's class_weight='balanced')
+            n = len(y_train)
+            n_pos = y_train.sum()
+            n_neg = n - n_pos
+            w = np.where(y_train == 1, n / (2.0 * n_pos), n / (2.0 * n_neg))
+
+            # C selection via GLM with offset
             if C_override is not None:
                 best_C = C_override
             else:
-                best_C = self._select_C(X_train, y_train, X_val, y_val)
+                best_C = self._select_C_glm(
+                    X_train, y_train, X_val, y_val,
+                    offset_train, offset_val, w,
+                )
             self.best_C[risk_name][horizon] = best_C
 
-            model = LogisticRegression(
-                C=best_C,
-                class_weight='balanced',
-                solver=self.solver,
-                max_iter=self.max_iter,
-                random_state=self.seed,
+            # Fit final GLM with offset (L2 penalty = 1/C)
+            alpha = 1.0 / best_C
+            X_train_c = sm.add_constant(X_train)
+            glm = sm.GLM(
+                y_train, X_train_c,
+                family=sm.families.Binomial(),
+                offset=offset_train,
+                freq_weights=w,
             )
-            model.fit(X_train, y_train)
-            model_dict[horizon] = model
+            result = glm.fit_regularized(
+                method='elastic_net', alpha=alpha, L1_wt=0.0,
+            )
+            model_dict[horizon] = result
 
-            proba_train = model.predict_proba(X_train)[:, 1]
-            proba_val = model.predict_proba(X_val)[:, 1]
+            # Predictions
+            X_val_c = sm.add_constant(X_val)
+            proba_train = result.predict(X_train_c, offset=offset_train)
+            proba_val = result.predict(X_val_c, offset=offset_val)
 
             try:
                 auc_train = roc_auc_score(y_train, proba_train)
@@ -956,7 +1017,7 @@ class BreedenCrookMultihorizon:
         horizon: int,
         include_delinq: bool = True,
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """Predict hazards using APC features for a given horizon."""
+        """Predict hazards using APC features with F(a)+H(t) offset."""
         results = []
 
         for risk_name, apc, model_dict in [
@@ -964,7 +1025,7 @@ class BreedenCrookMultihorizon:
             ('prepay', self.apc_prepay, self.models_prepay),
         ]:
             data_apc = apc.transform(data)
-            X_df, _ = build_feature_matrix_apc(
+            X_df, _, offset = build_feature_matrix_apc(
                 data_apc, horizon, include_delinq=include_delinq,
             )
 
@@ -974,8 +1035,10 @@ class BreedenCrookMultihorizon:
             if scaler is not None:
                 X = scaler.transform(X)
 
-            model = model_dict[horizon]
-            results.append(model.predict_proba(X)[:, 1])
+            # statsmodels GLM result — predict with offset
+            result = model_dict[horizon]
+            X_c = sm.add_constant(X)
+            results.append(result.predict(X_c, offset=offset))
 
         return results[0], results[1]
 
@@ -999,9 +1062,11 @@ class BreedenCrookMultihorizon:
                     feat_names = self.feature_names_apc.get(
                         horizon, self.feature_names.get(horizon, [])
                     )
+                    # statsmodels result: params[0] is const, params[1:] are features
+                    coefs = model.params[1:]
                 else:
                     feat_names = self.feature_names.get(horizon, [])
-                coefs = model.coef_[0]
+                    coefs = model.coef_[0]
                 for fname, coef in zip(feat_names, coefs):
                     records.append({
                         'horizon': horizon,
